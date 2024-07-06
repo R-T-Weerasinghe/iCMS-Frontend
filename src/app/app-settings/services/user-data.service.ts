@@ -67,4 +67,25 @@ export class UserDataService{
     return this.http.put<any>(this.apiUrl+'/enableUser', username, {headers});
 
   }
+  getUserLogs(token: string, username: string, start_time: string, end_time: string): any {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+
+
+    let params : HttpParams = new HttpParams().set('username', username);
+    params = params.append('start_time', start_time);
+    params = params.append('end_time', end_time);
+
+    return this.http.get(`${this.apiUrl}/userLogs`, { headers, params });
+  }
+
+  //   getUser(token: string, username: string): any {
+  //   let headers = new HttpHeaders({
+  //     'Authorization': `Bearer ${token}`
+  //   });
+  //   let params : HttpParams = new HttpParams().set('username', username);
+  //   return this.http.get<any>(this.apiUrl+'/getUserDetails', {headers, params});
+  // }
 }

@@ -21,7 +21,7 @@ export class NotificationsComponent implements OnInit{
 
   activeIndex: number = 0;
   //create string array to store tab title and content
-  list: string[] = ["Unread","All"];
+  list: string[] = ["All"];
   // list: string[] = ["New", "Read"];
   constructor(private notificationService:NotificationService){}
 
@@ -43,7 +43,7 @@ export class NotificationsComponent implements OnInit{
 
   ngOnInit(): void {
     this.tabs = [
-      { title: "Unread", content: "Unread"},
+      // { title: "Unread", content: "Unread"},
       { title: "All", content: "All"}
     ];
 

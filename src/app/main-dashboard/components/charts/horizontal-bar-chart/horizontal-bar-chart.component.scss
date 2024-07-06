@@ -12,6 +12,7 @@
   }
   .p-panel-content{
     height:100%;
+    padding-bottom:0
   }
   .p-panel-header{
     padding:0;
@@ -35,8 +36,16 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height:30px;
+    height:20px;
 
+  }
+  .p-menubar p-menubarsub {
+    position: absolute;
+    right: 0;
+  }
+  .p-menubar .p-submenu-list {
+    position: relative;
+    right:0;
   }
 }
 
@@ -44,10 +53,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 2px solid #ccc; /* Adds underline */
-  padding-bottom: 2px; /* Adds padding to create space between text and underline */
-  margin-bottom: 1rem; /* Adds space below the title */
   position: relative; /* Make sure the position is relative for the menu */
+  border-bottom:0;
+  margin-bottom: 0;
 }
 
 .chart-title {
@@ -56,6 +64,7 @@
   text-align: left;
   padding-top: 1px;
   padding-left: 2px;
+
 }
 
 .menu-container {

@@ -95,9 +95,8 @@ export class DashboardComponent implements OnInit,OnDestroy{
     this.socketSubscription = this.chartService.messages$.subscribe(
       message => {
         if (message.response === 'widget') {
-          this.skeletonActivation = true;
           this.widgetsUserData();
-
+          
           // Keep skeleton active for 2 seconds after receiving the message
           setTimeout(() => {
             this.skeletonActivation = false;
@@ -148,7 +147,7 @@ export class DashboardComponent implements OnInit,OnDestroy{
         });
       }
       else{
-        this.authService.signOut();
+        // this.authService.signOut();
         caches.open('all-data').then(cache => {
           cache.keys().then(keys => {
             keys.forEach(key => {
@@ -179,7 +178,6 @@ export class DashboardComponent implements OnInit,OnDestroy{
     this.authService.getIdToken().subscribe((token) =>{
       this.chartService.widgetsUser(token).subscribe(
         async (response) => {
-          if(response!=false){
             try {
               const cache = await caches.open('widgets');
               const cachedResponse = await cache.match('widgets-data');
@@ -193,6 +191,8 @@ export class DashboardComponent implements OnInit,OnDestroy{
                   await cache.put('widgets-data', dataResponse);
                   this.widgetCacheChange = true;
                   this.gridComponent.changes = true;
+                  // this.skeletonActivation=true;
+                  return;
                 }
               } else {
                 const dataResponse = new Response(JSON.stringify(response), {
@@ -206,9 +206,9 @@ export class DashboardComponent implements OnInit,OnDestroy{
             catch (error) {
               // console.error('Error handling cache:', error);
             }
-          }
+          },
             // else{
-            //   this.authService.signOut();
+            //   // this.authService.signOut();
             //   caches.open('widgets').then(cache => {
             //     cache.keys().then(keys => {
             //       keys.forEach(key => {
@@ -222,7 +222,7 @@ export class DashboardComponent implements OnInit,OnDestroy{
             //   });
             //   this.skeletonActivation=true;
             // }
-          },
+          // },
         (error) => {
           this.skeletonActivation=true;
         }

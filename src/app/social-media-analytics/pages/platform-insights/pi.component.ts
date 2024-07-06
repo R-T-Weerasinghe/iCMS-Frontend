@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MenuItem } from "primeng/api";
+import { MenuItem, MessageService } from "primeng/api";
 import { PiPageItem } from '../../models/platform-insights';
 import { PlatformInsightsApiService } from '../../services/platform-insights-api.service';
-import { ModalCampaignComponent } from '../../components/Modals/modal-campaign/modal-campaign.component';
-import { ModalAlertComponent } from '../../components/Modals/modal-alert/modal-alert.component';
+import UserMessages from "../../../shared/user-messages";
 import { TabStateService } from '../../services/tab-state.service';
 import { Subscription } from 'rxjs';
 
@@ -19,6 +18,8 @@ export class PIComponent implements OnInit, OnDestroy {
   loadingHighlightedComments: boolean = true;
   loadingSentiment: boolean = true;
   loadingKeywordTrends: boolean = true;
+  isError: boolean = false;
+  protected readonly userMessages = UserMessages;
 
   items: any;
   DataReactions: any;
@@ -33,7 +34,8 @@ export class PIComponent implements OnInit, OnDestroy {
 
   constructor(
     private platformInsightsApiService: PlatformInsightsApiService,
-    private tabStateService: TabStateService
+    private tabStateService: TabStateService,
+    private messageService: MessageService,
   ) { }
 
 
@@ -82,6 +84,9 @@ export class PIComponent implements OnInit, OnDestroy {
           ]
         };
         this.loadingKeywordTrends = false;
+      }, (error) => {
+        this.isError = true;
+        this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
       });
 
       this.platformInsightsApiService.getTotalReactions(platform, "2024-05-01", "2024-07-30").subscribe(response => {
@@ -112,6 +117,9 @@ export class PIComponent implements OnInit, OnDestroy {
           ]
         };
         this.loadingReactions = false;
+      }, (error) => {
+        this.isError = true;
+        this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
       });
 
       this.platformInsightsApiService.getTotalComments(platform, "2024-05-01", "2024-07-30").subscribe(response => {
@@ -142,6 +150,9 @@ export class PIComponent implements OnInit, OnDestroy {
           ]
         };
         this.loadingComments = false;
+      }, (error) => {
+        this.isError = true;
+        this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
       });
 
       this.platformInsightsApiService.getHighlightedComments(platform, "2024-05-01", "2024-07-30").subscribe(response => {
@@ -158,6 +169,9 @@ export class PIComponent implements OnInit, OnDestroy {
         });
         this.items = highlighted_comments;
         this.loadingHighlightedComments = false;
+      }, (error) => {
+        this.isError = true;
+        this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
       });
 
       this.platformInsightsApiService.getAverageSentimentScore(platform, "2024-05-01", "2024-07-30").subscribe(response => {
@@ -200,6 +214,9 @@ export class PIComponent implements OnInit, OnDestroy {
           ]
         };
         this.loadingSentiment = false;
+      }, (error) => {
+        this.isError = true;
+        this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
       });
 
     });
@@ -291,9 +308,9 @@ export class PIComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
   }
-  
+
   breadcrumbItems: MenuItem[] = [
-    { label: "Social Media Analytics" },
+    { label: "Social Media Analytics", routerLink: "/social-media/dashboard" },
     { label: "Platform Insights" }
   ];
 

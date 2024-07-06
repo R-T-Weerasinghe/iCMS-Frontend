@@ -148,8 +148,15 @@ export class VerticalBerChartComponent implements OnInit,OnChanges{
     this.deletedConfirmed.emit();
   }
 
+
+  edit:boolean=false;
   onEdit(){
-    console.log('Edit');
+      this.edit=true;
+    
+  }
+
+  editOff(){
+    this.edit=false;
   }
 
  confirmDeleted() {
@@ -271,6 +278,7 @@ export class VerticalBerChartComponent implements OnInit,OnChanges{
 
               if (source === 'email') {
                 emailTopics = this.extractTopics(data, 'email');
+                
                 allTopics.push(...emailTopics);
               }
             });
@@ -430,19 +438,29 @@ extractTopics(data: any, sourceType: string): any[] {
       .filter((sourceItem: any) => this.isDateInRange(sourceItem.Date))
       .flatMap((sourceItem: any) => {
         if (this.xAxis === 'topics') {
-          return sourceItem.data.flatMap((dataItem: any) => dataItem.topic);
+          return sourceItem.data
+            .filter((dataItem: any) => dataItem.topic !== undefined && dataItem.topic.length > 0)
+            .flatMap((dataItem: any) => dataItem.topic);
         } else if (this.xAxis === 'keywords') {
-          return sourceItem.data.flatMap((dataItem: any) => dataItem.keywords);
+          return sourceItem.data
+            .filter((dataItem: any) => dataItem.keywords !== undefined && dataItem.keywords.length > 0)
+            .flatMap((dataItem: any) => dataItem.keywords);
         } else if (this.xAxis === 'issues') {
-          return sourceItem.data.flatMap((dataItem: any) => dataItem.issue_type);
-        } else if (this.xAxis === 'inquiries') {
-          return sourceItem.data.flatMap((dataItem: any) => dataItem.inquiry_type);
+          return sourceItem.data
+            .filter((dataItem: any) => dataItem.issue_type !== undefined && dataItem.issue_type.length > 0)
+            .flatMap((dataItem: any) => dataItem.issue_type);
+        } else if (this.xAxis === 'inquries') {
+          return sourceItem.data
+            .filter((dataItem: any) => dataItem.inquiry_type !== undefined && dataItem.inquiry_type.length > 0)
+            .flatMap((dataItem: any) => dataItem.inquiry_type);
         } else {
           return [];
         }
-      }).filter((element: any) => element != null)
+      })
+      .filter((element: any) => element != null)
   );
 }
+
 
 extractCounts(data: any, sourceType: string): any[] {
   return data.flatMap((item: any) =>
@@ -479,7 +497,7 @@ aggregateWordCloudData(allCount: any, topics: string[]): any[] {
 
       if (this.xAxis === 'topics') {
         itemTopics = Array.isArray(item.topic) ? item.topic : (item.topic ? [item.topic] : []);
-      } else if (this.xAxis === 'inquiries') {
+      } else if (this.xAxis === 'inquries') {
         itemTopics = Array.isArray(item.inquiry_type) ? item.inquiry_type : (item.inquiry_type ? [item.inquiry_type] : []);
       } else if (this.xAxis === 'issues') {
         itemTopics = Array.isArray(item.issue_type) ? item.issue_type : (item.issue_type ? [item.issue_type] : []);
@@ -538,8 +556,10 @@ aggregateWordCloudData(allCount: any, topics: string[]): any[] {
       percentage: parseFloat(((categoryMapNeutral[topic] / this.total) * 100).toFixed(2))
     }));
 
+    console.log([positiveData, negativeData, neutralData]);
     return [positiveData, negativeData, neutralData];
-  } else {
+  } 
+  else {
     const ongoingData = topics.map(topic => ({
       category: topic,
       count: categoryMapOngoing[topic],
@@ -551,7 +571,7 @@ aggregateWordCloudData(allCount: any, topics: string[]): any[] {
       count: categoryMapClosed[topic],
       percentage: parseFloat(((categoryMapClosed[topic] / this.total) * 100).toFixed(2))
     }));
-
+    console.log([ongoingData, closedData]);
     return [ongoingData, closedData];
   }
 
@@ -620,4 +640,5 @@ aggregateWordCloudData(allCount: any, topics: string[]): any[] {
       },
     };
   }
+  
 }

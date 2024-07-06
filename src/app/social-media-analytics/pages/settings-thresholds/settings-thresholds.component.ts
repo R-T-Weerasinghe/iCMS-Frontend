@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Thresholds } from '../../models/settings';
+import { MessageService } from 'primeng/api';
 import { SettingsApiService } from '../../services/settings-api.service';
 import { ModalThresholdComponent } from '../../components/Modals/modal-threshold/modal-threshold.component';
 
@@ -12,17 +13,18 @@ import { ModalThresholdComponent } from '../../components/Modals/modal-threshold
 
 export class SettingsThresholdsComponent implements OnInit {
   topBarCaption: string = "Add New";
-  list_thresholds: Thresholds[] = [];
-  thresholds!: Thresholds[];
-  loading: boolean = true;
+  thresholds: Thresholds[] = [];
 
   @ViewChild(ModalThresholdComponent) modalThresholdComponent!: ModalThresholdComponent;
 
-  constructor(private settingsApiService: SettingsApiService) { }
+  constructor(
+    private settingsApiService: SettingsApiService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit() {
-    this.settingsApiService.getSentimentShift().subscribe(response => {
-      const list_thresholds = response as Thresholds[];
+    this.settingsApiService.getSentimentShift().subscribe((response: Thresholds[]) => {
+      const list_thresholds = response;
       list_thresholds.forEach((item: any) => {
         if (item.sm_id === 'SM01') {
           item.platform = "Facebook";
@@ -31,11 +33,12 @@ export class SettingsThresholdsComponent implements OnInit {
         }
       });
       this.thresholds = list_thresholds;
-      this.loading = false;
+    }, (error) => {
+      this.messageService.add({ severity: "error", summary: "Error", detail: "Error fetching Data"});
     });
   }
 
-  openAddNew(){
+  openAddNew() {
     this.modalThresholdComponent.showDialog();
   }
 
@@ -44,9 +47,12 @@ export class SettingsThresholdsComponent implements OnInit {
   }
 
   onRowDelete(item: Thresholds): void {
-    // this.settingsApiService.deleteThreshold(item.id).subscribe(() => {
-    //   this.thresholds = this.thresholds.filter((val: Thresholds) => val.id !== item.id);
-    // });
+    this.settingsApiService.deleteThreshold(item.id).subscribe(() => {
+      this.thresholds = this.thresholds.filter((val: Thresholds) => val.id !== item.id);
+      this.messageService.add({ severity: "success", summary: "Success", detail: "Threshold Deleted Successfully"});
+    }, (error) => {
+      this.messageService.add({ severity: "error", summary: "Error", detail: "Error Deleting Threshold"});
+    });
   }
 
 }

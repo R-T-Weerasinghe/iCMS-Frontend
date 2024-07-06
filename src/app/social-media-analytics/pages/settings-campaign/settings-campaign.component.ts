@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SortEvent } from 'primeng/api';
-import { Campaign, CampaignData } from '../../models/campaign-analysis';
+import { Campaign } from '../../models/settings';
+import { MessageService } from 'primeng/api';
 import { SettingsApiService } from '../../services/settings-api.service';
 import { ModalCampaignComponent } from '../../components/Modals/modal-campaign/modal-campaign.component';
 
@@ -16,12 +16,15 @@ export class SettingsCampaignComponent implements OnInit {
   tabFacebook = { title: 'Facebook', img: 'assets/social-media/icons/facebook.png' };
   tabInstagram = { title: 'Instagram', img: 'assets/social-media/icons/instargram.png' };
 
-  contentFacebook: CampaignData = { subtitle: 'Facebook', data: [] };
-  contentInstagram: CampaignData = { subtitle: 'Instagram', data: [] };
+  contentFacebook = { subtitle: 'Facebook', data: [] as Campaign[] };
+  contentInstagram = { subtitle: 'Instagram', data: [] as Campaign[] };
 
   @ViewChild(ModalCampaignComponent) modalCampaignComponent!: ModalCampaignComponent;
 
-  constructor(private settingsApiService: SettingsApiService) { }
+  constructor(
+    private settingsApiService: SettingsApiService,
+    private messageService: MessageService
+  ) { }
 
   ngOnInit(): void {
     this.fetchCampaignsBySM();
@@ -29,9 +32,9 @@ export class SettingsCampaignComponent implements OnInit {
 
   fetchCampaignsBySM(): void {
     this.settingsApiService.getCampaigns().subscribe(
-      (response: Campaign[]) => {
+      (response) => {
 
-        const FacebookData = response["SM01" as keyof typeof response] as Campaign[];
+        const FacebookData: Campaign[] = response["SM01" as keyof typeof response] as Campaign[];
         FacebookData.forEach((item: any) => {
           if (item.description.length > 40) {
             item.description = item.description.slice(0, 40) + '...';
@@ -39,7 +42,7 @@ export class SettingsCampaignComponent implements OnInit {
         });
         this.contentFacebook.data = FacebookData;
 
-        const InstagramData = response["SM02" as keyof typeof response] as Campaign[];
+        const InstagramData: Campaign[] = response["SM02" as keyof typeof response] as Campaign[];
         InstagramData.forEach((item: any) => {
           if (item.description.length > 40) {
             item.description = item.description.slice(0, 40) + '...';
@@ -49,18 +52,26 @@ export class SettingsCampaignComponent implements OnInit {
 
       },
       error => {
-        console.error('Error fetching data:', error);
+        this.messageService.add({ severity: "error", summary: "Error", detail: "Error fetching Data"});
       }
     );
   }
 
-  openAddNew(){
+  openAddNew() {
     this.modalCampaignComponent.showDialog();
   }
 
   onRowDelete(item: Campaign): void {
-    // Implement delete functionality
-  }
-
+    this.settingsApiService.deleteCampaign(item.id).subscribe(() => {
+      if (this.contentFacebook.data.includes(item)) {
+        this.contentFacebook.data = this.contentFacebook.data.filter((val: Campaign) => val.id !== item.id);
+      } else {
+        this.contentInstagram.data = this.contentInstagram.data.filter((val: Campaign) => val.id !== item.id);
+      }
+      this.messageService.add({ severity: "success", summary: "Success", detail: "Campaign Deleted Successfully"});
+    }, (error) => {
+      this.messageService.add({ severity: "error", summary: "Error", detail: "Error Deleting Campaign"});
+    });
+ }
   topBarCaption = 'Add New';
 }

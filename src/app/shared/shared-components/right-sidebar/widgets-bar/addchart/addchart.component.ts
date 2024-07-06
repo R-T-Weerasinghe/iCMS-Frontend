@@ -60,9 +60,9 @@ export class AddchartComponent {
   ];
 
   barChartYAxisOptions = [
-    { label: 'with Sentiment Count', value: 'sentiment-count' },
-    // { label: 'Sources', value: 'sources' },
-    { label: 'with Source & Sentiment', value: 'sentiments' },
+    { label: 'with Count', value: 'sentiment-count' },
+    // { label: 'Sources with sentiment', value: 'sources' },
+    { label: 'with Source & Count', value: 'counts' },
   ];
 
   pieYAxisOptions = [
@@ -166,11 +166,11 @@ export class AddchartComponent {
 
   saveWidget() {
     const gridConfigurations: any = {
-      'Line Chart': { cols: 3, rows: 2, x: 0, y: 0 },
-      'Bar Chart': { cols: 3, rows: 2, x: 1, y: 1 },
+      'Line Chart': { cols: 3, rows: 3, x: 0, y: 0 },
+      'Bar Chart': { cols: 3, rows: 3, x: 1, y: 1 },
       'Horizontal Bar Chart': { cols: 3, rows: 2, x: 2, y: 2 },
-      'Pie Chart': { cols: 2, rows: 2, x: 3, y: 3 },
-      'Word Cloud': { cols: 3, rows: 3, x: 0, y: 4 },
+      'Pie Chart': { cols: 2, rows: 3, x: 3, y: 3 },
+      'Word Cloud': { cols: 4, rows: 3, x: 0, y: 4 },
       'Table': { cols: 3, rows: 3, x: 4, y: 0 }
     };
   

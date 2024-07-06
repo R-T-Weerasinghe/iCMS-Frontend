@@ -1,4 +1,5 @@
 <modal-campaign></modal-campaign>
+<p-toast></p-toast>
 <div class="flex flex-col">
   <div>
     <p-panel>
@@ -12,7 +13,7 @@
       <ng-template #topBarRight let-content="content">
         <!-- <p class="text-top-right-bar">{{ topBarCaption }} :</p> -->
         <!-- <modal-campaign></modal-campaign> -->
-        <p-button label="Add New" [text]="true" (click)="openAddNew()" icon="pi pi-bookmark" [outlined]="true" severity="secondary" size="small" />
+        <p-button label="Add New" [text]="true" (click)="openAddNew()" icon="pi pi-plus" [outlined]="true" severity="secondary" size="small" />
       </ng-template>
 
       <ng-template #contentRef let-content="content">

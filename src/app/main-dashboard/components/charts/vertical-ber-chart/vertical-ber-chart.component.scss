@@ -35,8 +35,15 @@
     justify-content: space-between;
     align-items: center;
     height:30px;
-    border-bottom: 2px solid #ccc;
 
+  }
+  .p-menubar p-menubarsub {
+    position: absolute;
+    right: 0;
+  }
+  .p-menubar .p-submenu-list {
+    position: relative;
+    right:0;
   }
 }
 

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from "@angular/router";
 import { WebSocketService } from "./shared/shared-services/web-socket.service";
-import { catchError, map, tap } from "rxjs/operators";
 import { webSocket } from "rxjs/webSocket";
 
 @Component({
@@ -48,5 +47,4 @@ export class AppComponent implements OnInit{
       complete: () => console.log('complete') // Called when connection is closed (for whatever reason).
     });
   }
-
 }

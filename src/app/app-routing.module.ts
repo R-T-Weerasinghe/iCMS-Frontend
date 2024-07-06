@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PageNotFoundComponent } from "./shared/shared-components/page-not-found/page-not-found.component";
+import { UnauthorizedComponent } from "./shared/shared-components/unauthorized/unauthorized.component";
 
 const routes: Routes = [
   {
     path:"auth",
     loadChildren: () => import("./auth/auth.module").then(m => m.AuthModule)
-
   },
   {
     path: "call",
@@ -36,6 +36,10 @@ const routes: Routes = [
     path: "app-settings",
     loadChildren: () => import("./app-settings/app-settings.module").then(m => m.AppSettingsModule)
   },
+  {
+    path: "unauthorized",
+    component: UnauthorizedComponent
+  },
  //default path redirect to auth
   {
     path: "",
@@ -43,7 +47,7 @@ const routes: Routes = [
     pathMatch: "full"
   },
   {
-    path: "www.youtube.com",
+    path: "**",
     component: PageNotFoundComponent
   }
 ];

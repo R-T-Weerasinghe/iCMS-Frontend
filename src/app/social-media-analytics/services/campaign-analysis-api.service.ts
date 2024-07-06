@@ -11,7 +11,7 @@ import { socialMediaBackendAPI } from '../../app-settings/config';
 export class CampaignAnalysisApiService {
   private apiUrl = `${socialMediaBackendAPI}/social-media/campaign-analysis`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getCAData(sm_id: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/campaign_analysis_details?platform=${sm_id}`);

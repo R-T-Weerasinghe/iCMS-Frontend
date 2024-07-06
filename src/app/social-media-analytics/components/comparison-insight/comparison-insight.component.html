@@ -1,0 +1,22 @@
+<ng-container *ngFor="let insight of insights">
+  <div class="card">
+    <h3>{{ insight.title }}</h3>
+    <div
+      class="trend-box"
+      [ngClass]="{
+        'up-trend': insight.isUpTrend,
+        'down-trend': !insight.isUpTrend
+      }"
+    >
+      <div class="trend-content">
+        <span class="arrow">{{ getArrowSymbol(insight.isUpTrend) }}</span>
+        <div class="details">
+          <span class="trend-text">{{
+            getTrendStatus(insight.isUpTrend)
+          }}</span>
+          <span class="trend-value">{{ insight.percentage }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

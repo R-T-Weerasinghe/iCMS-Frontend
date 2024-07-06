@@ -52,6 +52,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CallFilteringResultComponent } from './components/call-filtering-result/call-filtering-result.component';
 import { OperatorCardItemComponent } from './components/operator-card-item/operator-card-item.component';
+import { ProcessingRecordsIndicatorComponent } from './components/processing-records-indicator/processing-records-indicator.component';
 import { PasswordModule } from "primeng/password";
 
 
@@ -77,6 +78,7 @@ import { PasswordModule } from "primeng/password";
     CallFilteringResultComponent,
     BestOperatorsCardComponent,
     OperatorCardItemComponent,
+    ProcessingRecordsIndicatorComponent,
   ],
     imports: [
         CommonModule,
@@ -116,9 +118,7 @@ import { PasswordModule } from "primeng/password";
         MultiSelectModule,
         PasswordModule
     ],
-  providers: [
-    CallAnalyticsService
-  ]
+  providers: []
 })
 export class CallAnalyticsModule {
 }

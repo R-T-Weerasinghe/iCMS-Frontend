@@ -7,8 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { AlertType } from '../../../models/settings';
 import { SettingsApiService } from '../../../services/settings-api.service';
+import { ToastModule } from 'primeng/toast';
 
 interface Platform {
   name: string;
@@ -21,6 +21,7 @@ interface Platform {
   styleUrls: ['./modal-campaign.component.scss'],
   standalone: true,
   imports: [
+    ToastModule,
     CommonModule,
     DialogModule,
     ButtonModule,
@@ -34,11 +35,11 @@ export class ModalCampaignComponent {
   visible: boolean = false;
   postTitle: string | undefined;
   company: string | undefined;
-  platforms: Platform[]; // Renamed from 'platform' to 'platforms'
+  platforms: Platform[];
   selectedPlatform: Platform | undefined;
-  
+
   modalAddNewSentimentForm: FormGroup;
-  
+
   constructor(
     private settingsApiService: SettingsApiService,
     private formBuilder: FormBuilder,
@@ -47,13 +48,12 @@ export class ModalCampaignComponent {
     this.modalAddNewSentimentForm = this.formBuilder.group({
       platform: ['', Validators.required],
       post_description_part: ['', Validators.required],
-      
+
     });
-    
+
     this.platforms = [
       { name: 'Facebook', icon: 'assets/social-media/icons/facebook.png' },
       { name: 'Instagram', icon: 'assets/social-media/icons/instargram.png' },
-      { name: 'Twitter', icon: 'assets/social-media/icons/twitter.png' },
     ];
   }
 
@@ -62,33 +62,29 @@ export class ModalCampaignComponent {
   }
 
   onSubmitModalAddNewSentimentForm() {
-    if(this.modalAddNewSentimentForm.valid){
+    if (this.modalAddNewSentimentForm.valid) {
       const formData = this.modalAddNewSentimentForm.value;
-      if(formData.platform.name == 'Facebook'){
+      if (formData.platform.name == 'Facebook') {
         formData.platform = 'SM01';
       }
-      else if(formData.platform.name == 'Instagram'){
+      else if (formData.platform.name == 'Instagram') {
         formData.platform = 'SM02';
       }
       console.log(formData);
       this.settingsApiService.setCampaigns(formData).subscribe(
         (response) => {
-          this.messageService.add({severity:'success', summary:'Success', detail:'Campaign added successfully'});
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Campaign added successfully' });
           this.visible = false;
         },
         (error) => {
           console.log(error);
-          this.messageService.add({severity:'error', summary:'Error', detail:'Error adding campaign'});
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.detail || 'Error adding alert' });
         }
-      );  
+      );
+    }
+    else {
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill all required fields' });
 
     }
-    else{
-      this.messageService.add({severity:'error', summary:'Error', detail:'Please fill all required fields'});
-
-    }
-
   }
-
-
 }

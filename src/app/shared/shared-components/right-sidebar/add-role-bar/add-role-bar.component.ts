@@ -69,6 +69,8 @@ export class AddRoleBarComponent implements OnInit {
       {name:'View Analytics', value: false},
       {name:'Filter Calls', value: false},
       {name:'Change Call Settings', value: false},
+      {name:'View Call Settings', value: false},
+      {name:'View Logs', value: false},
     ];
     this.roleUpdateService.roleToUpdate.subscribe((roleData: any) => {
       this.populateForm(roleData);
@@ -162,6 +164,8 @@ export class AddRoleBarComponent implements OnInit {
       {name:'View Analytics', value: false},
       {name:'Filter Calls', value: false},
       {name:'Change Call Settings', value: false},
+      {name:'View Call Settings', value: false},
+      {name:'View Logs', value: false},
     ];
     this.roleName = '';
     this.selectedUsers = [];

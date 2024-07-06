@@ -1,23 +1,30 @@
-<app-page-header pageTitle="Social Media Analytics Dashboard" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems" />
+<app-page-header pageTitle="Social Media Analytics Dashboard" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems"
+  [showDatePicker]="true" [callDashboardDate]="true" (callDateRangeChanged)="DateChanged($event[0], $event[1])" />
 
 <div class="flex flex-col">
-  <div class="flex gap-4 flex-wrap">
+  <div class="flex gap-7 flex-wrap">
 
-    <doughnut-chart title="Overall Sentiment" [percentages]="data_doughnut" />
+    <doughnut-chart title="Overall Sentiment" />
+
     <app-gauge-chart-facebook />
 
-    <word-cloud-topics [words]="myData1" title="Product Trends"/>
+    <app-gauge-chart-instagram/>  
+    <div>
+      <word-cloud-topics [words]="myData1" title="Product Trends"/>
+      <word-cloud-keywords [words]="myData2" title="Keyword Trends" />
 
-    <word-cloud-keywords [words]="myData2" title="Keyword Trends" />
-
+    </div>  
+  
   </div>
 
-   <div class="flex gap-3 flex-wrap ">
-
+   <div class="flex gap-4 flex-wrap ">
     <line-chart-facebook title="Insights from Facebook"/>
 
     <line-chart-instagram title="Insights from Instagram"/>
+  </div>
 
+  <div class="flex gap-3 flex-wrap">
+    <app-comparison-insight></app-comparison-insight>
   </div>
 
 </div>

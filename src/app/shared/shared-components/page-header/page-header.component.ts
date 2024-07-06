@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from "primeng/api";
 import { DateRangeService } from '../../../main-dashboard/services/shared-date-range/date-range.service';
+import { TokenStorageService } from "../../shared-services/token-storage.service";
 
 @Component({
   selector: 'app-page-header',
@@ -22,7 +23,7 @@ export class PageHeaderComponent implements OnInit {
   @Input() mainDashboardDate: boolean = false;
   @Input() callDashboardDate: boolean = false;
 
-  @Input() mainDashboardNotification:boolean=false;
+  @Input() mainDashboardNotification: boolean = false;
 
 
   @Input() minDate: Date = new Date();
@@ -37,15 +38,29 @@ export class PageHeaderComponent implements OnInit {
   rangeDates: Date[] | undefined;
   callDateRange: Date[] | undefined;
   home: MenuItem | undefined;
+  isAbleToAddCall: boolean = false;
+  isAbleToAddOperator: boolean = false;
 
-  constructor(private router: Router, private dateRangeService: DateRangeService) {
+  constructor(
+    private router: Router,
+    private dateRangeService: DateRangeService,
+    private tokenStorageService: TokenStorageService
+  ) {
   }
 
   ngOnInit() {
+    // get last month date
+    this.callDateRange = [
+      new Date(),
+      new Date(new Date().setMonth(new Date().getMonth() - 1))
+    ]
     this.rangeDates = this.getCurrentDateRange();
     this.dateRangeService.changeDateRange(this.rangeDates);
     this.home = {icon: 'pi pi-home', routerLink: '/'};
     this.showOldDate();
+    let permissions = this.tokenStorageService.getStorageKeyValue("permissions");
+    this.isAbleToAddCall = permissions.includes("Add Call Recording");
+    this.isAbleToAddOperator = permissions.includes("Add Call Operator");
   }
 
   onRangeDateChange(rangeDates: Date[]) {
@@ -61,7 +76,7 @@ export class PageHeaderComponent implements OnInit {
   }
 
   formatDate(date: Date, type: "start" | "end" = "start"): string {
-    const pad = (num:any) => num.toString().padStart(2, '0');
+    const pad = (num: any) => num.toString().padStart(2, '0');
 
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1); // getMonth() is zero-indexed

@@ -1,3 +1,5 @@
+<modal-campaign></modal-campaign>
+<p-toast></p-toast>
 <app-page-header pageTitle="Campaign Analysis" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems" />
 
 <div class="flex flex-col">
@@ -9,37 +11,51 @@
       </tabs>
 
       <ng-template #contentRef let-content="content">
-        <div style="
+
+        <p-panel class="text-center justify-center">
+          <div class="flex justify-between items-center px-3 mb-5" [style.display]="isError ? 'block' : 'none'">
+            <img src="./assets/img/500.jpg" style="width: 60%;">
+            <p class="text-4xl">Internal Server Error</p>
+            <p>{{ userMessages.FETCH_ERROR_USER_MSG }}</p>
+          </div>
+        </p-panel>
+
+        <div [style.display]="isError ? 'none' : 'block'">
+
+          <div style="
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
           ">
-          <h3>{{ content.subtitle }}</h3>
-          <div style="display: flex; flex-direction: row; align-items: center">
-            <!-- <p class="text-top-right-bar semi-balted">Custom Campaigns :</p> -->
-            <!-- <modal-campaign></modal-campaign> -->
-            <p-button label="Edit" [text]="true" icon="pi pi-pencil" [outlined]="true" severity="secondary" size="small" />
-            <p-button label="Add New" [text]="true" icon="pi pi-bookmark" [outlined]="true" severity="secondary" size="small" />
+            <h3>{{ content.subtitle }}</h3>
+            <div style="display: flex; flex-direction: row; align-items: center">
+              <!-- <p class="text-top-right-bar semi-balted">Custom Campaigns :</p> -->
+              <p-button label="Add New" [text]="true" icon="pi pi-plus" [outlined]="true" severity="secondary"
+                size="small" (click)="openAddNew()" />
+            </div>
           </div>
-        </div>
 
-        <p-panel>
-          <div class="flex justify-between w-full py-2 mb-2">
-            <div>
-              <h4 class="p-0 m-0">
-                {{ content.topCampaigns.length }} top performing campaigns
-              </h4>
+          <p-panel>
+            <div class="flex justify-between w-full py-2 mb-2">
+              <div>
+                <h4 class="p-0 m-0">
+                  {{ content.topCampaigns.length }} top performing campaigns
+                </h4>
+              </div>
+              <div>
+                <button class="p-button p-button-sm p-button-secondary" (click)="toggleAdditionalCards()">
+                  See More
+                </button>
+              </div>
             </div>
-            <div>
-              <button class="p-button p-button-sm p-button-secondary" (click)="toggleAdditionalCards()">
-                See More
-              </button>
-            </div>
-          </div>
-          <app-ca-cards [campaigns]="content.topCampaigns" [showAdditionalCards]="true" [loading]="loading"></app-ca-cards>
-          <app-ca-cards [campaigns]="content.additionalCampaigns" [showAdditionalCards]="showAdditionalCards" [loading]="loading"></app-ca-cards>
-        </p-panel>
+            <app-ca-cards [campaigns]="content.topCampaigns" [showAdditionalCards]="true"
+              [loading]="loading"></app-ca-cards>
+            <app-ca-cards [campaigns]="content.additionalCampaigns" [showAdditionalCards]="showAdditionalCards"
+              [loading]="loading"></app-ca-cards>
+          </p-panel>
+
+        </div>
       </ng-template>
 
     </p-panel>

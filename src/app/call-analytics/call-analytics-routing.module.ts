@@ -6,39 +6,44 @@ import { CallFilteringComponent } from './components/call-filtering/call-filteri
 import { SettingsComponent } from './components/settings/settings.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { CallOperatorsComponent } from "./components/call-operators/call-operators.component";
-import {AuthGuardService} from "../shared/shared-services/auth-guard.service";
+import { callUploadGuard } from "./guards/call-upload.guard";
+import { callSettingsGuard } from "./guards/call-settings.guard";
+import { callAnalyticsGuard } from "./guards/call-analytics.guard";
+import { callOperatorsGuard } from "./guards/call-operators.guard";
+import { callFilterGuard } from "./guards/call-filter.guard";
+import { callRecordingsGuard } from "./guards/call-recordings.guard";
 
 
 const routes: Routes = [
   {
     path: "dashboard",
     component: DashboardComponent,
-    // canActivate: [AuthGuardService]
+    canActivate: [callAnalyticsGuard]
   },
   {
     path: "recordings",
     component: CallRecordingsComponent,
-    // canActivate: [AuthGuardService]
+    canActivate: [callRecordingsGuard]
   },
   {
     path: "filtering",
     component: CallFilteringComponent,
-    // canActivate: [AuthGuardService]
+    canActivate: [callFilterGuard]
   },
   {
     path: 'settings',
     component: SettingsComponent,
-    // canActivate: [AuthGuardService]
+    canActivate: [callSettingsGuard]
   },
   {
     path: "upload",
     component: FileUploadComponent,
-    // canActivate: [AuthGuardService]
+    canActivate: [callUploadGuard]
   },
   {
     path: "operators",
     component: CallOperatorsComponent,
-    // canActivate: [AuthGuardService]
+    canActivate: [callOperatorsGuard]
   }
 
 ];

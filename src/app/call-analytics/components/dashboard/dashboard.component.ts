@@ -63,7 +63,22 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.end = this.formatDate(new Date(), "end");
+    this.start = this.formatDate(new Date(new Date().setMonth(new Date().getMonth() - 1)), "start");
     this.reloadData(this.start, this.end);
+  }
+
+  formatDate(date: Date, type: "start" | "end" = "start"): string {
+    const pad = (num:any) => num.toString().padStart(2, '0');
+
+    const year = date.getFullYear();
+    const month = pad(date.getMonth() + 1); // getMonth() is zero-indexed
+    const day = pad(date.getDate());
+    if (type === "start") {
+      return `${year}-${month}-${day}-00-00-00`;
+    } else {
+      return `${year}-${month}-${day}-23-59-59`;
+    }
   }
 
   reloadData(start: string, end: string) {

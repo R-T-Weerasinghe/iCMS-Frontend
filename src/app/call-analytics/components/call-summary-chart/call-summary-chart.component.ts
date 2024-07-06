@@ -5,6 +5,7 @@ import { CallAnalyticsService } from "../../services/call-analytics.service";
 import userMessages from "../../../shared/user-messages";
 import UserMessages from "../../../shared/user-messages";
 import { MessageService } from "primeng/api";
+import { TokenStorageService } from "../../../shared/shared-services/token-storage.service";
 
 @Component({
   selector: 'app-call-summary-chart',
@@ -29,15 +30,19 @@ export class CallSummaryChartComponent implements OnInit {
   isLoading: boolean = true;
   noData: boolean = false;
   protected readonly userMessages = userMessages;
+  isAbleToDelete: boolean = false;
 
   constructor(
     private callRecordingService: CallRecordingService,
     private callAnalyticsService: CallAnalyticsService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private tokenStorageService: TokenStorageService
   ) {
   }
 
   ngOnInit() {
+    let permissions = this.tokenStorageService.getStorageKeyValue("permissions");
+    this.isAbleToDelete = permissions.includes("Delete Call Recording");
     const documentStyle: CSSStyleDeclaration = getComputedStyle(document.documentElement);
     this.statusColors = {
       "Positive": documentStyle.getPropertyValue("--positive-color"),

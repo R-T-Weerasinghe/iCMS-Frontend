@@ -9,6 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { SettingsApiService } from '../../../services/settings-api.service';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'modal-threshold',
@@ -16,6 +17,7 @@ import { SettingsApiService } from '../../../services/settings-api.service';
   styleUrls: ['./modal-threshold.component.scss'],
   standalone: true,
   imports: [
+    ToastModule,
     CommonModule,
     DialogModule,
     ButtonModule,
@@ -31,13 +33,13 @@ export class ModalThresholdComponent implements OnInit {
   selectedNotificationType: any;
   topBarCaption: string = "Add New";
   visible: boolean = false;
-  
+
   minValue: number = 0;
   maxValue: number = 0;
 
   platforms: any[] = [];
   selectedPlatform: any;
-  
+
   modalsetThresholdForm: FormGroup;
   isEditMode: boolean = false;
   currentThresholdId: string | undefined;
@@ -46,7 +48,7 @@ export class ModalThresholdComponent implements OnInit {
     private formBuilder: FormBuilder,
     private settingsApiService: SettingsApiService,
     private messageService: MessageService
-  ){
+  ) {
     this.modalsetThresholdForm = this.formBuilder.group({
       sm_id: ['', Validators.required],
       alert_type: ['', Validators.required],
@@ -63,7 +65,6 @@ export class ModalThresholdComponent implements OnInit {
     this.platforms = [
       { name: 'Facebook', icon: 'assets/social-media/icons/facebook.png' },
       { name: 'Instagram', icon: 'assets/social-media/icons/instargram.png' },
-      { name: 'Twitter', icon: 'assets/social-media/icons/twitter.png' },
     ];
   }
 
@@ -91,8 +92,6 @@ export class ModalThresholdComponent implements OnInit {
         return 'Facebook';
       case 'SM02':
         return 'Instagram';
-      case 'SM03':
-        return 'Twitter';
       default:
         return '';
     }
@@ -118,30 +117,29 @@ export class ModalThresholdComponent implements OnInit {
       if (this.isEditMode && this.currentThresholdId) {
         this.settingsApiService.updateSentimentShift(this.currentThresholdId, formData).subscribe(
           (response) => {
-            this.messageService.add({severity:'success', summary:'Success', detail:'Threshold updated successfully'});
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Threshold updated successfully' });
             this.visible = false;
             this.modalsetThresholdForm.reset();
           },
           (error) => {
-            console.error('Error updating threshold:', error);
-            this.messageService.add({severity:'error', summary:'Error', detail:'Error updating threshold'});
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.detail || 'Error adding alert' });
           }
         );
       } else {
         this.settingsApiService.setSentimentShift(formData).subscribe(
           (response) => {
-            this.messageService.add({severity:'success', summary:'Success', detail:'Threshold added successfully'});
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Threshold added successfully' });
             this.visible = false;
             this.modalsetThresholdForm.reset();
           },
           (error) => {
-            console.error('Error adding threshold:', error);
-            this.messageService.add({severity:'error', summary:'Error', detail:'Error adding threshold'});
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.detail || 'Error adding alert' });
           }
         );
       }
     } else {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Please fill all required fields'});
+      console.log(this.modalsetThresholdForm);
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill all required fields' });
     }
   }
 
@@ -151,8 +149,6 @@ export class ModalThresholdComponent implements OnInit {
         return 'SM01';
       case 'Instagram':
         return 'SM02';
-      case 'Twitter':
-        return 'SM03';
       default:
         return '';
     }

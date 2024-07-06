@@ -46,6 +46,8 @@ export class DoughnutChartComponent implements OnInit,OnChanges{
     { label: 'Neutral', value: 70, color1: '#FF9800', color2: '#FFC107', icon: 'pi pi-desktop' }
   ];
 
+  edit:boolean=false;
+
   @Input() id!: string;
 
   totalSums = { positive: 0, negative: 0, neutral: 0 };
@@ -187,7 +189,12 @@ export class DoughnutChartComponent implements OnInit,OnChanges{
   }
 
   onEdit(){
-    console.log('Edit');
+      this.edit=true;
+    
+  }
+
+  editOff(){
+    this.edit=false;
   }
 
  confirmDeleted() {

@@ -1,4 +1,5 @@
 <modal-threshold></modal-threshold>
+<p-toast></p-toast>
 <div class="flex flex-col">
   <div>
     <p-panel>
@@ -15,9 +16,8 @@
           <ng-template #noThresholds>No Custom thresholds</ng-template>
         </p>
         <div style="display: flex; flex-direction: row; align-items: center">
-          <!-- <p class="text-top-right-bar">{{ topBarCaption }} :</p> -->
-          <!-- <modal-threshold></modal-threshold> -->
-          <p-button label="Add New" [text]="true" (click)="openAddNew()" icon="pi pi-bookmark" [outlined]="true" severity="secondary" size="small" />
+          <p-button label="Add New" [text]="true" (click)="openAddNew()" icon="pi pi-plus" [outlined]="true"
+            severity="secondary" size="small" />
         </div>
       </div>
 
@@ -49,35 +49,26 @@
                 <!-- <td>
                   <p-tableCheckbox></p-tableCheckbox>
                 </td> -->
-                <ng-container *ngIf="loading">
-                  <td><p-skeleton /></td>
-                  <td><p-skeleton /></td>
-                  <td><p-skeleton /></td>
-                  <td><p-skeleton /></td>
-                </ng-container>
-                <ng-container *ngIf="!loading">
-                  <td>{{ item.platform }}</td>
-                  <td>{{ item.alert_type }}</td>
-                  <td>
-                    <span>From {{ item.min_val }} to {{ item.max_val }}</span>
-                    <progress-bar [value]="(item.min_val + 10) * 5" [bufferValue]="(item.max_val + 10) * 5"
-                      [color]="'#e5ff00'"></progress-bar>
-                  </td>
-                  <td>
-                    <div class="flex align-items-center justify-content-center gap-2">
-                      <button pButton pRipple type="button" icon="pi pi-pencil" (click)="onRowEdit(item)"
-                        class="p-button-text p-button-Primary"></button>
-                      <button pButton pRipple type="button" icon="pi pi-trash" (click)="onRowDelete(item)"
-                        class="p-button-text p-button-danger"></button>
-                    </div>
-                  </td>
-                </ng-container>
+                <td>{{ item.platform }}</td>
+                <td>{{ item.alert_type }}</td>
+                <td>
+                  <span>From {{ item.min_val }} to {{ item.max_val }}</span>
+                  <progress-bar [value]="(item.min_val + 10) * 5" [bufferValue]="(item.max_val + 10) * 5"
+                    [color]="'#3699FF'"></progress-bar>
+                </td>
+                <td>
+                  <div class="flex align-items-center justify-content-center gap-2">
+                    <button pButton pRipple type="button" icon="pi pi-pencil" (click)="onRowEdit(item)"
+                      class="p-button-text p-button-Primary"></button>
+                    <button pButton pRipple type="button" icon="pi pi-trash" (click)="onRowDelete(item)"
+                      class="p-button-text p-button-danger"></button>
+                  </div>
+                </td>
               </tr>
             </ng-template>
           </p-table>
         </div>
       </ng-container>
-
     </p-panel>
   </div>
 </div>

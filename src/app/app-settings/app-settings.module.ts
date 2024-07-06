@@ -23,6 +23,7 @@ import {ToastModule} from "primeng/toast";
 import {ButtonModule} from "primeng/button";
 import {ChipModule} from "primeng/chip";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
+import {BadgeModule} from "primeng/badge";
 
 
 @NgModule({
@@ -55,7 +56,8 @@ import {ProgressSpinnerModule} from "primeng/progressspinner";
         ToastModule,
         ButtonModule,
         ChipModule,
-        ProgressSpinnerModule
+        ProgressSpinnerModule,
+        BadgeModule
 
     ]
 })

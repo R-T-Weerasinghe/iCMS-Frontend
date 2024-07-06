@@ -36,6 +36,7 @@ import { ViewUserComponent } from './shared-components/right-sidebar/view-user/v
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { DialogModule } from 'primeng/dialog';
 import { SkeletonModule } from "primeng/skeleton";
+import { UnauthorizedComponent } from './shared-components/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { SkeletonModule } from "primeng/skeleton";
     PageNotFoundComponent,
     AddRoleBarComponent,
     ViewUserComponent,
+    UnauthorizedComponent,
 
   ],
   exports: [

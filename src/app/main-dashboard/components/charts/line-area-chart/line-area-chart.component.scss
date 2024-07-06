@@ -9,8 +9,7 @@
     justify-content: space-between;
     align-items: center;
     height:30px;
-    border-bottom: 2px solid #ccc;
-
+    //border-bottom: 2px solid #ccc;
   }
 
   .p-menubar{
@@ -54,7 +53,7 @@
   .menu-button {
     position: relative;
     top: 20px;
-    left: 20px;
+    left: 10px;
 
   }
   .card {
@@ -74,7 +73,7 @@
   //janith
     .p-panel{
     height:100%;
-      
+
   }
   .p-component{
     height:100%;
@@ -88,5 +87,13 @@
   }
   .p-toggleable-content{
     height:100%
+  }
+  .p-menubar p-menubarsub {
+    position: absolute;
+    right: 0;
+  }
+  .p-menubar .p-submenu-list {
+    position: relative;
+    right:0;
   }
 }

@@ -39,7 +39,7 @@ export class AuthenticationService {
   }
 
   signIn(username: string, password: string): Observable<any> {
-  const getIp$ = this.http.get('http://api.ipify.org/?format=json', { responseType: 'text' });
+  const getIp$ = this.http.get('https://api.ipify.org/?format=json', { responseType: 'text' });
     console.log('getIp$', getIp$);
     const authenticateUser$ = (ip: any) => new Observable(observer => {
       const authenticationDetails = new AuthenticationDetails({

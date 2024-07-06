@@ -9,6 +9,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { SettingsApiService } from '../../../services/settings-api.service';
+import { ToastModule } from 'primeng/toast';
 
 interface NotificationType {
   name: string;
@@ -21,6 +22,7 @@ interface NotificationType {
   styleUrls: ['./modal-alert.component.scss'],
   standalone: true,
   imports: [
+    ToastModule,
     CommonModule,
     DialogModule,
     ButtonModule,
@@ -32,18 +34,18 @@ interface NotificationType {
   ]
 })
 export class ModalAlertComponent implements OnInit {
-  
+
   notificationTypes: NotificationType[] = [];
   selectedNotificationType: NotificationType | undefined;
   topBarCaption: string = "Add New";
   visible: boolean = false;
-  
+
   modalSetAlertForm: FormGroup;
   isEditMode: boolean = false;
   currentAlertId: string | undefined;
 
   constructor(
-    private formBuilder: FormBuilder, 
+    private formBuilder: FormBuilder,
     private settingsApiService: SettingsApiService,
     private messageService: MessageService) {
     this.modalSetAlertForm = this.formBuilder.group({
@@ -95,33 +97,34 @@ export class ModalAlertComponent implements OnInit {
       const formData = this.modalSetAlertForm.value;
       formData.alert_type = formData.alert_type.name === 'Email Notification' ? 'email' : 'app';
 
+      console.log('this.isEditMode', this.isEditMode);
+      console.log('this.currentAlertId', this.currentAlertId);
+
       if (this.isEditMode && this.currentAlertId) {
         this.settingsApiService.updateTopicAlerts(this.currentAlertId, formData).subscribe(
           (response) => {
-            this.messageService.add({severity:'success', summary:'Success', detail:'Alert updated successfully'});
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Alert updated successfully' });
             this.visible = false;
             this.modalSetAlertForm.reset();
           },
           (error) => {
-            console.error('Error updating alert:', error);
-            this.messageService.add({severity:'error', summary:'Error', detail:'Error updating alert'});
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.detail || 'Error adding alert' });
           }
         );
       } else {
         this.settingsApiService.setTopicAlerts(formData).subscribe(
           (response) => {
-            this.messageService.add({severity:'success', summary:'Success', detail:'Alert added successfully'});
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Alert added successfully' });
             this.visible = false;
             this.modalSetAlertForm.reset();
           },
           (error) => {
-            console.error('Error adding alert:', error);
-            this.messageService.add({severity:'error', summary:'Error', detail:'Error adding alert'});
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.detail || 'Error adding alert' });
           }
         );
       }
     } else {
-      this.messageService.add({severity:'error', summary:'Error', detail:'Please fill all required fields'});
+      this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill all required fields' });
     }
   }
 }

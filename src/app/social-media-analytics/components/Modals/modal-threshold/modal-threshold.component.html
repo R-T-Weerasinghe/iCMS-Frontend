@@ -1,16 +1,33 @@
-<p-dialog [header]="topBarCaption" [modal]="true" [(visible)]="visible" [style]="{ width: '45rem' }">
-  <form [formGroup]="modalsetThresholdForm" (ngSubmit)="onSubmitSetThresoldForm()">
+<p-toast></p-toast>
+<p-dialog
+  [header]="topBarCaption"
+  [modal]="true"
+  [(visible)]="visible"
+  [style]="{ width: '45rem' }"
+>
+  <form
+    [formGroup]="modalsetThresholdForm"
+    (ngSubmit)="onSubmitSetThresoldForm()"
+  >
     <div class="flex align-items-center mb-3">
-      <label for="topic" class="font-semibold" style="width: 6rem; flex-shrink: 0">Platform</label>
-      <div style="flex-grow: 1">
-        <p-dropdown [options]="platforms" optionLabel="name" [showClear]="true" placeholder="Select a Platform"
-          formControlName="sm_id" [style]="{ width: '100%' }">
-          <ng-template pTemplate="selectedItem">
-            <div class="flex align-items-center gap-2" *ngIf="selectedPlatform">
-              <img [src]="selectedPlatform.icon" style="width: 20px" />
-              <div>{{ selectedPlatform.name }}</div>
-            </div>
-          </ng-template>
+      <label
+        for="platform"
+        class="font-semibold"
+        style="width: 6rem; display: inline-block"
+        >Platform</label
+      >
+      <div
+        class="card flex justify-content-center"
+        style="display: inline-block; width: calc(100% - 6rem)"
+      >
+        <p-dropdown
+          [options]="platforms"
+          formControlName="sm_id"
+          optionLabel="name"
+          [showClear]="true"
+          placeholder="Select a Platform"
+          [style]="{ width: '100%' }"
+        >
           <ng-template let-platform pTemplate="item">
             <div class="flex align-items-center gap-2">
               <img [src]="platform.icon" style="width: 20px" />
@@ -22,10 +39,22 @@
     </div>
 
     <div class="flex align-items-center mb-3">
-      <label for="alertType" class="font-semibold" style="width: 6rem; flex-shrink: 0">Alert Type</label>
+      <label
+        for="alertType"
+        class="font-semibold"
+        style="width: 6rem; flex-shrink: 0"
+        >Alert Type</label
+      >
       <div style="flex-grow: 1">
-        <p-dropdown [options]="notificationTypes" optionLabel="name" [showClear]="true"
-          placeholder="Select an Alert Type" id="alertType" formControlName="alert_type" [style]="{ width: '100%' }">
+        <p-dropdown
+          [options]="notificationTypes"
+          optionLabel="name"
+          [showClear]="true"
+          placeholder="Select an Alert Type"
+          id="alertType"
+          formControlName="alert_type"
+          [style]="{ width: '100%' }"
+        >
           <ng-template let-notificationType pTemplate="item">
             <div class="flex align-items-center gap-2">
               <img [src]="notificationType.icon" style="width: 20px" />
@@ -37,33 +66,71 @@
     </div>
 
     <div class="flex align-items-center mb-3">
-      <label for="threshold" class="font-semibold" style="width: 6rem; flex-shrink: 0">Threshold</label>
+      <label
+        for="threshold"
+        class="font-semibold"
+        style="width: 6rem; flex-shrink: 0"
+        >Threshold</label
+      >
     </div>
-    <div class="flex align-items-center mb-3" style="align-items: center; justify-content: space-evenly">
+    <div
+      class="flex align-items-center mb-3"
+      style="align-items: center; justify-content: space-evenly"
+    >
       <div style="display: flex; flex-direction: row; align-items: center">
-        <label for="minThreshold" class="font-semibold" style="width: 6rem; flex-shrink: 0">Min :
+        <label
+          for="minThreshold"
+          class="font-semibold"
+          style="width: 6rem; flex-shrink: 0"
+          >Min :
         </label>
-        <p-inputNumber class="short-input" mode="decimal" [showButtons]="true" inputId="minThreshold" [min]="-10"
-          [max]="10" formControlName="min_val" [style]="{ width: '100px' }"
-          [inputStyle]="{ width: '100%', 'font-size': '14px' }"></p-inputNumber>
+        <p-inputNumber
+          class="short-input"
+          mode="decimal"
+          [showButtons]="true"
+          inputId="minThreshold"
+          [min]="-10"
+          [max]="10"
+          formControlName="min_val"
+          [style]="{ width: '100px' }"
+          [inputStyle]="{ width: '100%', 'font-size': '14px' }"
+        ></p-inputNumber>
       </div>
-      <div style="
-            display: flex;
-            justify-content: space-evenly;
-            flex-direction: row;
-            align-items: center;
-          ">
-        <label for="maxThreshold" class="font-semibold" style="width: 6rem; flex-shrink: 0">Max :
+      <div
+        style="
+          display: flex;
+          justify-content: space-evenly;
+          flex-direction: row;
+          align-items: center;
+        "
+      >
+        <label
+          for="maxThreshold"
+          class="font-semibold"
+          style="width: 6rem; flex-shrink: 0"
+          >Max :
         </label>
-        <p-inputNumber class="short-input" mode="decimal" [showButtons]="true" inputId="maxThreshold" [min]="-10"
-          [max]="10" formControlName="max_val" [style]="{ width: '100px' }"
-          [inputStyle]="{ width: '100%', 'font-size': '14px' }"></p-inputNumber>
+        <p-inputNumber
+          class="short-input"
+          mode="decimal"
+          [showButtons]="true"
+          inputId="maxThreshold"
+          [min]="-10"
+          [max]="10"
+          formControlName="max_val"
+          [style]="{ width: '100px' }"
+          [inputStyle]="{ width: '100%', 'font-size': '14px' }"
+        ></p-inputNumber>
       </div>
     </div>
 
     <div style="display: flex; justify-content: center">
-      <button pButton type="submit" label="{{ topBarCaption === 'Add New' ? 'Save' : 'Update' }}"
-        style="margin: 0 auto"></button>
+      <button
+        pButton
+        type="submit"
+        label="{{ topBarCaption === 'Add New' ? 'Save' : 'Update' }}"
+        style="margin: 0 auto"
+      ></button>
     </div>
   </form>
 </p-dialog>

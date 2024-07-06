@@ -11,7 +11,7 @@ import { socialMediaBackendAPI } from '../../app-settings/config';
 export class PlatformInsightsApiService {
   private apiUrl = `${socialMediaBackendAPI}/social-media/platform-insights`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getKeywordTrendCount(platform: string, startDate: string, endDate: string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/keyword_trend_count?platform=${platform}&startDate=${startDate}&endDate=${endDate}`);

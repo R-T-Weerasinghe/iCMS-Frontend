@@ -14,7 +14,7 @@
     [value]="users"
     selectionMode="single"
     [(selection)]="selectedUsers"
-    (onRowSelect)="updateActions()"
+    (onRowSelect)="updateActions();logs=[];"
     (onRowUnselect)="updateActions()"
     dataKey="username"
     [tableStyle]="{'min-width': '50rem'}"
@@ -174,3 +174,64 @@
         </div>
     </ng-template>
 </p-confirmDialog>
+
+
+<div class="card flex justify-content-center">
+  <p-dialog
+    header="User Logs"
+    [modal]="true"
+    [(visible)]="logsVisible"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  >
+    <div class="flex flex-col">
+      <div class="flex justify-content-end mb-4">
+        <p-button
+          label="Close"
+          (onClick)="logsVisible = false;logs = []"
+          class="p-button-outlined"
+        ></p-button>
+      </div>
+
+      <p-table
+        [value]="logs"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[5, 10, 20]"
+        responsiveLayout="scroll"
+        [globalFilterFields]="['time', 'action', 'is_success']"
+        class="logs-table"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Date</th>
+            <th>Action</th>
+            <th>Status</th>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-log>
+          <tr>
+            <td>{{ log.time }}</td>
+            <td>{{ log.action }}</td>
+            <td>
+              <p-badge
+                [value]="log.is_success ? 'Success' : 'Failed'"
+                [severity]="log.is_success ? 'success' : 'danger'"
+              ></p-badge>
+            </td>
+          </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3" class="text-center">
+              <p>No logs found.</p>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </p-dialog>
+</div>
+

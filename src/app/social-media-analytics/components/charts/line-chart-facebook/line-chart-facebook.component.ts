@@ -44,12 +44,12 @@ export class LineChartFacebookComponent {
               {
                 label: 'Reacts',
                 data: Object.values(data['1']),
-                borderColor: document.documentElement.style.getPropertyValue('--blue-500'),
+                borderColor: 'rgb(160, 161, 162)',
               },
               {
                 label: 'Comments',
                 data: Object.values(data['2']),
-                borderColor: document.documentElement.style.getPropertyValue('rgba(255, 235, 59, 1)'),
+                borderColor: 'rgb(19, 95, 193)',
               },
             ]
           };

@@ -125,8 +125,15 @@ export class WordcloudComponent implements OnInit, OnChanges{
     this.deletedConfirmed.emit();
   }
 
+
+  edit:boolean=false;
   onEdit(){
-    console.log('Edit');
+      this.edit=true;
+    
+  }
+
+  editOff(){
+    this.edit=false;
   }
 
  confirmDeleted() {
@@ -352,8 +359,7 @@ export class WordcloudComponent implements OnInit, OnChanges{
       return;
     }
 
-    console.log('Words:', this.words);  // Debugging: Check the words array
-
+  
     $(this.wordCloudContainer.nativeElement).jQWCloud({
       words: this.words,
       maxFont: 60,

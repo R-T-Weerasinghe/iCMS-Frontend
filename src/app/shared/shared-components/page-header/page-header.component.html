@@ -7,9 +7,13 @@
 <!--    <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" [showIcon]="true" class="z-10"></p-calendar>-->
 <!--  </div>-->
 
-  <div class="w-fit" *ngIf="showButton">
-    <p-button [outlined]="false" (click)="onClickActionButton()">{{ buttonText }}</p-button>
-  </div>
+  @if (showButton) {
+    @if ((buttonText.includes("Operator") && isAbleToAddOperator) || (buttonText.includes("Recording") && isAbleToAddCall)) {
+      <div class="w-fit">
+        <p-button [outlined]="false" (click)="onClickActionButton()">{{ buttonText }}</p-button>
+      </div>
+    }
+  }
 
   <div class="w-fit ms-auto pe-5 pt-1" *ngIf="showDatePicker">
     <p-calendar

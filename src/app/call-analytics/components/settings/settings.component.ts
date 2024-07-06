@@ -5,6 +5,7 @@ import { CallSettingsService } from '../../services/call-settings.service';
 import { CallSettingsDetails } from '../../types';
 import UserMessages from '../../../shared/user-messages';
 import { CheckboxChangeEvent } from 'primeng/checkbox';
+import { TokenStorageService } from "../../../shared/shared-services/token-storage.service";
 
 @Component({
   selector: 'app-settings',
@@ -14,16 +15,18 @@ import { CheckboxChangeEvent } from 'primeng/checkbox';
 export class SettingsComponent implements OnInit {
   notificationsSettingsForm: FormGroup;
   callSettingsDetails!: CallSettingsDetails;
+  isAbleToEdit: boolean = false;
 
   breadcrumbItems: MenuItem[] = [
-    { label: 'Call Analytics', routerLink: '/call/dashboard' },
-    { label: 'Settings' },
+    {label: 'Call Analytics', routerLink: '/call/dashboard'},
+    {label: 'Settings'},
   ];
 
   constructor(
     private fb: FormBuilder,
     private messageService: MessageService,
-    private callSettingsService: CallSettingsService
+    private callSettingsService: CallSettingsService,
+    private tokenStorageService: TokenStorageService
   ) {
     this.notificationsSettingsForm = this.fb.group({
       keywords: new FormControl<any>([]),
@@ -40,6 +43,8 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
+    let permissions = this.tokenStorageService.getStorageKeyValue("permissions");
+    this.isAbleToEdit = permissions.includes("Edit Call Settings");
     this.callSettingsService.getNotificationSettings().subscribe(
       (result) => {
         if (result.status) {
@@ -111,6 +116,11 @@ export class SettingsComponent implements OnInit {
         });
       }
     );
+  }
+
+  getIsDisabled(): boolean {
+    console.log('isAbleToEdit:', !this.isAbleToEdit)
+    return !this.isAbleToEdit;
   }
 
   onChangeBelowScore(event: CheckboxChangeEvent) {

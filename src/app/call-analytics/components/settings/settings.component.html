@@ -13,8 +13,10 @@
               <div class="flex align-items-center gap-1 text-sm justify-between mb-3">
                 <p-checkbox name="notify" (onChange)="onChangeBelowScore($event)"
                             formControlName="bellowNotify" [binary]="true"
+                            [readonly]="getIsDisabled()"
                             label="Notify me when the sentiment score is below the value: "></p-checkbox>
                 <p-inputNumber [showButtons]="true" class="short-input"
+                               [readonly]="getIsDisabled()"
                                formControlName="bellowScore" mode="decimal" inputId="minmax-buttons"
                                [min]="-10" [max]="10">
                 </p-inputNumber>
@@ -22,8 +24,10 @@
               <div class="flex align-items-center gap-1 text-sm justify-between mb-10">
                 <p-checkbox name="notify" (onChange)="onChangeAboveScore($event)" [binary]="true"
                             formControlName="aboveNotify"
+                            [readonly]="getIsDisabled()"
                             label="Notify when the sentiment score is above: "></p-checkbox>
-                <p-inputNumber [disabled]="true" class="short-input" formControlName="aboveScore"
+                <p-inputNumber class="short-input" formControlName="aboveScore"
+                               [readonly]="getIsDisabled()"
                                mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="-10"
                                [max]="10"></p-inputNumber>
               </div>
@@ -34,7 +38,7 @@
 
               <div class="flex items-center justify-between ">
                 <p>Enable Keywords Notifications</p>
-                <p-inputSwitch formControlName="enableKeywordsNotification"/>
+                <p-inputSwitch [readonly]="getIsDisabled()" formControlName="enableKeywordsNotification"/>
               </div>
 
               <div class="w-full p-fluid">
@@ -50,7 +54,7 @@
 
               <div class="w-full p-fluid mb-10">
                 <p>Topics to categorize calls</p>
-                <p-chips formControlName="topics"/>
+                <p-chips [disabled]="getIsDisabled()" formControlName="topics"/>
               </div>
 
               <p-divider align="left" type="solid">
@@ -59,11 +63,11 @@
 
               <div class="flex items-center justify-between ">
                 <p>Send Push Notifications</p>
-                <p-inputSwitch formControlName="enablePushNotification"/>
+                <p-inputSwitch [readonly]="getIsDisabled()" formControlName="enablePushNotification"/>
               </div>
               <div class="flex items-center justify-between ">
                 <p>Send Email Notifications</p>
-                <p-inputSwitch formControlName="enableEmailNotification"/>
+                <p-inputSwitch [readonly]="getIsDisabled()" formControlName="enableEmailNotification"/>
               </div>
               <div class="w-full p-fluid mb-5">
                 <p>Email Notifications Receivers</p>
@@ -71,9 +75,11 @@
               </div>
             </div>
           </div>
-          <div class="flex justify-end px-10 py-5">
-            <button pButton pRipple label="Update Settings" class="p-button-primary"></button>
-          </div>
+          @if (isAbleToEdit) {
+            <div class="flex justify-end px-10 py-5">
+              <button pButton pRipple label="Update Settings" class="p-button-primary"></button>
+            </div>
+          }
         </form>
       </div>
     </p-panel>

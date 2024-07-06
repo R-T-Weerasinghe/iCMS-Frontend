@@ -10,7 +10,7 @@ import { Content } from '../../models/main-types';
 export class settingsComponent {
   
   breadcrumbItems: MenuItem[] = [
-    {label: "Social Media Analytics"},
+    { label: "Social Media Analytics", routerLink: "/social-media/dashboard" },
     {label: "Settings"}
   ];
 

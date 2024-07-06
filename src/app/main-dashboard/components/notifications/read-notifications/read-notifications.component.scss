@@ -1,17 +1,57 @@
-:host ::ng-deep .p-card .p-card-content {
-    padding: 0 1.25rem;
-  }
+
+.notification-card {
+  width: 100%;
+}
+
+.full-width-card {
+  width: 100%;
+}
 
 :host ::ng-deep .p-component, .p-component * {
-    box-sizing: border-box;
-    height: auto;
-  }
+  box-sizing: border-box;
+  height: auto;
+  margin-bottom: 20px;
+}
 
-//:host ::ng-deep .p-message.p-message-success {
-//  background: #f9f9f9;
-//  /* border: solid #1ea97c; */
-//  border-width: 0 0 0 6px;
-//  /* color: #1ea97c; */
+:host ::ng-deep .p-card .p-card-body {
+  padding: 0 1.25rem;
+}
+
+.card-content1 {
+  color: black;
+}
+.card-content2{
+  font-size:12px;
+  color: #101010;
+}
+.card-content4{
+  font-size:12px;
+  color: #7a7a7a;
+}
+.notification-detail1 {
+  /* Add your custom styles here */
+  font-weight: bold;
+  color: black;
+  margin-top: 10px;
+  margin-left:40px;
+}
+.notification-detail2 {
+  color: #9a9999;
+  margin-left:40px;
+}
+
+:host ::ng-deep .p-card .p-card-content {
+  padding: 0 0;
+  padding-bottom: 15px;
+  margin-left:40px;
+}
+
+//:host ::ng-deep [_nghost-ng-c3772900254] .p-card .p-card-content {
+//  padding: 0 0;
+//  padding-bottom: 15px;
+//  margin-left:30px;
 //}
 
-
+.icons .pi pi-phone{
+  margin-top:30px;
+}

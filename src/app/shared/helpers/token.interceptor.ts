@@ -1,8 +1,12 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from "@angular/core";
+import { TokenStorageService } from "../shared-services/token-storage.service";
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
+  const tokenStorageService = inject(TokenStorageService);
   const URLS_TO_EXCLUDE = [
-    "api.ipify.org"
+    "api.ipify.org",
+    "3.7.55.235:8000"
   ]
 
   for (const url of URLS_TO_EXCLUDE) {
@@ -11,7 +15,7 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     }
   }
 
-  const idToken = getIdToken();
+  const idToken = tokenStorageService.getStorageKeyValue('idToken');
   console.log('idToken:', idToken)
   const  cloned = req.clone({
     setHeaders: {
@@ -20,19 +24,3 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   });
   return next(cloned);
 };
-
-function getIdToken() {
-  // Get all keys from localStorage
-  const keys = Object.keys(localStorage);
-
-  // Find the key that ends with 'idToken'
-  const idTokenKey = keys.find(key => key.endsWith('idToken'));
-
-  if (idTokenKey) {
-    // Return the value associated with the idToken key
-    return localStorage.getItem(idTokenKey);
-  } else {
-    console.log('idToken not found in localStorage');
-    return null;
-  }
-}

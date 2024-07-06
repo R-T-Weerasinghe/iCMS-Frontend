@@ -65,6 +65,10 @@
     border-radius: 0;
   }
   //janith
+  p-panel{
+    height:100%;
+    width:100%
+  }
   .p-panel{
     height:100%;
 
@@ -90,7 +94,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #ccc; /* Adds underline */
+    //border-bottom: 2px solid #ccc; /* Adds underline */
     padding-bottom: 2px; /* Adds padding to create space between text and underline */
     margin-bottom: 1rem; /* Adds space below the title */
     position: relative; /* Make sure the position is relative for the menu */
@@ -127,7 +131,7 @@
 
   }
 
-    .settings-button-container {
+  .settings-button-container {
     position: absolute;
     top: 0;
     right: 0;
@@ -145,6 +149,14 @@
   .settings-button-container button:first-child:hover {
     cursor: pointer;
     opacity: 0.7;
+  }
+  .p-menubar p-menubarsub {
+    position: absolute;
+    right: 0;
+  }
+  .p-menubar .p-submenu-list {
+    position: relative;
+    right:0;
   }
 
 }

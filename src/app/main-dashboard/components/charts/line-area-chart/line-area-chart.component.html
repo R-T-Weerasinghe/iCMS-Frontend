@@ -2,8 +2,8 @@
 <div class="chart-header-container">
 
     <p class="chart-title">{{ title }}</p>
-      <p *ngIf="selectedDateRange && selectedDateRange.length === 2 && selectedDateRange[0] && selectedDateRange[1]">{{ selectedDateRange[0]}} - {{ selectedDateRange[1]}}</p>
-      <p *ngIf="Date">{{ Date}}</p>
+<!--      <p *ngIf="selectedDateRange && selectedDateRange.length === 2 && selectedDateRange[0] && selectedDateRange[1]">{{ selectedDateRange[0]}} - {{ selectedDateRange[1]}}</p>-->
+<!--      <p *ngIf="Date">{{ Date}}</p>-->
       <div class="card">
         <p-menubar [model]="items" />
       </div>
@@ -16,11 +16,19 @@
 
   <p-chart type="line" [data]="data" [options]="options"></p-chart>
 
-<!--  <div *ngIf="categories.length > 1">-->
-<!--    <div *ngFor="let category of categories" class="field-checkbox flex align-items-center">-->
-<!--      <p-checkbox [(ngModel)]="selectedCategories" [label]="category" name="group" [value]="category" (ngModelChange)="onSourceChange(category)"></p-checkbox>-->
-<!--    </div>-->
-<!--  </div>-->
+  <div *ngIf="categories.length > 1 && edit==true">
+    <div *ngFor="let category of categories" class="field-checkbox flex align-items-center">
+     <p-checkbox
+        [(ngModel)]="selectedCategories"
+       [label]="category"
+        name="group"
+       [value]="category"
+        (ngModelChange)="onSourceChange(category)"/>
+     </div>
+     <div class="field-checkbox flex align-items-center">
+     <button pButton type="button" label="Done" (click)="editOff()" ></button>
+   </div>
+  </div>
 
 <!--  <p *ngIf="selectedDateRange && selectedDateRange.length === 2 && selectedDateRange[0] && selectedDateRange[1]">-->
 <!--    {{ selectedDateRange[0] }} - {{ selectedDateRange[1] }}-->
