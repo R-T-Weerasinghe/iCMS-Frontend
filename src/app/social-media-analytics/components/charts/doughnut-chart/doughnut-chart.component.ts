@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { DashboardApiService } from '../../../services/dashboard-api.service';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'doughnut-chart',
@@ -7,72 +6,56 @@ import { DashboardApiService } from '../../../services/dashboard-api.service';
   styleUrl: './doughnut-chart.component.scss'
 })
 
-export class DoughnutChartComponent implements OnInit {
+export class DoughnutChartComponent implements OnChanges {
   @Input() title!: string;
-  @Input() percentages!: number[];
+  @Input() percentages: number[] = [];
   data: any;
-
+  valuePercentage!: number[];
   options: any;
-  
 
-  constructor(private DashboardAPiService:DashboardApiService){}
-
-  ngOnInit() {
-    const startDate = '2024-05-01';
-    const endDate = '2024-07-30';
-
-    this.fetchSentimentPercentages(startDate,endDate);
-  }
-
-  fetchSentimentPercentages(startDate:string,endDate:string) {
-    this.DashboardAPiService.getSentimentPercentage(startDate,endDate)
-      .subscribe(
-        (data: any) => {
-          this.percentages = data.percentage; // Update percentages with data from backend
-
-          // Update chart data and options
-          this.data = {
-            labels: ['Negative', 'Neutral', 'Positive'],
-            datasets: [
-              {
-                data: this.percentages,
-                backgroundColor: [
-                  '#FF6E76',
-                  '#e7cb59',
-                  '#5dd28d'
-                ],
-                hoverBackgroundColor: [
-                  '#f87171',
-                  '#facc15',
-                  '#4ade80'
-                ]
-              }
-            ]
-          };
-
-          this.options = {
-            cutout: '50%',
-            height: 800,
-            overrides: {
-              legend: {
-                padding: 200
-              }
-            },
-            plugins: {
-              legend: {
-                position: 'bottom',
-                labels: {
-                  usePointStyle: true,
-                  color: '--text-color'
-                },
-              }
-            }
-          };
-        },
-        (error) => {
-          console.error('Error fetching sentiment percentages:', error);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['percentages']) {
+      this.valuePercentage = this.percentages;
+    }
+    
+    this.data = {
+      labels: ['Negative', 'Neutral', 'Positive'],
+      datasets: [
+        {
+          data: this.valuePercentage,
+          backgroundColor: [
+            '#FF6E76',
+            '#e7cb59',
+            '#5dd28d'
+          ],
+          hoverBackgroundColor: [
+            '#f87171',
+            '#facc15',
+            '#4ade80'
+          ]
         }
-      );
+      ]
+    };
+
+    this.options = {
+      cutout: '50%',
+      height: 800,
+      overrides: {
+        legend: {
+          padding: 200
+        }
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            color: '--text-color'
+          },
+        }
+      }
+    };
   }
+
 }
 

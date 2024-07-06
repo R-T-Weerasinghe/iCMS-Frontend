@@ -70,14 +70,13 @@ export class ModalCampaignComponent {
       else if (formData.platform.name == 'Instagram') {
         formData.platform = 'SM02';
       }
-      console.log(formData);
+      
       this.settingsApiService.setCampaigns(formData).subscribe(
         (response) => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Campaign added successfully' });
           this.visible = false;
         },
         (error) => {
-          console.log(error);
           this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.detail || 'Error adding alert' });
         }
       );

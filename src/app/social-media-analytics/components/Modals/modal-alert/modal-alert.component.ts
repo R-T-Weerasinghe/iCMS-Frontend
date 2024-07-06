@@ -97,9 +97,6 @@ export class ModalAlertComponent implements OnInit {
       const formData = this.modalSetAlertForm.value;
       formData.alert_type = formData.alert_type.name === 'Email Notification' ? 'email' : 'app';
 
-      console.log('this.isEditMode', this.isEditMode);
-      console.log('this.currentAlertId', this.currentAlertId);
-
       if (this.isEditMode && this.currentAlertId) {
         this.settingsApiService.updateTopicAlerts(this.currentAlertId, formData).subscribe(
           (response) => {

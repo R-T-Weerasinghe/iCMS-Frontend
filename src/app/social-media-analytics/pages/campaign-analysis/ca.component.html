@@ -12,8 +12,8 @@
 
       <ng-template #contentRef let-content="content">
 
-        <p-panel class="text-center justify-center">
-          <div class="flex justify-between items-center px-3 mb-5" [style.display]="isError ? 'block' : 'none'">
+        <p-panel class="text-center justify-center" [style.display]="isError ? 'block' : 'none'">
+          <div class="flex justify-between items-center px-3 mb-5">
             <img src="./assets/img/500.jpg" style="width: 60%;">
             <p class="text-4xl">Internal Server Error</p>
             <p>{{ userMessages.FETCH_ERROR_USER_MSG }}</p>

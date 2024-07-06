@@ -1,11 +1,11 @@
-<div class="cards" *ngIf="showAdditionalCards">
+<div class="grid grid-cols-3 gap-4" *ngIf="showAdditionalCards">
   <ng-container *ngIf="loading">
-    <p-skeleton height="520px" />
-    <p-skeleton height="520px" />
-    <p-skeleton height="520px" />
+    <p-skeleton class="md:col-span-1 sm:col-span-3" height="500px" width="100%"/>
+    <p-skeleton class="md:col-span-1 sm:col-span-3" height="500px" width="100%" />
+    <p-skeleton class="md:col-span-1 sm:col-span-3" height="500px" width="100%" />
   </ng-container>
   <ng-container *ngIf="!loading">
-    <div class="card-item" *ngFor="let campaign of campaigns; let i = index">
+    <div class="card-item md:col-span-1 sm:col-span-3" *ngFor="let campaign of campaigns; let i = index">
       <div class="image-container campaign-image" [ngStyle]="{'background-image': 'url(' + campaign.img_url + ')'}">
       </div>
       <div class="text-container">

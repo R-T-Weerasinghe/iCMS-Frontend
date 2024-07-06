@@ -1,4 +1,5 @@
-<app-page-header pageTitle="Platform Insights" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems" />
+<app-page-header pageTitle="Platform Insights" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems"
+  [showDatePicker]="true" [callDashboardDate]="true" (callDateRangeChanged)="DateChanged($event[0], $event[1])" />
 <p-toast></p-toast>
 
 <div class="flex flex-col">
@@ -20,8 +21,8 @@
       </ng-template>
 
       <ng-template #contentRef let-content="content">
-        <p-panel class="text-center justify-center">
-          <div class="flex justify-between items-center px-3 mb-5" [style.display]="isError ? 'block' : 'none'">
+        <p-panel class="text-center justify-center" [style.display]="isError ? 'block' : 'none'">
+          <div class="flex justify-between items-center px-3 mb-5">
             <img src="./assets/img/500.jpg" style="width: 60%;">
             <p class="text-4xl">Internal Server Error</p>
             <p>{{ userMessages.FETCH_ERROR_USER_MSG }}</p>
@@ -31,48 +32,47 @@
         <div [style.display]="isError ? 'none' : 'block'">
 
 
-          <div class="chart-container">
-            <div class="chart">
+          <div class="grid grid-cols-5 gap-4 my-3">
+            <div class="md:col-span-3 sm:col-span-5">
               <p class="text-title1">Brand Related Keyword thrends</p>
-              <div class="chart-kt">
-                <ng-container *ngIf="loadingKeywordTrends">
-                  <p-skeleton height="450px" />
+              <ng-container *ngIf="loadingKeywordTrends">
+                <p-skeleton height="400px" width="100%" />
+              </ng-container>
+              <ng-container *ngIf="!loadingKeywordTrends">
+                <p-chart type="bar" [data]="DataKeywordThrends" [options]="OptionsKeywordThrends"></p-chart>
+              </ng-container>
+            </div>
+
+            <div class="md:col-span-2 sm:col-span-5">
+              <div class="grid md:grid-rows-2 sm:grid-cols-1 gap-4">
+                <ng-container *ngIf="loadingReactions">
+                  <p-skeleton height="100%" width="100%" />
                 </ng-container>
-                <ng-container *ngIf="!loadingKeywordTrends">
-                  <p-chart type="bar" [data]="DataKeywordThrends" [options]="OptionsKeywordThrends"></p-chart>
+                <ng-container *ngIf="!loadingReactions">
+                  <div class="small-card" style="background-color: #f6d9e3">
+                    <p class="text-title2">Total Reactions</p>
+                    <p-chart type="line" [data]="DataReactions" [options]="OptionsSideCards"></p-chart>
+                    <div>
+                      <span class="text-total">{{ content.totalReactions }}</span>
+                      <span class="text-improvements">{{ content.reactionsImprovement }}% this week</span>
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="loadingComments">
+                  <p-skeleton height="100%" width="100%" />
+                </ng-container>
+                <ng-container *ngIf="!loadingComments">
+                  <div class="small-card" style="background-color: #cbf0f4">
+                    <p class="text-title2">Total Comments</p>
+                    <p-chart type="line" [data]="DataComments" [options]="OptionsSideCards"></p-chart>
+                    <div>
+                      <span class="text-total">{{ content.totalComments }}</span>
+                      <span class="text-improvements">{{ content.commentsImprovement }}% this week</span>
+                    </div>
+                  </div>
                 </ng-container>
               </div>
-            </div>
-            <div class="card-container">
-
-              <ng-container *ngIf="loadingReactions">
-                <p-skeleton height="250px" />
-              </ng-container>
-              <ng-container *ngIf="!loadingReactions">
-                <div class="small-card" style="background-color: #f6d9e3">
-                  <p class="text-title2">Total Reactions</p>
-                  <p-chart type="line" [data]="DataReactions" [options]="OptionsSideCards"></p-chart>
-                  <div>
-                    <span class="text-total">{{ content.totalReactions }}</span>
-                    <span class="text-improvements">{{ content.reactionsImprovement }}% this week</span>
-                  </div>
-                </div>
-              </ng-container>
-
-              <ng-container *ngIf="loadingComments">
-                <p-skeleton height="250px" />
-              </ng-container>
-              <ng-container *ngIf="!loadingComments">
-                <div class="small-card" style="background-color: #cbf0f4">
-                  <p class="text-title2">Total Comments</p>
-                  <p-chart type="line" [data]="DataComments" [options]="OptionsSideCards"></p-chart>
-                  <div>
-                    <span class="text-total">{{ content.totalComments }}</span>
-                    <span class="text-improvements">{{ content.commentsImprovement }}% this week</span>
-                  </div>
-                </div>
-              </ng-container>
-
             </div>
           </div>
 

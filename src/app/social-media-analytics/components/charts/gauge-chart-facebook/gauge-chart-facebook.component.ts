@@ -1,27 +1,25 @@
-import {Component, OnInit} from '@angular/core';
-import {EChartsOption} from "echarts";
-import {DashboardApiService} from "../../../services/dashboard-api.service";
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { EChartsOption } from "echarts";
 
 @Component({
   selector: 'app-gauge-chart-facebook',
   templateUrl: './gauge-chart-facebook.component.html',
   styleUrl: './gauge-chart-facebook.component.scss'
 })
-export class GaugeChartFacebookComponent implements OnInit {
+export class GaugeChartFacebookComponent implements OnChanges {
+  @Input() inputData!: number;
 
   options!: EChartsOption;
   score!: number;
+  data!: number;
 
-  constructor(private getfacebookscore: DashboardApiService) {}
 
-  ngOnInit(): void {
-    this.initializeChart();
-    const startDate = '2024-05-01';
-    const endDate = '2024-08-01';
-    this.updateGaugeChart(startDate, endDate);
-  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['inputData']) {
+      this.data = this.inputData;
+      this.score = this.data;
+    }
 
-  initializeChart(): void {
     this.options = {
       series: [
         {
@@ -72,26 +70,15 @@ export class GaugeChartFacebookComponent implements OnInit {
         }
       ]
     };
-  }
 
-  updateGaugeChart(startDate: string, endDate: string): void {
-    this.getfacebookscore.getSentimentScoreFacebook(startDate, endDate).subscribe(
-      (data: number) => {
-        this.score = data;
-        console.log(data)
-        if (this.options.series && Array.isArray(this.options.series) && this.options.series.length > 0) {
-          const firstSeries = this.options.series[0];
-          if ('data' in firstSeries && Array.isArray(firstSeries.data) && firstSeries.data.length > 0) {
-            firstSeries.data[0].value = (data+1)/2;
-
-            // Trigger change detection if using ngx-echarts
-            this.options = { ...this.options };
-          }
-        }
-      },
-      (error) => {
-        console.error('Error fetching sentiment score', error);
+    if (this.options.series && Array.isArray(this.options.series) && this.options.series.length > 0) {
+      const firstSeries = this.options.series[0];
+      if ('data' in firstSeries && Array.isArray(firstSeries.data) && firstSeries.data.length > 0) {
+        firstSeries.data[0].value = (this.data + 1) / 2;
+        this.options = { ...this.options };
       }
-    );
+    }
   }
+
+
 }

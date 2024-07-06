@@ -138,7 +138,6 @@ export class ModalThresholdComponent implements OnInit {
         );
       }
     } else {
-      console.log(this.modalsetThresholdForm);
       this.messageService.add({ severity: 'warn', summary: 'Warning', detail: 'Please fill all required fields' });
     }
   }
