@@ -39,10 +39,11 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    var today = new Date();
+    var tomorrow = new Date();
     var lastMonth = new Date();
-    lastMonth.setMonth(today.getMonth() - 1);
-    this.fetchDashboardData(lastMonth.toISOString().split('T')[0], today.toISOString().split('T')[0]);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    lastMonth.setMonth(tomorrow.getMonth() - 1);
+    this.fetchDashboardData(lastMonth.toISOString().split('T')[0], tomorrow.toISOString().split('T')[0]);
   }
 
   fetchDashboardData(Date: string, Date2: string) {

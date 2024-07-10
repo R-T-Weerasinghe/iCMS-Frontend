@@ -28,7 +28,7 @@
             justify-content: space-between;
             align-items: center;
           ">
-            <h3>{{ content.subtitle }}</h3>
+            <h4 class="pl-1">{{ content.topCampaigns.length + content.additionalCampaigns.length }} Campaigns</h4>
             <div style="display: flex; flex-direction: row; align-items: center">
               <!-- <p class="text-top-right-bar semi-balted">Custom Campaigns :</p> -->
               <p-button label="Add New" [text]="true" icon="pi pi-plus" [outlined]="true" severity="secondary"
@@ -40,17 +40,19 @@
             <div class="flex justify-between w-full py-2 mb-2">
               <div>
                 <h4 class="p-0 m-0">
-                  {{ content.topCampaigns.length }} top performing campaigns
+                  Top {{ content.topCampaigns.length }} Effective campaigns
                 </h4>
               </div>
               <div>
                 <button class="p-button p-button-sm p-button-secondary" (click)="toggleAdditionalCards()">
-                  See More
+                  {{ showAdditionalCards ? 'See Less' : 'See More' }}
                 </button>
               </div>
             </div>
-            <app-ca-cards [campaigns]="content.topCampaigns" [showAdditionalCards]="true"
-              [loading]="loading"></app-ca-cards>
+            <div class="mb-4">
+              <app-ca-cards [campaigns]="content.topCampaigns" [showAdditionalCards]="true"
+                [loading]="loading"></app-ca-cards>
+            </div>
             <app-ca-cards [campaigns]="content.additionalCampaigns" [showAdditionalCards]="showAdditionalCards"
               [loading]="loading"></app-ca-cards>
           </p-panel>

@@ -41,15 +41,25 @@ export class PIComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    var today = new Date();
+    var tomorrow = new Date();
     var lastMonth = new Date();
-    lastMonth.setMonth(today.getMonth() - 1);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    lastMonth.setMonth(tomorrow.getMonth() - 1);
     this.subscription = this.tabStateService.activeTab$.subscribe((tabName: string) => {
       if (tabName === "Instagram") {
         this.platform = "SM02";
+      } else {
+        this.platform = "SM01";
       }
 
-      this.fetchDashboardData(lastMonth.toISOString().split('T')[0], today.toISOString().split('T')[0]);
+      this.loadingReactions = true;
+      this.loadingComments = true;
+      this.loadingHighlightedComments = true;
+      this.loadingSentiment = true;
+      this.loadingKeywordTrends = true;
+      this.isError = false;
+
+      this.fetchDashboardData(lastMonth.toISOString().split('T')[0], tomorrow.toISOString().split('T')[0]);
     });
   }
 
@@ -63,24 +73,33 @@ export class PIComponent implements OnInit, OnDestroy {
 
       // ############ 0: Keyword Trends ############
 
-      const keyword_trends = response;
+      const topic_sentiments = response;
 
-      let keywordThrendsLabels: string[] = [];
-      let keywordThrendsData: any[] = [];
-
-      for (const [key, value] of Object.entries(keyword_trends)) {
-        keywordThrendsLabels.push(key);
-        keywordThrendsData.push(value);
+      function hexToRgba(hex: string, alpha: number): string {
+        hex = hex.replace(/^#/, '');
+        let bigint = parseInt(hex, 16);
+        let r = (bigint >> 16) & 255;
+        let g = (bigint >> 8) & 255;
+        let b = bigint & 255;
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
       }
+      
+      topic_sentiments.bordercolors = topic_sentiments.colors.map((color: string) => {
+        return hexToRgba(color, 0.9);
+      });     
 
+      topic_sentiments.colors = topic_sentiments.colors.map((color: string) => {
+        return hexToRgba(color, 0.1);
+      });
+      
       this.DataKeywordThrends = {
-        labels: keywordThrendsLabels,
+        labels: topic_sentiments.products,
         datasets: [
           {
-            data: keywordThrendsData,
-            backgroundColor: ['rgba(255, 159, 64, 0.4)', 'rgba(75, 192, 192, 0.4)', 'rgba(54, 162, 235, 0.4)', 'rgba(153, 102, 255, 0.4)'],
-            borderColor: ['rgb(255, 159, 64)', 'rgb(75, 192, 192)', 'rgb(54, 162, 235)', 'rgb(153, 102, 255)'],
-            borderWidth: 1
+            data: topic_sentiments.s_scores,
+            backgroundColor: topic_sentiments.colors,
+            borderColor: topic_sentiments.bordercolors,
+            borderWidth: 2
           }
         ]
       };
@@ -175,20 +194,28 @@ export class PIComponent implements OnInit, OnDestroy {
     this.platformInsightsApiService.getAverageSentimentScore(this.platform, Date, Date2).subscribe(response => {
 
       // ############ 4: Get average sentiment score of comments and reacts ############
-
       const sentiment_scores = response;
 
       let SentimentOverTimeLabels: string[] = [];
-      let SentimentOverTimeSubCommentsData: any[] = [];
-      let SentimentOverTimeCommentsData: any[] = [];
+      let SentimentOverTimeSubCommentsData: (number | null)[] = [];
+      let SentimentOverTimeCommentsData: (number | null)[] = [];
+
+      const allDates = Array.from(
+        new Set([...Object.keys(sentiment_scores.comments), ...Object.keys(sentiment_scores.subcomments)])
+      ).sort();
+
+      SentimentOverTimeLabels = allDates;
+      SentimentOverTimeCommentsData = new Array(allDates.length).fill(null);
+      SentimentOverTimeSubCommentsData = new Array(allDates.length).fill(null);
 
       for (const [key, value] of Object.entries(sentiment_scores.comments)) {
-        SentimentOverTimeLabels.push(key);
-        SentimentOverTimeCommentsData.push(value);
+        const index = SentimentOverTimeLabels.indexOf(key);
+        SentimentOverTimeCommentsData[index] = value as number;
       }
 
       for (const [key, value] of Object.entries(sentiment_scores.subcomments)) {
-        SentimentOverTimeSubCommentsData.push(value);
+        const index = SentimentOverTimeLabels.indexOf(key);
+        SentimentOverTimeSubCommentsData[index] = value as number;
       }
 
       this.DataSentimentOverTime = {
@@ -199,14 +226,16 @@ export class PIComponent implements OnInit, OnDestroy {
             data: SentimentOverTimeSubCommentsData,
             fill: false,
             borderColor: documentStyle.getPropertyValue('--blue-500'),
-            tension: 0.2
+            tension: 0.2,
+            spanGaps: true
           },
           {
             label: 'Comments',
             data: SentimentOverTimeCommentsData,
             fill: false,
             borderColor: documentStyle.getPropertyValue('--pink-500'),
-            tension: 0.2
+            tension: 0.2,
+            spanGaps: true
           }
         ]
       };

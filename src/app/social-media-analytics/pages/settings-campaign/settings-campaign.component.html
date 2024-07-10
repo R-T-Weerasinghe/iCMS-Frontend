@@ -34,15 +34,15 @@
                   <!-- <th style="width: 5%">
                   <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                 </th> -->
-                  <th pSortableColumn="title" style="width: 30%">
+                  <th pSortableColumn="description" style="width: 30%">
                     TITLE
-                    <p-sortIcon field="title"></p-sortIcon>
+                    <p-sortIcon field="description"></p-sortIcon>
                   </th>
                   <th pSortableColumn="company" style="width: 20%">
                     COMPANY
                     <p-sortIcon field="company"></p-sortIcon>
                   </th>
-                  <th pSortableColumn="overallsentiment" style="width: 40%">
+                  <th style="width: 40%">
                     OVERALL SENTIMENT
                     <p-sortIcon field="overallsentiment"></p-sortIcon>
                   </th>
@@ -57,8 +57,8 @@
                   <td>{{ item.description }}</td>
                   <td>{{ item.company }}</td>
                   <td>
-                    <span>{{ item.s_score*100 }} %</span>
-                    <progress-bar [value]="0" [bufferValue]="item.s_score*100" [color]="item.color"></progress-bar>
+                    <span>{{ item.s_score }} %</span>
+                    <progress-bar [value]="0" [bufferValue]="item.s_score" [color]="item.color"></progress-bar>
                   </td>
                   <td>
                     <div class="flex align-items-center justify-content-center gap-2">
