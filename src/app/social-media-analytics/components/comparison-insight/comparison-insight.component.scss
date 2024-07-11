@@ -1,48 +1,27 @@
-.card {
-  background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  margin: 0 0 1rem 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: start;
-  flex-wrap: wrap;
-}
-
-h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  font-size: 24px;
-}
-
 .trend-box {
   border-radius: 8px;
   padding: 15px;
-  height: 6.5rem;
-  width: 10rem;
+  height: 5rem;
+  width: 12rem;
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 1rem 0 1rem 0;
 }
 
 .trend-box.up-trend {
-  background-color: green;
+  background-color: rgb(22, 184, 70);
 }
 
 .trend-box.down-trend {
-  background-color: #ff4d4d;
+  background-color: #ff4c4c;
 }
 
 .trend-content {
   display: flex;
   align-items: center;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
-  margin-left:0.5rem ;
 }
 
 .arrow {
@@ -61,6 +40,6 @@ h2 {
 }
 
 .trend-value {
-  font-size: 10px;
+  font-size: 13px;
   font-weight: bold;
 }

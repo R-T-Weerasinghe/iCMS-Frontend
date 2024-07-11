@@ -1,22 +1,21 @@
-<ng-container *ngFor="let insight of insights">
-  <div class="card">
-    <h3>{{ insight.title }}</h3>
-    <div
-      class="trend-box"
-      [ngClass]="{
+<p-panel>
+  <p class="font-medium text-xl pb-2 m-0">Next week Prediction</p>
+  <div class="grid grid-cols-5">
+    <ng-container *ngFor="let insight of insights">
+      <div class="md:col-span-1 sm:col-span-2">
+        <h3 class="pb-2 m-0">{{ insight.product }}</h3>
+        <div class="trend-box" [ngClass]="{
         'up-trend': insight.isUpTrend,
-        'down-trend': !insight.isUpTrend
-      }"
-    >
-      <div class="trend-content">
-        <span class="arrow">{{ getArrowSymbol(insight.isUpTrend) }}</span>
-        <div class="details">
-          <span class="trend-text">{{
-            getTrendStatus(insight.isUpTrend)
-          }}</span>
-          <span class="trend-value">{{ insight.percentage }}</span>
+        'down-trend': !insight.isUpTrend}">
+          <div class="trend-content">
+            <span class="arrow">{{ getArrowSymbol(insight.isUpTrend) }}</span>
+            <div class="details">
+              <span class="trend-text">{{ getTrendStatus(insight.isUpTrend) }}</span>
+              <span class="trend-value">{{ insight.percentage }}</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
-</ng-container>
+</p-panel>
