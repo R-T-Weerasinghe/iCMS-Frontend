@@ -68,7 +68,7 @@
   </div>
 </p-panel>
 
-<p-dialog [draggable]="false" [resizable]="false" *ngIf="visibleSummary" header="Call Summary" [modal]="true"
+<p-dialog [draggable]="false" [resizable]="false" *ngIf="visibleSummary" header="Call Details" [modal]="true"
           [(visible)]="visibleSummary" [style]="{width: '30vw', height: 'auto'}">
   <div class="flex justify-between items-center px-3 mb-5">
     <!-- Use selectedCall only when it is defined -->
@@ -85,7 +85,21 @@
              value="{{ selectedCall.sentiment }}"></p-tag>
     </div>
   </div>
+  <hr>
+  <h5>Call Summary</h5>
   <p style="text-align: justify;"> {{ selectedCallSummary }} </p>
+  <hr>
+  <h5>Call Topics</h5>
+  <p style="text-align: justify;"> {{ selectedCall.topics }} </p>
+  <hr>
+  <h5>Call Keywords</h5>
+  <div class="keywords-container">
+    <div *ngFor="let keyword of selectedCall.keywords" class="keyword">
+      <p-tag [style]="{'background': statusColors[keyword.trim()],  'padding': '5px 10px', 'white-space': 'nowrap'}"
+             value="{{ keyword.trim() }}"></p-tag>
+    </div>
+    <br><br><br>
+  </div>
   <div class="text-right">
     <p-button label="Close" (click)="visibleSummary = false" icon="pi pi-times"></p-button>
   </div>

@@ -6,8 +6,10 @@ import { Component, Input } from '@angular/core';
   styleUrl: './stat-card.component.scss'
 })
 export class StatCardComponent {
-  @Input() title!: string;
-  @Input() subTitle!: string;
+  @Input() totalCalls!: number;
+  @Input() avgCallTime!: number;
+  @Input() totalCallDuration!: number;
+  @Input() avgSentimentScore!: string;
   @Input() imgPath!: string;
   @Input() isLoading!: boolean;
 }

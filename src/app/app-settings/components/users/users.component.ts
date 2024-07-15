@@ -35,6 +35,20 @@ export class UsersComponent implements OnInit {
   logsVisible: boolean = false;
 
   logs: { action: string, is_success: boolean, time:string }[] = [];
+  authLogs!:{
+    "action": String,
+    "is_pass": String,
+    "time": String,
+    "event_data": {
+      "IpAddress": String,
+      "DeviceName": String,
+      "City": String,
+      "Country": String
+    }
+  }[];
+
+  //add some sample data
+
 
   constructor(
     private customerService: UserDataService,
@@ -267,13 +281,46 @@ export class UsersComponent implements OnInit {
     this.authService.getIdToken().subscribe((token: any) => {
       this.customerService.getUserLogs(token, this.selectedUsers.username, '2024-07-01', '2024-07-31').subscribe(
         (data: any) => {
-          console.log(data);
-          this.logs = data;
+          this.logs = data.reverse();
+
+          // for (let log of this.logs) {
+          //   console.log(log.time);
+          //   let date = new Date(log.time.toString());
+          //   let utcTime = date.getTime();
+          //   let timeZoneOffset = 5.5 * 60 * 60 * 1000; // +5:30 offset in milliseconds
+          //   let localTime = new Date(utcTime + timeZoneOffset);
+          //   log.time = localTime.toLocaleString();
+          // }
+          for (let log of this.logs) {
+            console.log(log.time);
+            log.time = new Date(log["time"].toString()).toLocaleString();
+          }
+
+
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Logs fetched successfully' });
+
+
         },
         (error: any) => {
           console.log(error);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to fetch logs' });
+          // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No logs for  '+ this.selectedUsers.username });
+        }
+      );
+      this.customerService.getUserAuthLogs(token, this.selectedUsers.username, '2024-07-01', '2024-07-31').subscribe(
+        (data: any) => {
+          console.log(data);
+          this.authLogs = data;
+          for (let log of this.authLogs) {
+            console.log(log.time);
+            log.time = new Date(log["time"].toString()).toLocaleString();
+          }
+
+          // this.logsVisible = true;
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Auth Logs fetched successfully' });
+        },
+        (error: any) => {
+          console.log(error);
+          // this.messageService.add({ severity: 'error', summary: 'Error', detail: 'No auth logs for  '+ this.selectedUsers.username });
         }
       );
     });
@@ -282,6 +329,12 @@ export class UsersComponent implements OnInit {
 
   private hasPermission(permission: string): boolean {
     return this.permissions.includes(permission);
+  }
+
+  // convert the timestamp to a human readable format
+  //time zone is considered
+  convertTime(time: string) {
+    return new Date(time).toLocaleString();
   }
 
 }

@@ -81,5 +81,19 @@
   cursor: pointer;
 }
 
+.small-select-button {
+  font-size: 6px; /* Adjust font size */
+  padding: 1px 1px; /* Adjust padding */
+}
+
+.small-select-button .p-button {
+  height: 1px; /* Adjust height */
+  line-height: 1; /* Adjust line height to match height */
+}
+
+.small-select-button .p-button-label {
+  font-size: 1px; /* Adjust font size for the label */
+}
+
 
 

@@ -8,80 +8,112 @@
       (rangeDatesChanged)="onRangeDatesChanged($event)"
       [minDate]="minDate"
       [maxDate]="maxDate"
+      [emailDashboardDate]="true"
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
     />
   </div>
-
 </div>
 
-<div
-    class="my-child-2 flex-grow min-h-[900px] grid grid-cols-2 gap-5 md:grid-cols-3 md:grid-rows-4 md:min-h-[600px]"
-  >
-    <div
-      class="flex flex-col col-span-2 min-h-72 md:min-h-48 items-center overflow-hidden relative"
-    >
-      <!-- <span class="text-5xl">1</span>
-      <span class="text-3xl">summary</span> -->
-      <app-dashboard-summary-card></app-dashboard-summary-card>
-      <!-- The most important overall KPI  -->
-    </div>
-    <div
-      class="flex flex-col min-h-36 md:min-h-48 items-center overflow-hidden relative"
-    >
-      <!-- <span class="text-5xl">5</span>
-      <span class="text-3xl">sentiment score</span> -->
-      <app-dashboard-sentiment-card></app-dashboard-sentiment-card>
-    </div>
-    <div
-      class="flex flex-col min-h-36 md:min-h-48 items-center overflow-hidden relative"
-    >
-      <!-- <span class="text-5xl">2</span>
-      <span class="text-3xl">issues</span> -->
-      <app-dashboard-issue-card></app-dashboard-issue-card>
-    </div>
-    <div
-      class="flex flex-col min-h-36 md:min-h-48 items-center overflow-hidden relative"
-    >
-      <!-- <span class="text-5xl">3</span>
-      <span class="text-3xl">inquiries</span> -->
-      <app-dashboard-inquiry-card></app-dashboard-inquiry-card>
-    </div>
-    <div
-      class="flex flex-col min-h-36 md:min-h-48 items-center overflow-hidden relative"
-    >
-      <!-- <span class="text-5xl">4</span>
-      <span class="text-3xl">suggestions</span> -->
-      <app-dashboard-suggestion-card></app-dashboard-suggestion-card>
-    </div>
 
-    <div
-      class="min-h-72 col-span-2 row-span-2 md:col-span-2 md:row-span-2 flex flex-col items-center overflow-hidden relative"
-    >
-      <app-dashboard-responsetime></app-dashboard-responsetime>
+
+<!-- NEW -->
+<div
+  class="flex-grow min-h-[900px] grid grid-cols-2 gap-5 md:grid-cols-4 md:min-h-[600px]"
+>
+  <div
+    class="flex flex-col col-span-2 min-h-72 h-max md:min-h-64 md:col-span-3 place-content-evenly overflow-hidden border border-solid border-slate-300 rounded-lg bg-white hover:bg-gray-50 hover:border-sky-400 hover:cursor-pointer transition hover:duration-150"
+  >
+    <!-- <span class="text-5xl">1</span>
+      <span class="text-3xl">summary</span> -->
+    <div class="h-fit">
+      <app-dashboard-overall-progress
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+      [efficiencyData]="dntChartDataOverallEfficiency"
+      [effectivenessData]="dntChartDataOverallEffeftiveness"
+      [progressData]="dntChartDataProgress"></app-dashboard-overall-progress>
     </div>
-    <div
-      class="min-h-72 col-span-2 row-span-2 md:col-span-1 md:row-span-2 flex flex-col items-center overflow-hidden relative"
-    >
-      <!-- <span class="text-5xl">7</span>
-      <span class="text-3xl">actionable insights</span> -->
-      <app-dashboard-actionables></app-dashboard-actionables>
+  </div>
+  <div
+    class="flex flex-col col-span-2 min-h-36 md:min-h-48 md:col-span-1 items-center overflow-hidden relative"
+  >
+    <!-- <span class="text-5xl">5</span>
+      <span class="text-3xl">sentiment score</span> -->
+    <div class="w-full h-full flex justify-center items-center border border-solid border-slate-300 rounded-lg bg-white hover:bg-gray-50 hover:border-sky-400 hover:cursor-pointer transition hover:duration-150">
+      <app-dashboard-sentiment-card
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+      [value]="dataValue_forGaugeStart"></app-dashboard-sentiment-card>
+    </div>
+  </div>
+  <div
+    class="flex flex-col col-span-2 min-h-36 md:min-h-48 items-center overflow-hidden relative"
+  >
+    <!-- <span class="text-5xl">2</span>
+      <span class="text-3xl">issues</span> -->
+    <div class="w-full h-full border border-solid border-slate-300 rounded-lg bg-white hover:bg-gray-50 hover:border-sky-400 hover:cursor-pointer transition hover:duration-150">
+      <app-dashboard-issue-inquiry
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+      [openedIssuesCount]="openedIssuesCount"
+      [closedIssuesCount]="closedIssuesCount"
+      [openedInquiriesCount]="openedInquiriesCount"
+      [closedInquiriesCount]="closedInquiriesCount"></app-dashboard-issue-inquiry>
+    </div>
+  </div>
+  <div
+    class="flex flex-col col-span-2 min-h-36 md:min-h-48 items-center overflow-hidden relative"
+  >
+    <!-- <span class="text-5xl">2</span>
+  <span class="text-3xl">issues</span> -->
+    <div class="w-full h-full border border-solid border-slate-300 rounded-lg bg-white hover:bg-gray-50 hover:border-sky-400 hover:cursor-pointer transition hover:duration-150">
+      <app-dashboard-time-graph
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+      [overdueCount]="overdueCount"
+      [avgFRT]="avgFirstResponseTime"
+      [firstResponseTimes]="firstResponseTimes"
+      [clientMsgTimes]="clientMsgTimes"
+      ></app-dashboard-time-graph>
+    </div>
+  </div>
+  <div
+    class="flex flex-col col-span-2 min-h-36 md:min-h-48 items-center overflow-hidden border border-solid border-slate-300 rounded-lg bg-white hover:bg-gray-50 hover:border-sky-400 hover:cursor-pointer transition hover:duration-150"
+  >
+    <!-- <span class="text-5xl">2</span>
+      <span class="text-3xl">issues</span> -->
+    <div class="h-full w-full p-4">
+      <app-dashboard-product-insights
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+      [product_performance_scores]="products_performance_scores"
+      [product_labels]="products_labels"></app-dashboard-product-insights>
     </div>
   </div>
 
-<!-- the calendars
+  <div
+    class="flex flex-col col-span-2 min-h-36 md:min-h-48 items-center overflow-hidden border border-solid border-slate-300 rounded-lg bg-white hover:bg-gray-50 hover:border-sky-400 hover:cursor-pointer transition hover:duration-150"
+  >
+    <!-- <span class="text-5xl">4</span>
+      <span class="text-3xl">suggestions</span> -->
+    <div class="h-full w-full p-4">
+      <app-dashboard-account-insights
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+      [accountCardsArr]="EmailAccData"></app-dashboard-account-insights>
+    </div>
+  </div>
+</div>
+<!-- END of NEW -->
 
-<p-calendar [(ngModel)]="fromDate" [minDate]="minDate" [maxDate]="maxDate" [readonlyInput]="true" 
-(ngModelChange)="onFromDateChange($event)" [showIcon]="true"  [ngStyle]="{ 'width.px': '100', 'height.px': '100' }"></p-calendar>
-<p-calendar [(ngModel)]="toDate" [minDate]="minDate" [maxDate]="maxDate" [readonlyInput]="true" 
-    (ngModelChange)="onToDateChange($event)" [showIcon]="true"></p-calendar> -->
+<!-- 
+<div class="size-1/2"></div> -->
 
-<!-- TODO: Dashboard interface link: https://chatgpt.com/share/0de7e86e-c8e0-47d0-b7a7-b329cde45d49 -->
-
-<div class="size-1/5"></div>
-
-<div class="flex flex-col">
-  <div class="flex flex-wrap gap-6">
+<!-- <div class="flex flex-col">
+  <div class="flex flex-wrap gap-6"> -->
     <!-- 'No of stats' stat cards-->
-    <div class="stat-cards" *ngIf="!isLoadingStatcards">
+    <!-- <div class="stat-cards" *ngIf="!isLoadingStatcards">
       <div *ngFor="let item of statsData">
         <app-stat-card-mgr-analytics
           [title]="item.title.toString()"
@@ -91,26 +123,26 @@
           [subheader]="item.subheader"
         ></app-stat-card-mgr-analytics>
       </div>
-    </div>
+    </div> -->
     <!-- Current Overall efficiency donought chart-->
     <!-- <div class="stat-cards h-40"> -->
-      <app-effi-effec-donought-chart
-        title="Current Overall Efficiency"
-        [chartData]="dntChartDataOverallEfficiency"
-        [chartLabels]="dntChartOverallEfficiencyLabels"
-        *ngIf="!isLoadingDCOverallEfficiency"
-      />
+    <!-- <app-effi-effec-donought-chart
+      title="Current Overall Efficiency"
+      [chartData]="dntChartDataOverallEfficiency"
+      [chartLabels]="dntChartOverallEfficiencyLabels"
+      *ngIf="!isLoadingDCOverallEfficiency"
+    /> -->
     <!-- </div> -->
     <!-- Current Overall progress donought chart-->
-    <app-progress-donought-chart
+    <!-- <app-progress-donought-chart
       title="Current Progress of both issues and inquiries"
       [chartData]="dntChartDataProgress"
       [chartLabels]="dntChartProgressLabels"
       *ngIf="!isLoadingDCProgress"
-    ></app-progress-donought-chart>
+    ></app-progress-donought-chart> -->
 
     <!-- Current Overall efficiency donought chart-->
-    <app-effi-effec-donought-chart
+    <!-- <app-effi-effec-donought-chart
       title="Current Overall Effectiveness"
       [chartData]="dntChartDataOverallEffeftiveness"
       [chartLabels]="dntChartOverallEffectivenessLabels"
@@ -217,4 +249,4 @@
       *ngIf="!isLoadingOverdueIssByEmailAcc"
     />
   </div>
-</div>
+</div> -->

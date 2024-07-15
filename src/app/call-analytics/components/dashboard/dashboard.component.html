@@ -4,9 +4,13 @@
   <div class="flex gap-5 flex-wrap">
     @if (callStatistics !== undefined) {
       <div class="stat-cards">
-        <app-stat-card [isLoading]="isLoadingStatistics" title="{{callStatistics.total_calls}}" subTitle="Total Calls" imgPath="./call/blue-phone.png"/>
-        <app-stat-card [isLoading]="isLoadingStatistics" title="{{Math.round(callStatistics.avg_call_time_in_sec / 60)}} Min" subTitle="Avg. Call Time" imgPath="./call/green-call.png"/>
-        <app-stat-card [isLoading]="isLoadingStatistics" title="{{Math.round(callStatistics.total_duration_in_sec / 60)}}" subTitle="Total Minute" imgPath="./call/blue-call.png"/>
+        <app-stat-card
+          [isLoading]="isLoadingStatistics"
+          [totalCalls]="callStatistics.total_calls"
+          [avgCallTime]="Math.round(callStatistics.avg_call_time_in_sec / 60)"
+          [totalCallDuration]="Math.round(callStatistics.total_duration_in_sec / 60)"
+          [avgSentimentScore]="(Math.round(callStatistics.avg_score * 100) / 100).toFixed(2)"
+          imgPath="./call/blue-phone.png"/>
       </div>
     }
     @if (sentimentOverTime !== undefined) {

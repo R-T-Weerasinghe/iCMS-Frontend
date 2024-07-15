@@ -1,13 +1,3 @@
-export interface OverallCallStatusPercentages {
-  positive: number;
-  negative: number;
-  neutral: number;
-}
-export interface Topic {
-  name: string;
-  code: string;
-}
-
 export interface SentiCatg {
   name: string;
   code: string;
@@ -22,6 +12,8 @@ export interface CallRecording {
   callUrl: string;
   transcription: string;
   operator_id: number;
+  topics:any;
+  keywords:any
 }
 
 export interface OperatorAnalyticsOverTimeRecord {
@@ -38,11 +30,6 @@ export interface OperatorAnalyticsOverTimeRecord {
    date: Date;
    operatorId: number;
  }
-
-export interface ApiResponse {
-  message: string;
-  // Add other properties as needed
-}
 
 export interface OperatorListItem {
   name: string;
@@ -86,6 +73,7 @@ export interface CallStatistics {
   total_calls: number;
   total_duration_in_sec: number;
   avg_call_time_in_sec: number;
+  avg_score: number;
 }
 
 export interface SentimentPercentages {

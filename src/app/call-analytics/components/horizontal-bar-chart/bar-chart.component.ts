@@ -27,7 +27,9 @@ export class BarChartComponent implements OnInit {
       },
       scales: {
         y: {
-          stepSize: 1
+          ticks: {
+            stepSize: 1
+          }
         }
       }
     };

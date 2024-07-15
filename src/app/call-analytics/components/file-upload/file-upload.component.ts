@@ -5,6 +5,7 @@ import { FileSelectEvent, FileUpload } from 'primeng/fileupload';
 import { OperatorListItem, QueuedFile } from '../../types';
 import { CallOperatorService } from '../../services/call-operator.service';
 import UserMessages from '../../../shared/user-messages';
+import { TokenStorageService } from "../../../shared/shared-services/token-storage.service";
 
 @Component({
   selector: 'app-file-upload',
@@ -29,17 +30,29 @@ export class FileUploadComponent implements OnInit {
   callOperators: OperatorListItem[] = [];
   isSubmitted = false;
   visible: boolean = false;
+  currentLoggedInUserEmail: string = "";
+  isAdmin: boolean = false;
 
   constructor(
     private confirmationService: ConfirmationService,
     private callRecordingService: CallRecordingService,
     private callOperatorService: CallOperatorService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private tokenStorageService: TokenStorageService
   ) {}
 
   ngOnInit() {
+    let permissionsList = JSON.parse(this.tokenStorageService.getStorageKeyValue("permissions"));
+    this.isAdmin = permissionsList.length > 2;
+    if (!this.isAdmin) {
+      this.currentLoggedInUserEmail = this.tokenStorageService.getStorageKeyValue("LastAuthUser");
+    }
     this.callOperatorService.getAllOperators().subscribe((data) => {
       this.callOperators = data.data;
+      if (!this.isAdmin) {
+        const currentOperator = this.callOperators.find(op => op.email === this.currentLoggedInUserEmail);
+        this.callOperators = [currentOperator!];
+      }
     });
   }
 

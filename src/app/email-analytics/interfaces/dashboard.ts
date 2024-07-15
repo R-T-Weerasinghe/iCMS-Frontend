@@ -54,6 +54,7 @@ export interface stat_card_single_response{
     sub_title: string;
     header: string;
     sentiment: string;
+    sentiment_score: number;
     imgPath: string;
 }
 
@@ -93,6 +94,7 @@ export interface IssueInquiryFreqByProdcuts{
     product_labels: string[];
     issue_freq: number[];
     inquiry_freq: number[];
+    performence_scores: number[];
     best_product: string;
     worst_product: string;
 }
@@ -138,7 +140,14 @@ export interface OngoingAndClosedStatsResponse{
     closed_percentage_inquiry: number; 
 
 }
-    
+
+export interface StatCard {
+    title: number;
+    sub_title: string;
+    header: string;
+    subheader: string;
+    fontColor: string;
+  }
     
 export interface BestPerformingEmailAccResponse{  
     best_performing_email_acc: string;
@@ -160,4 +169,12 @@ export interface OverdueIssuesResponse{
     all_reading_email_accs: string[];
     overdue_issues_count_per_each_email: number[];
     total_ongoing_issues: number;  
+}
+
+export interface TimeCardResponse {
+    // emailLoad: number[];
+    firstResponseTimes: number[];
+    overdueCount: number;
+    avgFirstResponseTime: number;
+    clientMsgTimes: string[];
 }

@@ -1,9 +1,10 @@
-import {  Component, Input, OnInit,EventEmitter, OnChanges, SimpleChanges,Output } from '@angular/core';
+import {  Component, Input, OnInit,EventEmitter, OnChanges, SimpleChanges,Output,ViewChild } from '@angular/core';
 import { DateRangeService } from '../../../services/shared-date-range/date-range.service';
 import { ChartsService } from '../../../services/charts.service';
 import { timer } from 'rxjs';
 import { AuthenticationService } from '../../../../auth/services/authentication.service';
 import {MenuItem, MenuItemCommandEvent} from "primeng/api";
+import { OverlayPanel } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'app-bar-chart',
@@ -12,6 +13,8 @@ import {MenuItem, MenuItemCommandEvent} from "primeng/api";
 })
 export class BarChartComponent  implements OnInit,OnChanges{
 
+  @ViewChild('op') overlayPanel!: OverlayPanel;
+  @Output() sliderInteraction: EventEmitter<boolean> = new EventEmitter();
   @Output() deletedConfirmed: EventEmitter<void> = new EventEmitter<void>();
   @Output() hideConfirmed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -19,11 +22,20 @@ export class BarChartComponent  implements OnInit,OnChanges{
 
   @Input() id!:string;
 
+  visible:boolean =false;
+
   data:any;
   @Input() persentages: any[]=[];
   @Input() persentages1: any[]=[];
   @Input() persentages2: any[]=[];
   @Input() persentages3: any[]=[];
+
+  positiveMin:number=2;
+  positiveMax:number=100;
+  negativeMin:number=2;
+  negativeMax:number=100;
+  neutralMin:number=2;
+  neutralMax:number=100;
 
   options: any;
   @Output() changesEvent = new EventEmitter<boolean>();
@@ -68,7 +80,7 @@ export class BarChartComponent  implements OnInit,OnChanges{
     
   )
   {
-    
+
   }
 
   items:MenuItem[] = [];
@@ -163,6 +175,9 @@ export class BarChartComponent  implements OnInit,OnChanges{
   // }
 
 
+  onSliderChange(event: any) {
+    this.sliderInteraction.emit(true);
+  }
 
   onDelete(){
 
@@ -170,14 +185,26 @@ export class BarChartComponent  implements OnInit,OnChanges{
   }
 
 edit:boolean=false;
-  onEdit(){
-      this.edit=true;
-    
-  }
 
-  editOff(){
-    this.edit=false;
+onEdit() {
+
+    this.sliderInteraction.emit(true);
+    this.edit = true;
+
+}
+
+editOffApply(){
+  this.edit=false;
+  this.sliderInteraction.emit(false);
+  if(this.selectedCategories){
+    this.barChartExtract(this.selectedCategories);
   }
+}
+
+editOffCancel(){
+  this.edit=false;
+  this.sliderInteraction.emit(false);
+}
 
  confirmDeleted() {
 
@@ -326,11 +353,23 @@ chartDataGet(): void {
                 this.updateAllData(this.transformData(sourceData[0]), 'email');
                 this.updateAllData(this.transformData(sourceData[1]), 'call');
                 this.updateAllData(this.transformData(sourceData[2]), 'social');
+                
               } else if (sourceData && sourceData.length === 2) {
                 this.updateAllData(this.transformData(sourceData[0]), 'ongoing');
                 this.updateAllData(this.transformData(sourceData[1]), 'closed');
               }
             });
+
+          if (this.xAxis === 'topics' || this.xAxis === 'keywords') {
+            const filteredTopicsPositive = this.topics.filter(topic =>
+              (this.allDataTpoic[topic]?.positive >= this.positiveMin && this.allDataTpoic[topic]?.positive <= this.positiveMax) || 
+              (this.allDataTpoic[topic]?.negative >= this.negativeMin && this.allDataTpoic[topic]?.negative <= this.negativeMax) ||
+              (this.allDataTpoic[topic]?.neutral >= this.neutralMin && this.allDataTpoic[topic]?.neutral <= this.neutralMax)
+            );
+            console.log(this.topics)
+            this.topics=filteredTopicsPositive
+
+          }
 
             this.createDatasets(documentStyle);
             this.getMaxValues(this.datasets);
@@ -395,7 +434,6 @@ transformData(data: any[]): { [key: string]: { count: number, percentage: number
 
 updateAllData(sourceData: any, sentiment: string): void {
   if (this.yAxis === 'counts') {
-
     Object.keys(sourceData).forEach(topic => {
       if (!this.allDataTpoic[topic]) {
         this.allDataTpoic[topic] = { positive: 0, negative: 0, neutral: 0 };
@@ -411,6 +449,7 @@ updateAllData(sourceData: any, sentiment: string): void {
         this.allDataTpoic[topic].neutral += sourceData[topic].count;
       }
     });
+
   } else {
     Object.keys(sourceData).forEach(topic => {
       if (!this.allDataTpoic[topic]) {
@@ -590,6 +629,7 @@ aggregateWordCloudData(allCount: any, topics: string[],source:string): any[] {
       percentage: parseFloat(((categoryMapSocial[topic] / this.total) * 100).toFixed(2))
     }));
 
+    console.log([positiveData, negativeData, neutralData])
     return [positiveData, negativeData, neutralData];
   } else {
     const ongoingData = topics.map(topic => ({
@@ -636,6 +676,7 @@ isDateInRange(dateStr: string): boolean {
 
 
   chart() {
+    console.log(this.datasets);
     const documentStyle = getComputedStyle(document.documentElement);
   
     // Define your desired range for labels and datasets
@@ -648,7 +689,7 @@ isDateInRange(dateStr: string): boolean {
    
     // Assign sliced data to this.data
     this.data = {
-      labels: slicedLabels,
+      labels: this.labels,
       datasets: this.datasets
     };
   

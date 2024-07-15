@@ -14,12 +14,36 @@ import {MenuItem, MenuItemCommandEvent} from "primeng/api";
 
 export class VerticalBerChartComponent implements OnInit,OnChanges{
 
+  @Output() sliderInteraction: EventEmitter<boolean> = new EventEmitter();
   @Output() deletedConfirmed: EventEmitter<void> = new EventEmitter<void>();
   @Output() hideConfirmed: EventEmitter<void> = new EventEmitter<void>();
 
   @Input() closable:boolean = true;
 
   @Input() id!:string;
+
+  // Example component method to delay layout changes
+onInputChange() {
+  setTimeout(() => {
+    // Perform layout-changing actions here
+    console.log('Input changed');
+  }, 0); // Delay execution to ensure input focus is maintained
+}
+
+  
+  positiveMin:number=5;
+  positiveMax:number=2;
+  negativeMin:number=2;
+  negativeMax:number=10;
+  neutralMin:number=2;
+  neutralMax:number=2;
+
+  wordYAxisOptions = [
+    { label: 'Topics', value: 'topics' },
+    { label: 'Keywords', value: 'keywords' },
+    { label: 'Products', value: 'products' },
+  ];
+
 
   data:any;
   @Input() persentages: any[]=[];
@@ -145,6 +169,13 @@ export class VerticalBerChartComponent implements OnInit,OnChanges{
   }
 
 
+  onSliderChange(event: any) {
+    this.sliderInteraction.emit(true);
+  }
+
+  showOverlay(op:any):void{
+    op.toggle(event);
+  }
   onDelete(){
     console.log('delete');
     this.deletedConfirmed.emit();
@@ -153,12 +184,26 @@ export class VerticalBerChartComponent implements OnInit,OnChanges{
 
   edit:boolean=false;
   onEdit(){
-      this.edit=true;
+    if(this.xAxis=='topics' || this.xAxis=='keywords'){
+      console.log('edit');
+      this.edit = true;
+      this.sliderInteraction.emit(true);
+    }
     
   }
 
-  editOff(){
+  editOffApply(){
     this.edit=false;
+    this.sliderInteraction.emit(false);
+    if(this.selectedCategories){
+
+      this.barChartExtract(this.selectedCategories);
+    }
+  }
+
+  editOffCancel(){
+    this.edit=false;
+    this.sliderInteraction.emit(false);
   }
 
  confirmDeleted() {
@@ -320,6 +365,14 @@ export class VerticalBerChartComponent implements OnInit,OnChanges{
           //   this.topics=filteredTopicsPositive
           // }
 
+          if (this.xAxis === 'topics' || this.xAxis === 'keywords') {
+            const filteredTopicsPositive = this.topics.filter(topic =>
+              (this.allDataTpoic[topic]?.positive >= this.positiveMin && this.allDataTpoic[topic]?.positive <= this.positiveMax) || 
+              (this.allDataTpoic[topic]?.negative >= this.negativeMin && this.allDataTpoic[topic]?.negative <= this.negativeMax) ||
+              (this.allDataTpoic[topic]?.neutral >= this.neutralMin && this.allDataTpoic[topic]?.neutral <= this.neutralMax)
+            );
+            this.topics=filteredTopicsPositive
+          }
             
 
             this.createDatasets(documentStyle);

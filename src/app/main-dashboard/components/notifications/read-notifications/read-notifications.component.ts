@@ -184,68 +184,77 @@ export class ReadNotificationsComponent implements OnInit {
 
 
   readNotification(): void {
-    this.authService.getIdToken().subscribe((token) =>{
-    forkJoin([
-      this.notificationService.getReadNotifications(token),
-      this.notificationService.getNotifications(token)
-    ]).subscribe(([readNotifications, unreadNotifications]) => {
-      console.log(readNotifications, unreadNotifications);
+    this.authService.getIdToken().subscribe((token) => {
+      forkJoin([
+        this.notificationService.getReadNotifications(token),
+        this.notificationService.getNotifications(token)
+      ]).subscribe(([readNotifications, unreadNotifications]) => {
+        console.log(readNotifications, unreadNotifications);
   
-      const allNotifications: CustomMessage[] = [];
-      let emptyRead = false;
-      let emptyUnread = false;
+        const unreadNotificationsTemp: CustomMessage[] = [];
+        const readNotificationsTemp: CustomMessage[] = [];
+        let emptyRead = false;
+        let emptyUnread = false;
   
-      // Process read notifications
-      if (readNotifications.length !== 0) {
-        for (const notification of readNotifications) {
-          const newMessage: CustomMessage = {
-            severity: "success",
-            summary: notification.datetime,
-            detail: notification.title,
-            id: notification.id,
-            data: notification.description,
-            read: false,  // Mark as read
-            sources:notification.sources
-          };
-          allNotifications.push(newMessage);
+        // Process unread notifications
+        if (unreadNotifications.length !== 0) {
+          for (const notification of unreadNotifications) {
+            const newMessage: CustomMessage = {
+              severity: "info",
+              summary: notification.datetime,
+              detail: notification.title,
+              id: notification.id,
+              data: notification.description,
+              read: true,  // Mark as unread
+              sources: notification.sources
+            };
+            unreadNotificationsTemp.push(newMessage);
+          }
+        } else {
+          emptyUnread = true;
         }
-      } else {
-        emptyRead = true;
-      }
   
-      // Process unread notifications
-      if (unreadNotifications.length !== 0) {
-        for (const notification of unreadNotifications) {
-          const newMessage: CustomMessage = {
-            severity: "info",
-            summary: notification.datetime,
-            detail: notification.title,
-            id: notification.id,
-            data: notification.description,
-            read: true,  // Mark as read,
-            sources:notification.sources
-          };
-          allNotifications.push(newMessage);
+        // Process read notifications
+        if (readNotifications.length !== 0) {
+          for (const notification of readNotifications) {
+            const newMessage: CustomMessage = {
+              severity: "success",
+              summary: notification.datetime,
+              detail: notification.title,
+              id: notification.id,
+              data: notification.description,
+              read: false,  // Mark as read
+              sources: notification.sources
+            };
+            readNotificationsTemp.push(newMessage);
+          }
+        } else {
+          emptyRead = true;
         }
-      } else {
-        emptyUnread = true;
-      }
   
-      // Sort all notifications by datetime from most recent to least recent
-      allNotifications.sort((a, b) => 
-        new Date(b.summary || "").getTime() - new Date(a.summary || "").getTime()
-      );
+        // Sort unread notifications by datetime from most recent to least recent
+        unreadNotificationsTemp.sort((a, b) => 
+          new Date(b.summary || "").getTime() - new Date(a.summary || "").getTime()
+        );
   
-      // Handle empty notifications for both read and unread
-      if (emptyRead && emptyUnread) {
-        this.filteredNotifications = [{ severity: "info", summary: "No Notifications", detail: "Empty",read:false,sources:'' }];
-      } else {
-        this.filteredNotifications = allNotifications;
-      }
+        // Sort read notifications by datetime from most recent to least recent
+        readNotificationsTemp.sort((a, b) => 
+          new Date(b.summary || "").getTime() - new Date(a.summary || "").getTime()
+        );
   
-      this.readnotifications = allNotifications;
+        // Concatenate unread and read notifications
+        const allNotifications = unreadNotificationsTemp.concat(readNotificationsTemp);
+  
+        // Handle empty notifications for both read and unread
+        if (emptyRead && emptyUnread) {
+          this.filteredNotifications = [{ severity: "info", summary: "No Notifications", detail: "Empty", read: false, sources: '' }];
+        } else {
+          this.filteredNotifications = allNotifications;
+        }
+  
+        this.readnotifications = allNotifications;
+      });
     });
-  });
   }
-
+  
   }

@@ -1,9 +1,7 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CallRecordingService } from "../../services/call-recording.service";
-import {CallRecording, SentiCatg, Topic} from "../../types";
-import { CallAnalyticsService } from "../../services/call-analytics.service";
-import { SomeService } from "../../services/some.service";
-import {cleanData} from "jquery";
+import { CallSettingsService } from "../../services/call-settings.service";
+import { CallRecording, SentiCatg } from "../../types";
 
 @Component({
   selector: 'app-filtering-features',
@@ -11,12 +9,11 @@ import {cleanData} from "jquery";
   styleUrl: './filtering-features.component.scss',
 
 })
-export class FilteringFeaturesComponent implements OnInit{
+export class FilteringFeaturesComponent implements OnInit {
 
   rangeDates: Date[] | undefined;
   keyword: any;   //Keyword
   duration: number = 0;  //Slider
-  topic: Topic[] | undefined;
   topics: string[] = [];
   keywords: string[] = [];
   selectedTopic!: any;
@@ -25,29 +22,28 @@ export class FilteringFeaturesComponent implements OnInit{
   callFiltering: CallRecording[] = [];
   currentTime: any;
   dateString: any;
-  end_date : string = '';
-  start_date : string = '';
-  sentimentCatg : string[] = [];  //changed
+  end_date: string = '';
+  start_date: string = '';
+  sentimentCatg: string[] = [];  //changed
   noResultsMessage: string = 'Search Recordings';
   callRecordings: never[] | undefined;
   visibility: boolean = true;
-  constructor(private callRecordingService: CallRecordingService) { }
+
+  constructor(private callRecordingService: CallRecordingService, private callSettingsService: CallSettingsService) {
+  }
 
   ngOnInit(): void {
-    this.topic = [
-      {name: 'Pricing', code: 'PCG'},
-      {name: 'Product', code: 'PDT'},
-      {name: 'services', code: 'SVC'},
-      {name: 'Issues', code: 'IS'},
-      {name: 'Website', code: 'WS'}
-    ];
+    this.callSettingsService.getNotificationSettings().subscribe((data) => {
+      this.topics = data.data['topics'];
+      console.log(this.topics)
+    });
 
     this.sentiCatg = [
       {name: 'Positive', code: 'POS'},
       {name: 'Neutral', code: 'NEU'},
       {name: 'Negative', code: 'NEG'}
     ];
-    }
+  }
 
   applyFeatures() {
     try {
@@ -67,7 +63,6 @@ export class FilteringFeaturesComponent implements OnInit{
 
       }
 
-      this.topics = [] ;
       // Check if duration is null, if so, assign 0
       const duration = this.duration == null || undefined ? 0 : this.duration;
       this.duration = duration
@@ -75,24 +70,18 @@ export class FilteringFeaturesComponent implements OnInit{
       // Check if selectedSentiCatg is null, if so, assign an empty string
       //this.sentimentCatg = this.selectedSentiCatg == null || undefined? '' : this.selectedSentiCatg.name;
 
-      if(this.selectedSentiCatg != null){
+      if (this.selectedSentiCatg != null) {
         for (let item of this.selectedSentiCatg) {
           this.sentimentCatg.push(item.name);
         }
       }
 
-      console.log(duration, this.sentimentCatg );
-
-      if(this.selectedTopic != null){
-        for (let item of this.selectedTopic) {
-          this.topics.push(item.name);
-        }
-      }
+      console.log(duration, this.sentimentCatg);
 
       console.log(this.topics);
 
       // Call applyFeatures method from the service with required parameters
-      this.callRecordingService.applyFeatures(duration, this.keywords, this.sentimentCatg , this.start_date, this.end_date, this.topics)
+      this.callRecordingService.applyFeatures(duration, this.keywords, this.sentimentCatg, this.start_date, this.end_date, this.selectedTopic)
         .subscribe((response: any) => {
           console.log("response ", response);
           if (response.data.length == 0) {
@@ -111,10 +100,10 @@ export class FilteringFeaturesComponent implements OnInit{
                 duration: record.call_duration ?? 4.39,
                 date: new Date(record.call_date['$date']),
                 sentiment: record.sentiment_category,
-                call_id : record.call_id
+                call_id: record.call_id
               } as CallRecording;
             });
-          }          
+          }
           console.log('Call recordings refreshed:', this.callFiltering);
         });
     } catch (error) {
@@ -122,11 +111,9 @@ export class FilteringFeaturesComponent implements OnInit{
     }
   }
 
-  protected readonly cleanData = cleanData;
-
-  cleanDate() : void {
-    this.end_date  = '';
-    this.start_date  = '';
+  cleanDate(): void {
+    this.end_date = '';
+    this.start_date = '';
   }
 
   clearFields() {
@@ -136,7 +123,7 @@ export class FilteringFeaturesComponent implements OnInit{
     this.selectedTopic = [];
     this.selectedSentiCatg = [];
     this.keywords = [];
-    this.topics = [];
+    this.selectedTopic = [];
     console.log('Fields cleared');
   }
 }

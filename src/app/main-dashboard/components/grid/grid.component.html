@@ -97,7 +97,8 @@
           [yAxis]="item['yAxis']"
           (changesEvent)="onChanges($event, i)"
           (hideConfirmed)="onDeleteConfirmed(item)"
-          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])">
+          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])"
+          (sliderInteraction)="handleSliderInteraction($event)">
         </app-line-area-chart>
       </ng-container>
 
@@ -115,7 +116,8 @@
           [id]="item['id']"
           (changesEvent)="onChanges($event, i)"
           (hideConfirmed)="onDeleteConfirmed(item)"
-          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])">
+          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])"
+          (sliderInteraction)="handleSliderInteraction($event)">
         </app-horizontal-bar-chart>
       </ng-container>
 
@@ -142,7 +144,8 @@
           [xAxis]="item['xAxis']"
           (changesEvent)="onChanges($event, i)"
           (hideConfirmed)="onDeleteConfirmed(item)"
-          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])">
+          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])"
+          (sliderInteraction)="handleSliderInteraction($event)">
         </app-bar-chart>
 
         <app-vertical-ber-chart *ngIf="item['yAxis'] != 'counts'"
@@ -154,7 +157,8 @@
           [xAxis]="item['xAxis']"
           (changesEvent)="onChanges($event, i)"
           (hideConfirmed)="onDeleteConfirmed(item)"
-          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])">
+          (deletedConfirmed)="gridDeleteConfirmed(item['id'],item['title'])"
+          (sliderInteraction)="handleSliderInteraction($event)">
         </app-vertical-ber-chart>
       </ng-container>
 

@@ -68,6 +68,7 @@ export class CallSummaryChartComponent implements OnInit {
           } else {
             this.noData = false;
             this.callRecordings = data.data.map((record: any) => {
+              console.log(record)
               return {
                 id: record.id,
                 description: record.description,
@@ -75,7 +76,9 @@ export class CallSummaryChartComponent implements OnInit {
                 callUrl: record.call_recording_url,
                 duration: record.call_duration ?? 4.39,
                 date: new Date(record.call_date),
-                sentiment: record.sentiment
+                sentiment: record.sentiment,
+                keywords : record.keywords,
+                topics: record.topics
               } as CallRecording;
             });
             console.log('Fetched callRecordings:', this.callRecordings);

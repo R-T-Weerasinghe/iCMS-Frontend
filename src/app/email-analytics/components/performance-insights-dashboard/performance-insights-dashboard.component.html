@@ -1,0 +1,126 @@
+<div class="my-container flex flex-col h-auto">
+  <div class="my-child-1 flex-none">
+    <app-page-header
+      pageTitle="Email Analytics Dashboard"
+      class="w-full h-fit"
+      [breadcrumbItems]="breadcrumbItems"
+      [showDatePicker]="true"
+      (rangeDatesChanged)="onRangeDatesChanged($event)"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [emailDashboardDate]="true"
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+    />
+  </div>
+</div>
+
+<div class="flex flex-col flex-wrap gap-6">
+  <!-- Current Overall efficiency donought chart-->
+  <!-- <div class="stat-cards h-40"> -->
+  <!-- <app-effi-effec-donought-chart
+          title="Current Overall Efficiency"
+          [chartData]="dntChartDataOverallEfficiency"
+          [chartLabels]="dntChartOverallEfficiencyLabels"
+          *ngIf="!isLoadingDCOverallEfficiency"
+        /> -->
+  <!-- </div> -->
+  <!-- Current Overall progress donought chart-->
+  <!-- <app-progress-donought-chart
+        title="Current Progress of both issues and inquiries"
+        [chartData]="dntChartDataProgress"
+        [chartLabels]="dntChartProgressLabels"
+        *ngIf="!isLoadingDCProgress"
+      ></app-progress-donought-chart> -->
+
+  <!-- Current Overall efficiency donought chart-->
+  <!-- <app-effi-effec-donought-chart
+        title="Current Overall Effectiveness"
+        [chartData]="dntChartDataOverallEffeftiveness"
+        [chartLabels]="dntChartOverallEffectivenessLabels"
+        *ngIf="!isLoadingDCOverallEffectiveness"
+      /> -->
+
+  <div class="flex flex-row justify-center">
+    <div>
+      <!-- TODO: Some issue here with the skeleton -->
+      <app-best-worst-card
+        [header]="overallOverdueIssuesHeader"
+        [card_content]="overallOverdueIssuesContent"
+        [bgcolor]="noOfOverdueIssuesColor"
+        *ngIf="!isLoadingoverallOverdueIssuesCount"
+      />
+      <p-skeleton
+        styleClass="w-full my-3"
+        height="250px"
+        *ngIf="isLoadingoverallOverdueIssuesCount"
+      ></p-skeleton>
+    </div>
+
+    <!-- Other cards to go on first row goes here -->
+  </div>
+
+  <div class="flex flex-row gap-6">
+    <div class="w-1/2">
+      <app-multi-vertical-bar-chart
+        title="Efficiency Distribution"
+        [labels]="effi_dstri_vert_bar_labels"
+        [efficiency_dataset_for_issues]="effi_distri_vert_var_issues_data"
+        [efficiency_dataset_for_inquiries]="effi_distri_vert_var_inquiries_data"
+        *ngIf="!isLoadingEffiDistri"
+      />
+      <p-skeleton
+        styleClass="w-full my-3"
+        height="250px"
+        *ngIf="isLoadingEffiDistri"
+      ></p-skeleton>
+    </div>
+
+    <div class="w-1/2">
+      <app-multi-vertical-bar-chart
+        title="Effectiveness Distribution"
+        [labels]="effect_dstri_vert_bar_labels"
+        [efficiency_dataset_for_issues]="effect_distri_vert_var_issues_data"
+        [efficiency_dataset_for_inquiries]="
+          effect_distri_vert_var_inquiries_data
+        "
+        *ngIf="!isLoadingEffectDistri"
+      />
+      <p-skeleton
+        styleClass="w-full my-3"
+        height="250px"
+        *ngIf="isLoadingEffectDistri"
+      ></p-skeleton>
+    </div>
+  </div>
+</div>
+
+<div class="flex flex-row gap-6">
+  <div class="w-1/2">
+    <app-dynamic-stacked-bar-chart
+      title="Efficiency distribution of email accounts"
+      [labels]="email_acc_effi_labels"
+      [datasets]="email_acc_effi_dataset"
+      *ngIf="!isLoadingEffiByEmailAcc"
+    />
+    <p-skeleton
+      styleClass="w-full my-3"
+      height="250px"
+      *ngIf="isLoadingEffiByEmailAcc"
+    ></p-skeleton>
+  </div>
+  <div class="w-1/2">
+    <app-horizontal-bar-chart
+      title="Overdue issues distribution among email accounts"
+      [sbtChartLabels]="overdueIssByEmailsLabels"
+      [sbtChartColors]="overdueIssByEmailsColors"
+      [sbtChartValues]="overdueIssByEmailsData"
+      *ngIf="!isLoadingOverdueIssByEmailAcc"
+    />
+    <p-skeleton
+      styleClass="w-full my-3"
+      height="250px"
+      *ngIf="isLoadingOverdueIssByEmailAcc"
+    ></p-skeleton>
+  </div>
+</div>
