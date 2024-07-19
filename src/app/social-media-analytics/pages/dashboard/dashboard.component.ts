@@ -47,13 +47,14 @@ export class DashboardComponent implements OnInit {
     lastMonth.setMonth(tomorrow.getMonth() - 1);
     this.fetchDashboardData(lastMonth.toISOString().split('T')[0], tomorrow.toISOString().split('T')[0]);
 
-    this.DashboardApiService.getProductTrends().subscribe((data: any) => {
-      this.productTrendData = data;
+    // this.DashboardApiService.getProductTrends().subscribe((data: any) => {
+    //   this.productTrendData = data;
+    //   this.loadingProductTrend = false;
+    // }, (error: any) => {
+    //   this.isError = true;
+    //   this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
+    // });
       this.loadingProductTrend = false;
-    }, (error: any) => {
-      this.isError = true;
-      this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
-    });
   }
 
   fetchDashboardData(Date: string, Date2: string) {
