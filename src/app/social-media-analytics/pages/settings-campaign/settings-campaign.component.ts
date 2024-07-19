@@ -39,6 +39,7 @@ export class SettingsCampaignComponent implements OnInit {
           if (item.description.length > 40) {
             item.description = item.description.slice(0, 40) + '...';
           }
+          item.s_score = Math.round(item.s_score*100);
         });
         this.contentFacebook.data = FacebookData;
 
@@ -47,6 +48,7 @@ export class SettingsCampaignComponent implements OnInit {
           if (item.description.length > 40) {
             item.description = item.description.slice(0, 40) + '...';
           }
+          item.s_score = Math.round(item.s_score*100);
         });
         this.contentInstagram.data = InstagramData;
 

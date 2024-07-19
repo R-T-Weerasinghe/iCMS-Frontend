@@ -41,4 +41,8 @@ export class DashboardApiService {
     return this.http.get<any>(`${this.apiUrl}/sentimentscore_instagram?startDate=${startDate}&endDate=${endDate}`);
   }
 
+  getProductTrends(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/product_prediction`);
+  }
+
 }

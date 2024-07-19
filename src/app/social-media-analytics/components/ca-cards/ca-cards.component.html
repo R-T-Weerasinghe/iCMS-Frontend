@@ -17,7 +17,7 @@
               <span class="count">{{ campaign.total_likes }}</span>
             </div>
             <span class="change">
-              <span *ngIf="campaign.likesChange > 0; else negative" class="positive">
+              <span *ngIf="campaign.like_increment > 0; else negative" class="positive">
                 +{{ campaign.like_increment }}
               </span>
               <ng-template #negative>
@@ -34,7 +34,7 @@
               <span class="count">{{ campaign.total_comments }}</span>
             </div>
             <span class="change">
-              <span *ngIf="campaign.likesChange > 0; else negative" class="positive">
+              <span *ngIf="campaign.comment_increment > 0; else negative" class="positive">
                 +{{ campaign.comment_increment }}
               </span>
               <ng-template #negative>

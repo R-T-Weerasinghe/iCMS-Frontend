@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   loadingWordCloudProduct: boolean = true;
   loadingChartFacebook: boolean = true;
   loadingChartInstagram: boolean = true;
+  loadingProductTrend: boolean = true;
 
   facebookScore: number = 0;
   instagramScore: number = 0;
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit {
   wordCloudProductData: any[] = [];
   chartFacebookData: any;
   chartInstagramData: any;
+  productTrendData: any[] = [];
   isError: boolean = false;
   protected readonly userMessages = UserMessages;
 
@@ -39,10 +41,20 @@ export class DashboardComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    var today = new Date();
+    var tomorrow = new Date();
     var lastMonth = new Date();
-    lastMonth.setMonth(today.getMonth() - 1);
-    this.fetchDashboardData(lastMonth.toISOString().split('T')[0], today.toISOString().split('T')[0]);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    lastMonth.setMonth(tomorrow.getMonth() - 1);
+    this.fetchDashboardData(lastMonth.toISOString().split('T')[0], tomorrow.toISOString().split('T')[0]);
+
+    // this.DashboardApiService.getProductTrends().subscribe((data: any) => {
+    //   this.productTrendData = data;
+    //   this.loadingProductTrend = false;
+    // }, (error: any) => {
+    //   this.isError = true;
+    //   this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
+    // });
+      this.loadingProductTrend = false;
   }
 
   fetchDashboardData(Date: string, Date2: string) {

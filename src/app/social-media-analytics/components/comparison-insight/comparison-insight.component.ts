@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 
 interface ComparisonInsight {
-  title: string;
+  product: string;
   percentage: string;
-  name: string;
   isUpTrend: boolean;
 }
 
@@ -12,21 +11,24 @@ interface ComparisonInsight {
   templateUrl: './comparison-insight.component.html',
   styleUrls: ['./comparison-insight.component.scss']
 })
-export class ComparisonInsightComponent implements OnInit {
+export class ComparisonInsightComponent implements OnChanges, OnInit {
   insights: ComparisonInsight[] = [];
+  @Input() data: any[] = [];
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['data']) {
+      this.insights = this.data;
+    }
+  }
 
   ngOnInit() {
     this.insights = [
-      { title: 'Vertex AI', percentage: '1.02%', name: 'Google', isUpTrend: true },
-      { title: 'AWS SageMaker', percentage: '1.50%', name: 'Amazon', isUpTrend: true },
-      { title: 'Azure ML', percentage: '0.85%', name: 'Microsoft', isUpTrend: false },
-      { title: 'TensorFlow', percentage: '2.00%', name: 'Google', isUpTrend: true },
-      { title: 'PyTorch', percentage: '1.75%', name: 'Facebook', isUpTrend: true },
-      { title: 'IBM Watson', percentage: '0.95%', name: 'IBM', isUpTrend: false },
-      { title: 'H2O.ai', percentage: '0.60%', name: 'H2O.ai', isUpTrend: false },
-      { title: 'DataRobot', percentage: '1.20%', name: 'DataRobot', isUpTrend: true },
-      { title: 'BigML', percentage: '0.70%', name: 'BigML', isUpTrend: false },
-      { title: 'RapidMiner', percentage: '0.80%', name: 'RapidMiner', isUpTrend: false }
+      { product: 'Gemini', percentage: '1.02%', isUpTrend: true },
+      { product: 'ChatGPT', percentage: '1.50%', isUpTrend: true },
+      { product: 'VertexAI', percentage: '0.85%', isUpTrend: false },
+      { product: 'Sora', percentage: '2.00%', isUpTrend: true },
+      { product: 'MidJourney', percentage: '1.75%', isUpTrend: false },
     ];
   }
 
@@ -35,6 +37,6 @@ export class ComparisonInsightComponent implements OnInit {
   }
 
   getTrendStatus(isUpTrend: boolean): string {
-    return isUpTrend ? 'uptrending' : 'downtrending';
+    return isUpTrend ? 'UpTrending' : 'DownTrending';
   }
 }
