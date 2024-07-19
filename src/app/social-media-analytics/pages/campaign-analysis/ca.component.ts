@@ -60,9 +60,9 @@ export class CAComponent implements OnInit, OnDestroy {
           item.dataSentimentLabels = Array.from({ length: item.s_score_arr.length }, (_, i) => `${i + 1}`);
         });
 
-        this.caPageContent.topCampaigns = campaignsContent;
-        // this.caPageContent.topCampaigns = campaignsContent.filter((item: any) => item.s_score_arr[campaignsContent[0].s_score_arr.length - 1] >= -0.1);
-        // this.caPageContent.additionalCampaigns = campaignsContent.filter((item: any) => item.s_score_arr[campaignsContent[0].s_score_arr.length - 1] < 0);
+        // this.caPageContent.topCampaigns = campaignsContent;
+        this.caPageContent.topCampaigns = campaignsContent.filter((item: any) => item.s_score_arr[item.s_score_arr.length - 1] >= -0.2);
+        this.caPageContent.additionalCampaigns = campaignsContent.filter((item: any) => item.s_score_arr[item.s_score_arr.length - 1] < -0.2);
 
         this.loading = false;
       }, (error) => {
