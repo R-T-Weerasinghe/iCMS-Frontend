@@ -1,3 +1,3 @@
 export class CallAnalyticsConfig {
-  public static readonly SentimentCategories = ["Negative", "Positive", "Neutral"]
+  public static readonly SentimentCategories = ["Positive", "Negative", "Neutral"]
 }

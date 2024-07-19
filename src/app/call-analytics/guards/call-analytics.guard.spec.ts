@@ -4,8 +4,8 @@ import { CanActivateFn } from '@angular/router';
 import { callAnalyticsGuard } from './call-analytics.guard';
 
 describe('callAnalyticsGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => callAnalyticsGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => callAnalyticsGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

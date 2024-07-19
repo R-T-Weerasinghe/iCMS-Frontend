@@ -2,7 +2,7 @@
 
 // export const apiEndpoint = 'http://localhost:8000';
 
-export const apiEndpoint = 'http://13.233.195.74:8000';
+export const apiEndpoint = 'http://3.110.89.72:8000';
 
 // export const socialMediaBackendAPI = 'https://icsms-social-media-backend.vercel.app'
   export const socialMediaBackendAPI = 'http://localhost:8000'

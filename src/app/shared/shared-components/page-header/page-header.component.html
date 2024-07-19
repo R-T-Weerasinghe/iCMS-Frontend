@@ -47,7 +47,7 @@
       [maxDate]="maxDate" *ngIf="!mainDashboardDate && !callDashboardDate &&!mainDashboardNotification && !emailDashboardDate">
     </p-calendar>
 
-    
+
     <p-calendar
       [(ngModel)]="emailDates"
       selectionMode="range"
@@ -64,9 +64,11 @@
       selectionMode="range"
       [readonlyInput]="true"
       [showIcon]="true"
+      class="call-date"
       [showButtonBar]="true"
       (ngModelChange)="onRangeSelect($event)"
-      *ngIf="callDashboardDate">   <-- Check if hide or show
+      [maxDate]="maxCallDate"
+      *ngIf="callDashboardDate">
     </p-calendar>
   </div>
 

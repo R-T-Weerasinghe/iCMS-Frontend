@@ -16,10 +16,11 @@ export class SettingsComponent implements OnInit {
   notificationsSettingsForm: FormGroup;
   callSettingsDetails!: CallSettingsDetails;
   isAbleToEdit: boolean = false;
+  loading = false;
 
   breadcrumbItems: MenuItem[] = [
-    {label: 'Call Analytics', routerLink: '/call/dashboard'},
-    {label: 'Settings'},
+    { label: 'Call Analytics', routerLink: '/call/dashboard' },
+    { label: 'Settings' },
   ];
 
   constructor(
@@ -44,7 +45,7 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit() {
     let permissions = this.tokenStorageService.getStorageKeyValue("permissions");
-    this.isAbleToEdit = permissions.includes("Edit Call Settings");
+    this.isAbleToEdit = permissions.includes("Change Call Settings");
     this.callSettingsService.getNotificationSettings().subscribe(
       (result) => {
         if (result.status) {
@@ -144,50 +145,36 @@ export class SettingsComponent implements OnInit {
   }
 
   onSubmit(): void {
+    this.loading = true
     const formValue = this.notificationsSettingsForm.value;
-    (this.callSettingsDetails.alert_keywords =
-      formValue.keywords === undefined ? [] : formValue.keywords),
-      (this.callSettingsDetails.alert_email_receptions = formValue.emails),
-      (this.callSettingsDetails.sentiment_lower_threshold =
-        formValue.bellowScore || 0),
-      (this.callSettingsDetails.sentiment_upper_threshold =
-        formValue.aboveScore || 10),
-      (this.callSettingsDetails.is_upper_threshold_enabled =
-        formValue.aboveNotify),
-      (this.callSettingsDetails.is_lower_threshold_enabled =
-        formValue.bellowNotify),
-      (this.callSettingsDetails.is_email_alerts_enabled =
-        formValue.enableEmailNotification),
-      (this.callSettingsDetails.is_push_notifications_enabled =
-        formValue.enablePushNotification),
-      (this.callSettingsDetails.is_keyword_alerts_enabled =
-        formValue.enableKeywordsNotification),
-      (this.callSettingsDetails.topics = formValue.topics);
+    this.callSettingsDetails.alert_keywords = formValue.keywords === undefined ? [] : formValue.keywords;
+    this.callSettingsDetails.alert_email_receptions = formValue.emails === undefined ? [] : formValue.emails;
+    this.callSettingsDetails.sentiment_lower_threshold = formValue.bellowScore || 0;
+    this.callSettingsDetails.sentiment_upper_threshold = formValue.aboveScore || 10;
+    this.callSettingsDetails.is_upper_threshold_enabled = formValue.aboveNotify;
+    this.callSettingsDetails.is_lower_threshold_enabled = formValue.bellowNotify;
+    this.callSettingsDetails.is_email_alerts_enabled = formValue.enableEmailNotification;
+    this.callSettingsDetails.is_push_notifications_enabled = formValue.enablePushNotification;
+    this.callSettingsDetails.is_keyword_alerts_enabled = formValue.enableKeywordsNotification;
+    this.callSettingsDetails.topics = formValue.topics;
     console.log(this.callSettingsDetails);
+
     this.callSettingsService
       .updateNotificationSettings(this.callSettingsDetails)
       .then((response) => {
         if (response.status) {
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Success',
-            detail: UserMessages.SAVED_SUCCESS,
-          });
+          this.messageService.add({ severity: 'success', summary: 'Success', detail: UserMessages.SAVED_SUCCESS });
+          this.loading = false
         } else {
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Error',
-            detail: UserMessages.SAVED_ERROR,
-          });
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: UserMessages.SAVED_ERROR });
+          this.loading = false
         }
       })
       .catch((error) => {
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Error',
-          detail: UserMessages.SAVED_ERROR,
-        });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: UserMessages.SAVED_ERROR });
+        this.loading = false
         console.log(error);
       });
+
   }
 }

@@ -4,8 +4,8 @@ import { CanActivateFn } from '@angular/router';
 import { callUploadGuard } from './call-upload.guard';
 
 describe('callUploadGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => callUploadGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => callUploadGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

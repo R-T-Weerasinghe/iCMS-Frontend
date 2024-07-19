@@ -17,9 +17,9 @@ export class FileUploadComponent implements OnInit {
   @ViewChild('callUpload') callUpload!: FileUpload;
 
   breadcrumbItems: MenuItem[] = [
-    { label: 'Call Analytics', routerLink: '/call/dashboard' },
-    { label: 'Call Recordings', routerLink: '/call/recordings' },
-    { label: 'Upload Calls' },
+    {label: 'Call Analytics', routerLink: '/call/dashboard'},
+    {label: 'Call Recordings', routerLink: '/call/recordings'},
+    {label: 'Upload Calls'},
   ];
 
   files: any[] = [];
@@ -32,6 +32,8 @@ export class FileUploadComponent implements OnInit {
   visible: boolean = false;
   currentLoggedInUserEmail: string = "";
   isAdmin: boolean = false;
+  maxDate: Date = new Date();
+  uploadFeedbackMsg: string = 'Upload started. Please wait...';
 
   constructor(
     private confirmationService: ConfirmationService,
@@ -39,7 +41,8 @@ export class FileUploadComponent implements OnInit {
     private callOperatorService: CallOperatorService,
     private messageService: MessageService,
     private tokenStorageService: TokenStorageService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     let permissionsList = JSON.parse(this.tokenStorageService.getStorageKeyValue("permissions"));
@@ -57,6 +60,7 @@ export class FileUploadComponent implements OnInit {
   }
 
   onUploadClick(event: any): void {
+    this.visible = true;
     this.files = event.files;
     if (this.files && this.files.length > 0) {
       let queuedFiles = this.createUploadQueue(this.files);
@@ -65,8 +69,9 @@ export class FileUploadComponent implements OnInit {
         .then((response) => {
           this.clearFiles();
           if (response!.status) {
-            this.visible = true;
+            this.uploadFeedbackMsg = "Your calls have been added for analyze. This process will take some time. When analysis completed you will be notified.";
           } else {
+            this.visible = false;
             this.messageService.add({
               severity: 'error',
               summary: 'Error',

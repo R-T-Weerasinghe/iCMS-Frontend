@@ -1,19 +1,20 @@
-.rightBottom{
-        bottom: 9px;
-        right: 5px;
+.rightBottom {
+  bottom: 9px;
+  right: 5px;
 }
 
-:host ::ng-deep{
-    .short-input.p-element{
-        .p-inputnumber-input{
-            width: 50px;
-        }
+:host ::ng-deep {
+  .short-input.p-element {
+    .p-inputnumber-input {
+      width: 50px;
     }
-    .long-input.p-element {
-            width: 100%;
-    }
+  }
+
+  .long-input.p-element {
+    width: 100%;
+  }
 }
 
-.space-between{
-    justify-content: space-between;
+.space-between {
+  justify-content: space-between;
 }

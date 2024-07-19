@@ -8,12 +8,13 @@ import { Router } from '@angular/router';
   styleUrl: './call-recordings.component.scss',
 })
 export class CallRecordingsComponent {
-  constructor(private router: Router) {}
-
   breadcrumbItems: MenuItem[] = [
     { label: 'Call Analytics', routerLink: '/call/dashboard' },
     { label: 'Call Recordings' },
   ];
+
+  constructor(private router: Router) {
+  }
 
   addCallRecording(): void {
     this.router.navigate(['/call/upload']);

@@ -6,6 +6,7 @@ import userMessages from "../../../shared/user-messages";
 import UserMessages from "../../../shared/user-messages";
 import { MessageService } from "primeng/api";
 import { TokenStorageService } from "../../../shared/shared-services/token-storage.service";
+import { CallOperatorService } from "../../services/call-operator.service";
 
 @Component({
   selector: 'app-call-summary-chart',
@@ -25,15 +26,19 @@ export class CallSummaryChartComponent implements OnInit {
   audioPosition: any;
   currentTime: any;
   totalTime: any;
+  email: any;
   selectedCallSummary: string = "";
   isError: boolean = false;
   isLoading: boolean = true;
   noData: boolean = false;
-  protected readonly userMessages = userMessages;
   isAbleToDelete: boolean = false;
+  isOperator: boolean = false
+  operatorId: any;
+  protected readonly userMessages = userMessages;
 
   constructor(
     private callRecordingService: CallRecordingService,
+    private callOperatorService: CallOperatorService,
     private callAnalyticsService: CallAnalyticsService,
     private messageService: MessageService,
     private tokenStorageService: TokenStorageService
@@ -42,6 +47,7 @@ export class CallSummaryChartComponent implements OnInit {
 
   ngOnInit() {
     let permissions = this.tokenStorageService.getStorageKeyValue("permissions");
+    this.email = this.tokenStorageService.getEmailFromLocalStorage("permissions");
     this.isAbleToDelete = permissions.includes("Delete Call Recording");
     const documentStyle: CSSStyleDeclaration = getComputedStyle(document.documentElement);
     this.statusColors = {
@@ -58,6 +64,17 @@ export class CallSummaryChartComponent implements OnInit {
   }
 
   reloadDataSource(): void {
+    if (this.email) {
+      this.callOperatorService.getOperatorByEmail(this.email).subscribe((response) => {
+        console.log('Operator ', response.data);
+        if (response.data && Object.keys(response.data).length > 0) {
+          this.isOperator = true;
+          this.operatorId = response.data.operator_id;
+        }
+      });
+    } else {
+      console.log('No email found in localStorage');
+    }
     try {
       this.isLoading = true;
       this.callRecordingService.getCallsList().subscribe((data) => {
@@ -66,9 +83,8 @@ export class CallSummaryChartComponent implements OnInit {
           if (data.data.length === 0) {
             this.noData = true;
           } else {
-            this.noData = false;
             this.callRecordings = data.data.map((record: any) => {
-              console.log(record)
+              console.log(record);
               return {
                 id: record.id,
                 description: record.description,
@@ -77,28 +93,42 @@ export class CallSummaryChartComponent implements OnInit {
                 duration: record.call_duration ?? 4.39,
                 date: new Date(record.call_date),
                 sentiment: record.sentiment,
-                keywords : record.keywords,
-                topics: record.topics
+                keywords: record.keywords,
+                topics: record.topics,
+                operator_id: record.operator_id,
               } as CallRecording;
             });
             console.log('Fetched callRecordings:', this.callRecordings);
+            // If the user is an operator, filter the call recordings by operator ID
+            if (this.isOperator) {
+              this.callRecordings = this.callRecordings.filter(record => record.operator_id === this.operatorId);
+              if (this.callRecordings.length > 0) {
+                this.noData = false
+              } else {
+                this.noData = true
+              }
+            } else {
+              this.noData = false;
+            }
+
           }
         } else {
           this.isError = true;
-          this.messageService.add({severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR});
+          this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
         }
         this.isLoading = false;
       }, (error) => {
         console.error('Error fetching call recordings', error);
         this.isError = true;
         this.isLoading = false;
-        this.messageService.add({severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR});
+        this.messageService.add({ severity: "error", summary: "Error", detail: UserMessages.FETCH_ERROR });
       });
     } catch (error) {
       console.error('Error fetching recordings', error);
       this.isError = true;
     }
   }
+
 
   showDialogSummary(call: CallRecording): void {
     this.selectedCall = call;

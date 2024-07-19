@@ -8,13 +8,15 @@ import { environment } from "../../../environment/environment";
   providedIn: 'root',
 })
 export class CallSettingsService {
-  constructor(private http: HttpClient) {}
-
   API_ROOT = environment.callAnalyzerAPI;
+
+  constructor(private http: HttpClient) {
+  }
 
   public getNotificationSettings(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.API_ROOT}/notification-settings`);
   }
+
   public updateNotificationSettings(settings: CallSettingsDetails): Promise<ApiResponse> {
     console.log(settings)
     return firstValueFrom(this.http.post<ApiResponse>(this.API_ROOT + '/notification-settings', settings));

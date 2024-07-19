@@ -1,0 +1,9 @@
+<p-panel *ngIf="!isLoading" class="flex flex-col text-center justify-center mb-4">
+  <p class="font-medium text-xl">{{ title }}</p>
+  <div class="h-[265px] w-[565px] p-5" id="wordCloud"></div>
+</p-panel>
+<p-panel *ngIf="isLoading" class="flex flex-col text-center justify-center mb-4">
+  <p-skeleton height="100px" styleClass="mb-3" width="570px"/>
+  <p-skeleton height="100px" styleClass="mb-3" width="570px"/>
+  <p-skeleton height="100px" styleClass="mb-3" width="570px"/>
+</p-panel>

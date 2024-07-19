@@ -21,17 +21,21 @@
 :host ::ng-deep .title {
   color: blanchedalmond;
 }
+
 :host ::ng-deep .keywords-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px; /* Adjust the gap between tags as needed */
 }
+
 :host ::ng-deep .keyword {
   white-space: nowrap;
 }
+
 :host ::ng-deep .date {
   color: rgb(158, 156, 152);
 }
+
 .timeline-container {
   width: 100%; /* Set the width of the timeline container */
 }

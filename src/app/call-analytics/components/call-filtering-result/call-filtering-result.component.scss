@@ -9,7 +9,7 @@
 :host ::ng-deep .p-button-surface-200 {
   background-color: var(--surface-200) !important;
   color: var(--text-on-surface-200) !important;
-  
+
 }
 
 :host ::ng-deep .play {
@@ -25,6 +25,7 @@
 :host ::ng-deep .date {
   color: rgb(158, 156, 152);
 }
+
 .timeline-container {
   width: 100%; /* Set the width of the timeline container */
 }

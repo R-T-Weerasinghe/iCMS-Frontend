@@ -10,8 +10,8 @@ describe('CallRecordingsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CallRecordingsComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CallRecordingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

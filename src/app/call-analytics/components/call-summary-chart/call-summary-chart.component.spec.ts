@@ -10,8 +10,8 @@ describe('CallSummaryChartComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CallSummaryChartComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CallSummaryChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

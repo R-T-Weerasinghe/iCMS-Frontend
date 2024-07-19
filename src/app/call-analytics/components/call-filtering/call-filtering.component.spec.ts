@@ -10,8 +10,8 @@ describe('CallFilteringComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CallFilteringComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CallFilteringComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

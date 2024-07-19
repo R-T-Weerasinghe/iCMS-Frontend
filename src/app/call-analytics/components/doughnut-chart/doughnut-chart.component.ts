@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { CallAnalyticsConfig } from "../../config";
 import { UIChart } from "primeng/chart";
 
@@ -63,13 +63,13 @@ export class DoughnutChartComponent implements OnInit, OnChanges {
         {
           data: percentages,
           backgroundColor: [
-            this.documentStyle.getPropertyValue('--negative-color'),
             this.documentStyle.getPropertyValue('--positive-color'),
+            this.documentStyle.getPropertyValue('--negative-color'),
             this.documentStyle.getPropertyValue('--neutral-color'),
           ],
           hoverBackgroundColor: [
-            this.documentStyle.getPropertyValue('--negative-hover-color'),
             this.documentStyle.getPropertyValue('--positive-hover-color'),
+            this.documentStyle.getPropertyValue('--negative-hover-color'),
             this.documentStyle.getPropertyValue('--neutral-hover-color')
           ]
         }

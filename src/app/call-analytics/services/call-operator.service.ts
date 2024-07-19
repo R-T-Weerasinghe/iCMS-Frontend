@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { firstValueFrom, Observable } from "rxjs";
 import { ApiResponse, OperatorListItem } from "../types";
 import { environment } from "../../../environment/environment";
@@ -9,13 +9,21 @@ import { environment } from "../../../environment/environment";
 })
 export class CallOperatorService {
 
-  constructor(private http: HttpClient) { }
-
   API_ROOT = environment.callAnalyzerAPI;
+
+  constructor(private http: HttpClient) {
+  }
 
   public getAllOperators(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.API_ROOT + "/operators");
   }
+
+  public getOperatorByEmail(operatorEmail: string): Observable<ApiResponse> {
+    console.log("operatorEmail ", operatorEmail);
+    const url = `${this.API_ROOT}/operators-by-email/${operatorEmail}`;
+    return this.http.get<ApiResponse>(url);
+  }
+
 
   public getOperatorDetails(operatorId: number): Promise<ApiResponse> {
     const url = `${this.API_ROOT}/operators/${operatorId}`;

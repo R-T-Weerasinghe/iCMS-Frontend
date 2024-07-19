@@ -1,12 +1,14 @@
-<app-page-header pageTitle="Call Recordings" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems"
-                 [showDatePicker]="false" [showButton]="false"/>
+<app-page-header [breadcrumbItems]="breadcrumbItems" [showButton]="false" [showDatePicker]="false"
+                 class="w-full h-fit" pageTitle="Call Recordings"/>
 
-<p-confirmDialog />
-<p-toast />
+<p-confirmDialog/>
+<p-toast/>
 <div class="flex flex-col">
   <div class="card flex justify-content-center">
-    <p-fileUpload [multiple]="true" #callUpload accept=".mp3,.wav" name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php"
-                (onSelect)="onSelectFilesToUpload($event)" (onClear)="onCancel()" [customUpload]="true" (uploadHandler)="handleBeforeUpload($event)"  >
+    <p-fileUpload #callUpload (onClear)="onCancel()" (onSelect)="onSelectFilesToUpload($event)" (uploadHandler)="handleBeforeUpload($event)"
+                  [customUpload]="true"
+                  [multiple]="true" accept=".mp3,.wav" name="myfile[]"
+                  url="https://www.primefaces.org/cdn/api/upload.php">
       <ng-template pTemplate="toolbar">
         <div class="py-3">Upload {{ selectedFilesCount }} Files</div>
       </ng-template>
@@ -14,19 +16,26 @@
         <h5>{{ file.name }}</h5>
         <div class="grid p-fluid">
           <p-inputGroup [class]="isSubmitted && !descriptionList[i] ? 'mb-2':'mb-5'">
-            <input type="text" [class]="isSubmitted && !descriptionList[i] ? 'ng-invalid ng-dirty':''"  required pInputText [(ngModel)]="descriptionList[i]" placeholder="Description*">
+            <input [(ngModel)]="descriptionList[i]" [class]="isSubmitted && !descriptionList[i] ? 'ng-invalid ng-dirty':''" pInputText
+                   placeholder="Description*" required type="text">
             <p-inputGroupAddon>
               <i class="pi pi-book"></i>
             </p-inputGroupAddon>
           </p-inputGroup>
-            <p class="text-red-500 mt-0" [style.display]="isSubmitted && !descriptionList[i] ? '':'none'">Please enter description.</p>
-          <p-dropdown [(ngModel)]="operatorsList[i]" [class]="isSubmitted && !operatorsList[i] ? 'ng-invalid ng-dirty mb-2':'mb-5'" optionValue="operator_id" [options]="callOperators" optionLabel="name" placeholder="Select a call operator*"></p-dropdown>
-          <p class="text-red-500 mt-0" [style.display]="isSubmitted && !operatorsList[i] ? '':'none'">Please select an operator.</p>
-          <p-calendar [(ngModel)]="dateList[i]" [showTime]="true" [showIcon]="true" placeholder="Date"></p-calendar>
+          <p [style.display]="isSubmitted && !descriptionList[i] ? '':'none'" class="text-red-500 mt-0">Please enter
+            description.</p>
+          <p-dropdown [(ngModel)]="operatorsList[i]"
+                      [class]="isSubmitted && !operatorsList[i] ? 'ng-invalid ng-dirty mb-2':'mb-5'"
+                      [options]="callOperators" optionLabel="name" optionValue="operator_id"
+                      placeholder="Select a call operator*"></p-dropdown>
+          <p [style.display]="isSubmitted && !operatorsList[i] ? '':'none'" class="text-red-500 mt-0">Please select an
+            operator.</p>
+          <p-calendar [(ngModel)]="dateList[i]" [maxDate]="maxDate" [showIcon]="true" [showTime]="true"
+                      placeholder="Date"></p-calendar>
         </div>
       </ng-template>
 
-      <ng-template pTemplate="content" let-files>
+      <ng-template let-files pTemplate="content">
         <div *ngIf="selectedFilesCount == 0">
           <p>Select Files To Upload</p>
         </div>
@@ -35,15 +44,12 @@
   </div>
 </div>
 
-<p-dialog header="Upload Success" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+<p-dialog [(visible)]="visible" [modal]="true" [style]="{ maxWidth: '550px', minWidth: '400px' }"
+          header="Upload Success">
   <p>
-    Your calls have been added for analyze. This process will tak some time. When analysis completed you will be notified.
+    {{ uploadFeedbackMsg }}
   </p>
   <ng-template pTemplate="footer">
-    <p-button
-      label="Ok"
-      [text]="true"
-      severity="secondary"
-      (click)="visible = false" />
+    <p-button (click)="visible = false" label="Ok"/>
   </ng-template>
 </p-dialog>

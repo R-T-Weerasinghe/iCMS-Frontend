@@ -1,11 +1,17 @@
-<p-panel class="mb-4" *ngIf="!isLoading">
+<p-panel *ngIf="!isLoading" class="mb-4">
   <p class="font-medium text-xl text-center">{{ title }}</p>
-  @for (item of operatorRankings; track item; let i =  $index) {
-    <app-operator-card-item [name]="item.name" [avgHandleTime]="Math.round(item.avg_duration/60)" [id]="item._id" [totalCalls]="item.total" [rank]="i"/>
+  @for (item of operatorRankings; track item; let i = $index) {
+    <app-operator-card-item
+      [name]="item.name"
+      [avgHandleTime]="Math.round(item.avg_duration/60)"
+      [id]="item._id"
+      [totalCalls]="item.total"
+      [rank]="i"
+    />
   }
 </p-panel>
-<p-panel class="mb-4" *ngIf="isLoading">
-  <p-skeleton height="100px" width="700px" styleClass="mb-3"/>
-  <p-skeleton height="100px" width="700px" styleClass="mb-3"/>
-  <p-skeleton height="100px" width="700px" styleClass="mb-3"/>
+<p-panel *ngIf="isLoading" class="mb-4">
+  <p-skeleton height="100px" styleClass="mb-3" width="700px"/>
+  <p-skeleton height="100px" styleClass="mb-3" width="700px"/>
+  <p-skeleton height="100px" styleClass="mb-3" width="700px"/>
 </p-panel>

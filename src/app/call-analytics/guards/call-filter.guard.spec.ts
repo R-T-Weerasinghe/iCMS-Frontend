@@ -4,8 +4,8 @@ import { CanActivateFn } from '@angular/router';
 import { callFilterGuard } from './call-filter.guard';
 
 describe('callFilterGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => callFilterGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => callFilterGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

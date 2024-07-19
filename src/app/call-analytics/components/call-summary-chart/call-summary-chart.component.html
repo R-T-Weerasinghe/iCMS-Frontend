@@ -1,23 +1,23 @@
 <p-toast></p-toast>
 <p-panel class="flex flex-col text-center justify-center mb-4">
 
-  <div class="flex justify-between items-center px-3 mb-5" [style.display]="noData ? 'block' : 'none'">
+  <div [style.display]="noData ? 'block' : 'none'" class="flex justify-between items-center px-3 mb-5">
     <img src="./assets/call/noresult.png">
   </div>
 
-  <div class="flex justify-between items-center px-3 mb-5" [style.display]="isError ? 'block' : 'none'">
+  <div [style.display]="isError ? 'block' : 'none'" class="flex justify-between items-center px-3 mb-5">
     <img src="./assets/img/500.jpg" style="width: 60%;">
     <p class="text-4xl">Internal Server Error</p>
     <p>{{ userMessages.FETCH_ERROR_USER_MSG }}</p>
   </div>
 
-  <div class="flex flex-col text-center justify-center mb-4 pt-10 px-10" *ngIf="isLoading">
+  <div *ngIf="isLoading" class="flex flex-col text-center justify-center mb-4 pt-10 px-10">
     <ul class="m-0 p-0 list-none">
       <li class="mb-3">
         <div class="flex">
           <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
           <div style="flex: 1">
-            <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+            <p-skeleton styleClass="mb-2" width="100%"></p-skeleton>
             <p-skeleton width="75%"></p-skeleton>
           </div>
         </div>
@@ -26,7 +26,7 @@
         <div class="flex">
           <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
           <div style="flex: 1">
-            <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+            <p-skeleton styleClass="mb-2" width="100%"></p-skeleton>
             <p-skeleton width="75%"></p-skeleton>
           </div>
         </div>
@@ -35,7 +35,7 @@
         <div class="flex">
           <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
           <div style="flex: 1">
-            <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+            <p-skeleton styleClass="mb-2" width="100%"></p-skeleton>
             <p-skeleton width="75%"></p-skeleton>
           </div>
         </div>
@@ -43,11 +43,11 @@
     </ul>
   </div>
 
-  <div class="flex justify-between items-center px-3 mb-5" *ngFor="let call of callRecordings"
-       [style.display]="isLoading ? 'none':''">
+  <div *ngFor="let call of callRecordings" [style.display]="isLoading ? 'none':''"
+       class="flex justify-between items-center px-3 mb-5">
     <div class="flex justify-between" style="width:60%;">
       <div class="flex items-center gap-8">
-        <img src="./assets/call/phone.png" width="25" height="25">
+        <img height="25" src="./assets/call/phone.png" width="25">
         <div class="flex flex-col justify-start">
           <p class="mb-0 mt-0 text-start">{{ call.description }}</p>
           <p class="mb-0 mt-0 text-gray-500 w-fit text-xs">{{ call.date }}</p>
@@ -56,9 +56,9 @@
       <p-tag [style]="{'background': statusColors[call.sentiment], 'width': '65px'}" value="{{call.sentiment}}"></p-tag>
     </div>
     <div class="flex gap-3">
-      <p-button icon="pi pi-bars" (click)="showDialogSummary(call)" severity="success" size="small"
-                [outlined]="true"></p-button>
-      <p-button icon="pi pi-play" (click)="showDialogPlay(call)" [outlined]="true" size="small"
+      <p-button (click)="showDialogSummary(call)" [outlined]="true" icon="pi pi-bars" severity="success"
+                size="small"></p-button>
+      <p-button (click)="showDialogPlay(call)" [outlined]="true" icon="pi pi-play" size="small"
       ></p-button>
       @if (isAbleToDelete) {
         <p-button icon="pi pi-trash" (click)="showDialogConfirmation(call)" severity="danger" size="small"
@@ -68,12 +68,12 @@
   </div>
 </p-panel>
 
-<p-dialog [draggable]="false" [resizable]="false" *ngIf="visibleSummary" header="Call Details" [modal]="true"
-          [(visible)]="visibleSummary" [style]="{width: '30vw', height: 'auto'}">
+<p-dialog *ngIf="visibleSummary" [(visible)]="visibleSummary" [draggable]="false" [modal]="true" [resizable]="false"
+          [style]="{width: '30vw', height: 'auto'}" header="Call Details">
   <div class="flex justify-between items-center px-3 mb-5">
     <!-- Use selectedCall only when it is defined -->
-    <div class="flex items-center gap-8" *ngIf="selectedCall">
-      <img src="./assets/call/phone.png" width="25" height="25">
+    <div *ngIf="selectedCall" class="flex items-center gap-8">
+      <img height="25" src="./assets/call/phone.png" width="25">
       <div class="flex flex-col justify-start">
         <p class="mb-0 mt-0 text-start">{{ selectedCall.description }}</p>
         <p class="mb-0 mt-0 text-gray-500 w-fit text-xs">{{ selectedCall.date }}</p>
@@ -101,16 +101,16 @@
     <br><br><br>
   </div>
   <div class="text-right">
-    <p-button label="Close" (click)="visibleSummary = false" icon="pi pi-times"></p-button>
+    <p-button (click)="visibleSummary = false" icon="pi pi-times" label="Close"></p-button>
   </div>
 </p-dialog>
 
-<p-dialog [draggable]="false" [resizable]="false" *ngIf="visiblePlay" header="Play Call Recording"
-          [(visible)]="visiblePlay" [modal]="true" [style]="{width: '30vw', height: 'auto'}">
+<p-dialog *ngIf="visiblePlay" [(visible)]="visiblePlay" [draggable]="false" [modal]="true"
+          [resizable]="false" [style]="{width: '30vw', height: 'auto'}" header="Play Call Recording">
   <div class="flex justify-between items-center px-3 mb-5 play">
     <!-- Use selectedCall only when it is defined -->
-    <div class="flex items-center gap-8" *ngIf="selectedCall">
-      <img src="./assets/call/phone-record.png" width="25" height="25">
+    <div *ngIf="selectedCall" class="flex items-center gap-8">
+      <img height="25" src="./assets/call/phone-record.png" width="25">
       <div class="flex flex-col justify-start">
         <p class="mb-0 mt-0 title">{{ selectedCall.description }}</p>
         <p class="mb-0 mt-0 text-gray-500 w-fit text-xs date">{{ selectedCall.date }}</p>
@@ -118,34 +118,34 @@
     </div>
     <div>
       <!-- Play Button -->
-      <i class="pi pi-play" style="color: wheat" (click)="playAudio(selectedCall.callUrl)" *ngIf="selectedCall"></i>
+      <i (click)="playAudio(selectedCall.callUrl)" *ngIf="selectedCall" class="pi pi-play" style="color: wheat"></i>
       <!-- Pause Button -->
-      <i class="pi pi-pause" style="color: wheat" (click)="pauseAudio()"></i>
+      <i (click)="pauseAudio()" class="pi pi-pause" style="color: wheat"></i>
       <!-- Resume Button -->
-      <i class="pi pi-play" style="color: wheat" (click)="resumeAudio()" *ngIf="audioPosition !== null"></i>
+      <!--      <i class="pi pi-play" style="color: wheat" (click)="resumeAudio()" *ngIf="audioPosition !== null"></i>-->
       <!-- Volume Up Button -->
-      <i class="pi pi-volume-up" style="color: wheat" (click)="increaseVolume()"></i>
+      <i (click)="increaseVolume()" class="pi pi-volume-up" style="color: wheat"></i>
     </div>
     <!-- Timeline Indicator -->
 
   </div>
   <div class="timeline-container">
-    <progress [value]="currentTime" [max]="selectedCall.callUrl" class="timeline"></progress>
+    <progress [max]="selectedCall.callUrl" [value]="currentTime" class="timeline"></progress>
   </div>
   <p class="font-medium text-lg text-start">Transcript</p>
   <p style="text-align: justify;"> {{ selectedCall.transcription }} </p>
   <div class="text-right">
-    <p-button label="Close" (click)="visiblePlay = false" icon="pi pi-times"></p-button>
+    <p-button (click)="visiblePlay = false" icon="pi pi-times" label="Close"></p-button>
   </div>
 </p-dialog>
 
-<p-dialog [draggable]="false" [resizable]="false" *ngIf="visibleConfirmation" header="Confirmation" [modal]="true"
-          [(visible)]="visibleConfirmation" [style]="{width: '30vw', height: 'auto'}">
+<p-dialog *ngIf="visibleConfirmation" [(visible)]="visibleConfirmation" [draggable]="false" [modal]="true" [resizable]="false"
+          [style]="{width: '30vw', height: 'auto'}" header="Confirmation">
   <p style="text-align: justify;">
     Are you sure you want to Delete this Call Recording?
   </p>
   <div class="text-right">
-    <p-button label="No" (click)="visibleConfirmation = false"></p-button>
-    <p-button label="Yes" (click)="onConfirmDelete(selectedCall.id)" styleClass="p-button-danger"></p-button>
+    <p-button (click)="visibleConfirmation = false" label="No"></p-button>
+    <p-button (click)="onConfirmDelete(selectedCall.id)" label="Yes" styleClass="p-button-danger"></p-button>
   </div>
 </p-dialog>

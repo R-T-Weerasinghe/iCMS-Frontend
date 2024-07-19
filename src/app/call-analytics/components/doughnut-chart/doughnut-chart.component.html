@@ -1,8 +1,8 @@
-<p-panel class="flex flex-col text-center justify-center w-[280px] mb-4" *ngIf="!isLoading">
+<p-panel *ngIf="!isLoading" class="flex flex-col text-center justify-center w-[280px] mb-4">
   <p class="font-medium text-xl">{{ title }}</p>
-  <p-chart #dChart type="doughnut" [data]="data" [options]="options"></p-chart>
+  <p-chart #dChart [data]="data" [options]="options" type="doughnut"></p-chart>
 </p-panel>
-<p-panel class="flex flex-col justify-even w-[280px] mb-4" *ngIf="isLoading">
+<p-panel *ngIf="isLoading" class="flex flex-col justify-even w-[280px] mb-4">
   <p-skeleton height="30px" styleClass="mb-3"/>
   <p-skeleton height="300px" styleClass="mb-3"/>
 </p-panel>

@@ -28,17 +28,17 @@ export class LineAreaChartComponent implements OnInit {
       aspectRatio: 1.1,
       plugins: {
         legend: {
-          labels: {color: textColor}
+          labels: { color: textColor }
         }
       },
       scales: {
         x: {
-          ticks: {color: textColorSecondary},
-          grid: {color: surfaceBorder},
+          ticks: { color: textColorSecondary },
+          grid: { color: surfaceBorder },
         },
         y: {
-          ticks: {color: textColorSecondary, stepSize: 1},
-          grid: {color: surfaceBorder},
+          ticks: { color: textColorSecondary, stepSize: 1 },
+          grid: { color: surfaceBorder },
         }
       }
     };

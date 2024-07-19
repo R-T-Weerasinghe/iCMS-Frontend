@@ -10,8 +10,8 @@ describe('BestOperatorsCardComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [BestOperatorsCardComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(BestOperatorsCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

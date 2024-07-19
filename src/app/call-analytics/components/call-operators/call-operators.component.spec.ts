@@ -10,8 +10,8 @@ describe('CallOperatorsComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [CallOperatorsComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(CallOperatorsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

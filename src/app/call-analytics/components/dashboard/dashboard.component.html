@@ -1,5 +1,6 @@
-<app-page-header pageTitle="Call Analytics Dashboard" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems" [showDatePicker]="true" [callDashboardDate]="true"
-                 (callDateRangeChanged)="reloadData($event[0], $event[1])" />
+<app-page-header (callDateRangeChanged)="reloadData($event[0], $event[1])" [breadcrumbItems]="breadcrumbItems" [callDashboardDate]="true"
+                 [showDatePicker]="true" class="w-full h-fit"
+                 pageTitle="Call Analytics Dashboard"/>
 <div class="flex flex-col">
   <div class="flex gap-5 flex-wrap">
     @if (callStatistics !== undefined) {
@@ -14,26 +15,31 @@
       </div>
     }
     @if (sentimentOverTime !== undefined) {
-      <line-area-chart [isLoading]="isLoadingSentimentsOverTime" #lChartComp [dataset]="sentimentOverTime" title="Sentiment Over Time"/>
+      <line-area-chart [isLoading]="isLoadingSentimentsOverTime" #lChartComp [dataset]="sentimentOverTime"
+                       title="Sentiment Over Time"/>
     }
     @if (callSentiments !== undefined) {
-      <doughnut-chart [isLoading]="isLoadingPercentages" #dChartComp title="Sentiment Distribution" [percentages]="[callSentiments.negative, callSentiments.positive, callSentiments.neutral]"/>
+      <doughnut-chart [isLoading]="isLoadingPercentages" #dChartComp title="Sentiment Distribution"
+                      [percentages]="[callSentiments.positive, callSentiments.negative, callSentiments.neutral]"/>
     }
   </div>
   <div class="flex gap-6 flex-wrap">
     @if (topicDistribution !== undefined) {
-      <bar-chart [isLoading]="isLoadingTopics" #bChartComp style="width: 49%;" title="Calls Distribution By Topics" [dataset]="topicDistribution"/>
+      <bar-chart [isLoading]="isLoadingTopics" #bChartComp style="width: 49%;" title="Calls Distribution By Topics"
+                 [dataset]="topicDistribution"/>
     }
     @if (operatorCallsOverTime !== undefined) {
-      <stacked-bar-chart [isLoading]="isLoadingOperatorCalls" #sChartComp style="width: 49%;" title="Call Distribution By Operators" [dataset]="operatorCallsOverTime"/>
+      <stacked-bar-chart [isLoading]="isLoadingOperatorCalls" #sChartComp style="width: 49%;"
+                         title="Call Distribution By Operators" [dataset]="operatorCallsOverTime"/>
     }
   </div>
   <div class="flex gap-7 flex-wrap">
     @if (operatorRankings !== undefined) {
-      <best-operators-card [isLoading]="isLoadingOperatorRankings" style="width: 54%;" title="Best Operators" [operatorRankings]="operatorRankings"/>
+      <best-operators-card [isLoading]="isLoadingOperatorRankings" style="width: 54%;" title="Best Operators"
+                           [operatorRankings]="operatorRankings"/>
     }
     @if (keywords !== undefined && keywords.length > 0) {
-      <app-wordcloud [isLoading]="isLoadingKeywords" #keywordCloud [words]="keywords" title="Keywords Highlights" />
+      <wordcloud [isLoading]="isLoadingKeywords" #keywordCloud [words]="keywords" title="Keywords Highlights"/>
     }
   </div>
 </div>

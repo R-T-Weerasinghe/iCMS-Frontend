@@ -47,13 +47,16 @@ export class CallOperatorsComponent implements OnInit {
   });
 
   data: any;
+  isDataSaving: boolean = false;
   options: any;
+  protected readonly delay = delay;
 
   constructor(
     private callOperatorService: CallOperatorService,
     private messageService: MessageService,
     private tokenStorageService: TokenStorageService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     let permissions = this.tokenStorageService.getStorageKeyValue("permissions");
@@ -179,6 +182,7 @@ export class CallOperatorsComponent implements OnInit {
         email: this.operatorForm.controls['email'].value!,
         password: this.operatorForm.controls['password'].value!,
       };
+      this.isDataSaving = true;
       if (this.isEditMode) {
         operator.id = this.selectedOperator.id;
         this.updateOperator(operator);
@@ -193,6 +197,7 @@ export class CallOperatorsComponent implements OnInit {
     this.callOperatorService
       .addOperator(operator)
       .then((result) => {
+        this.isDataSaving = false;
         if (result.status) {
           this.messageService.add({
             severity: 'success',
@@ -225,6 +230,7 @@ export class CallOperatorsComponent implements OnInit {
     this.callOperatorService
       .updateOperator(operator)
       .then((result) => {
+        this.isDataSaving = false;
         if (result.status) {
           this.messageService.add({
             severity: 'success',
@@ -254,9 +260,11 @@ export class CallOperatorsComponent implements OnInit {
   }
 
   onConfirmDelete() {
+    this.isDataSaving = true;
     this.callOperatorService
       .deleteOperator(this.selectedOperator.id!.toString())
       .then((result) => {
+        this.isDataSaving = false;
         if (result.status) {
           this.messageService.add({
             severity: 'success',
@@ -308,7 +316,7 @@ export class CallOperatorsComponent implements OnInit {
       ) {
         return 'Neutral';
       }
-      return 'Mixed';
+      return 'Neutral';
     }
     return 'Not handled any call yet';
   }
@@ -332,7 +340,8 @@ export class CallOperatorsComponent implements OnInit {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {});
+      .finally(() => {
+      });
 
     this.callOperatorService.getAllOperators().subscribe(
       (result) => {
@@ -385,6 +394,4 @@ export class CallOperatorsComponent implements OnInit {
     }
     return '';
   }
-
-  protected readonly delay = delay;
 }

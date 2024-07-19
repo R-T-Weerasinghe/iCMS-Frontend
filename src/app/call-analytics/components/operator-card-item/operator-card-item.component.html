@@ -1,9 +1,10 @@
 <div class="my-9 flex items-center w-full">
-  <p-avatar label="1" styleClass="mr-4" size="large" [style]="{ 'background-color': rankColors[rank], color: '#ffffff' }" shape="circle"></p-avatar>
+  <p-avatar [style]="{ 'background-color': rankColors[rank], color: '#ffffff' }" label="{{rank}}" shape="circle"
+            size="large" styleClass="mr-4"></p-avatar>
   <div class="flex justify-between w-full">
     <div>
-      <p class="font-bold text-xl my-0">{{name}}</p>
-      <p class="text-sm text-gray-500 font-medium my-0">Operator Id: {{id}}</p>
+      <p class="font-bold text-xl my-0">{{ name }}</p>
+      <p class="text-sm text-gray-500 font-medium my-0">Operator Id: {{ id }}</p>
     </div>
     <div class="text-center">
       <p class="font-medium text-lg my-0">Total Calls</p>

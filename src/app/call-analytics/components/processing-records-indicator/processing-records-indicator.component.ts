@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {CallRecordingService} from "../../services/call-recording.service";
+import { CallRecordingService } from "../../services/call-recording.service";
 
 @Component({
   selector: 'app-processing-records-indicator',
@@ -7,14 +7,30 @@ import {CallRecordingService} from "../../services/call-recording.service";
   styleUrls: ['./processing-records-indicator.component.scss']
 })
 export class ProcessingRecordsIndicatorComponent implements OnInit {
-  pendingCallData: any;
+  pendingCallData: any = [];
   isLoading: boolean = true;
-  constructor(
-    private callRecordingService: CallRecordingService  ) {
+
+  constructor(private callRecordingService: CallRecordingService) {
   }
+
   ngOnInit() {
     this.reloadDataSource();
+    this.callRecordingService.getServerSentEvent()
+      .subscribe(
+        data => {
+          console.log("test", data);
+          let pendingListFromString = JSON.parse(data);
+          console.log("List", pendingListFromString);
+          if (pendingListFromString.length == 0 && this.pendingCallData.length > 0) {
+            location.reload();
+          } else {
+            this.pendingCallData = pendingListFromString;
+          }
+        },
+        err => console.error('Error receiving SSE:', err)
+      );
   }
+
   reloadDataSource(): void {
     try {
       this.isLoading = true;

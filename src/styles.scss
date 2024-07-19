@@ -116,3 +116,14 @@ mwl-gauge > .gauge > .value-text {
 .wrapper > .gauge-container {
   margin: 0;
 }
+
+.readonly-look {
+  opacity: 1;
+  /* Ensure full opacity */
+  pointer-events: none;
+  /* Disable mouse interactions */
+  background-color: #f0f0f0;
+  /* Optional: change background to indicate readonly */
+  color: #000;
+  /* Optional: ensure text color remains dark for readability */
+}

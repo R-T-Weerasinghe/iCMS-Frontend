@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
-import { ApiResponse, CallRecording, QueuedFile } from '../types';
+import { Injectable, NgZone } from '@angular/core';
+import { ApiResponse, QueuedFile } from '../types';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import {firstValueFrom, Observable, tap} from 'rxjs';
-import { Header } from 'primeng/api';
+import { Observable, tap } from 'rxjs';
 import { environment } from "../../../environment/environment";
 
 interface Topic {
@@ -16,21 +15,43 @@ interface Topic {
 })
 export class CallRecordingService {
 
-  constructor(private http: HttpClient) {
-  }
-
   API_ROOT = environment.callAnalyzerAPI;
 
-  public uploadFiles(files: QueuedFile[]): Promise<ApiResponse|undefined> {
+  constructor(private http: HttpClient, private zone: NgZone) {
+  }
+
+  getServerSentEvent(): Observable<any> {
+    return new Observable<any>(observer => {
+      const eventSource = new EventSource(`${this.API_ROOT}/sse-pending-calls`);
+
+      eventSource.onmessage = event => {
+        this.zone.run(() => {
+          observer.next(event.data);
+        });
+      };
+
+      eventSource.onerror = error => {
+        this.zone.run(() => {
+          observer.error(error);
+        });
+      };
+
+      return () => eventSource.close();
+    });
+  }
+
+  public uploadFiles(files: QueuedFile[]): Promise<ApiResponse | undefined> {
     const formData: FormData = new FormData();
     files.forEach(file => {
       formData.append('files', file.file, file.file.name);
     });
     return this.http.post<ApiResponse>(`${this.API_ROOT}/upload-calls`, formData).toPromise();
   }
+
   public getCallsList(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.API_ROOT}/get-calls-list`);
   }
+
   public getPendingCallsList(): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.API_ROOT}/pendiing-calls-list`);
   }
@@ -76,7 +97,6 @@ export class CallRecordingService {
       })
     )
   }
-
 
 
 }

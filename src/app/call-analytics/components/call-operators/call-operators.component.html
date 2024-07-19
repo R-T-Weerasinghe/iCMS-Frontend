@@ -1,21 +1,21 @@
-<app-page-header pageTitle="Call Operators" class="h-fit" [breadcrumbItems]="breadcrumbItems"
-                 [showButton]="true" buttonText="+ Add Call Operator" (buttonAction)="onClickAddOperator()"/>
+<app-page-header (buttonAction)="onClickAddOperator()" [breadcrumbItems]="breadcrumbItems" [showButton]="true"
+                 buttonText="+ Add Call Operator" class="h-fit" pageTitle="Call Operators"/>
 
 <p-toast></p-toast>
 <p-panel class="flex flex-col text-center justify-center mb-4">
-  <div class="flex justify-between items-center px-3 mb-5" [style.display]="isDataFetchError ? 'block' : 'none'">
+  <div [style.display]="isDataFetchError ? 'block' : 'none'" class="flex justify-between items-center px-3 mb-5">
     <img src="./assets/img/500.jpg" style="width: 60%;">
     <p class="text-4xl">Internal Server Error</p>
     <p>{{ userMessages.FETCH_ERROR_USER_MSG }}</p>
   </div>
 
-  <div class="flex flex-col text-center justify-center mb-4 pt-10 px-10" *ngIf="isLoading">
+  <div *ngIf="isLoading" class="flex flex-col text-center justify-center mb-4 pt-10 px-10">
     <ul class="m-0 p-0 list-none">
       <li class="mb-3">
         <div class="flex">
           <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
           <div style="flex: 1">
-            <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+            <p-skeleton styleClass="mb-2" width="100%"></p-skeleton>
             <p-skeleton width="75%"></p-skeleton>
           </div>
         </div>
@@ -24,7 +24,7 @@
         <div class="flex">
           <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
           <div style="flex: 1">
-            <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+            <p-skeleton styleClass="mb-2" width="100%"></p-skeleton>
             <p-skeleton width="75%"></p-skeleton>
           </div>
         </div>
@@ -33,20 +33,20 @@
         <div class="flex">
           <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
           <div style="flex: 1">
-            <p-skeleton width="100%" styleClass="mb-2"></p-skeleton>
+            <p-skeleton styleClass="mb-2" width="100%"></p-skeleton>
             <p-skeleton width="75%"></p-skeleton>
           </div>
         </div>
       </li>
     </ul>
   </div>
-  <div class="flex justify-between items-center px-3 mb-5"
-       [style.display]="!isDataFetchError && callOperators.length == 0 && !isLoading ? 'block' : 'none'">
+  <div [style.display]="!isDataFetchError && callOperators.length == 0 && !isLoading ? 'block' : 'none'"
+       class="flex justify-between items-center px-3 mb-5">
     <p>Currently, there are no operators. You can add new operator by clicking <b>Add Call Operator</b> button</p>
   </div>
-  <div class="pt-5" *ngIf="!isDataFetchError && !isLoading && callOperators.length > 0">
-    @for(operator of callOperators; track operator; let i =  $index) {
-      <div class="flex justify-between items-center px-10 mb-5" >
+  <div *ngIf="!isDataFetchError && !isLoading && callOperators.length > 0" class="pt-5">
+    @for (operator of callOperators; track operator; let i = $index) {
+      <div class="flex justify-between items-center px-10 mb-5">
         <div class="flex items-center gap-8 w-1/3 justify-start">
           <img src="./assets/call/call-op.png" width="25" height="25">
           <div class="flex flex-col justify-start">
@@ -56,12 +56,14 @@
         </div>
         <div class="w-1/3 flex justify-start">
           <span>Average Sentiment:&nbsp;</span>
-          <p-tag [style]="{'background': statusColors[getAverageSentiment(operator.operator_id)], 'min-width': '65px'}" [value]="getAverageSentiment(operator.operator_id)" />
+          <p-tag [style]="{'background': statusColors[getAverageSentiment(operator.operator_id)], 'min-width': '65px'}"
+                 [value]="getAverageSentiment(operator.operator_id)"/>
         </div>
         <div class="flex gap-3 w-1/3 justify-end">
           <p-button icon="pi pi-bars" size="small" [outlined]="true" (click)="onClickDetails(operator)"></p-button>
           @if (isAbleToEdit) {
-            <p-button icon="pi pi-pencil" size="small" [outlined]="true" severity="success" (click)="onClickEditOperator(operator)"></p-button>
+            <p-button icon="pi pi-pencil" size="small" [outlined]="true" severity="success"
+                      (click)="onClickEditOperator(operator)"></p-button>
           }
           @if (isAbilityToDelete) {
             <p-button icon="pi pi-trash" (click)="showDialogConfirmation(operator)" severity="danger" size="small"
@@ -76,62 +78,64 @@
   </div>
 </p-panel>
 
-<p-dialog [draggable]="false" [resizable]="false" header="Confirmation" [modal]="true"
-          [(visible)]="isConfirmModalVisible" [style]="{width: '30vw', height: 'auto'}" *ngIf="isConfirmModalVisible">
+<p-dialog *ngIf="isConfirmModalVisible" [(visible)]="isConfirmModalVisible" [draggable]="false" [modal]="true"
+          [resizable]="false" [style]="{width: '30vw', height: 'auto'}" header="Confirmation">
   <p class="text-left">
     Are you sure you want to delete call operator {{ selectedOperator.name }}?
   </p>
   <div class="justify-end flex gap-5">
-    <p-button label="No" (click)="isConfirmModalVisible = false" [text]="true"></p-button>
-    <p-button label="Yes" (click)="onConfirmDelete()" styleClass="p-button-danger"></p-button>
+    <p-button (click)="isConfirmModalVisible = false" [disabled]="isDataSaving" [text]="true" label="No"></p-button>
+    <p-button (click)="onConfirmDelete()" [loading]="isDataSaving" label="Yes" styleClass="p-button-danger"></p-button>
   </div>
 </p-dialog>
 
-<p-dialog header="Add New Call Operator" [(visible)]="isModelVisible" [modal]="true" [style]="{ width: '50rem' }"
-          [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+<p-dialog [(visible)]="isModelVisible" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [modal]="true" [style]="{ width: '50rem' }"
+          header="Add New Call Operator">
   <form [formGroup]="operatorForm" class="flex flex-col gap-5 p-10">
     <div class="flex justify-between items-center">
-      <label for="op-id" class="w-1/14">Operator Id: </label>
-      <input id="op-id" class="w-3/4" type="text" pInputText formControlName="operatorId" [readOnly]="true"
-             [disabled]="true"/>
+      <label class="w-1/14" for="op-id">Operator Id: </label>
+      <input [disabled]="true" [readOnly]="true" class="w-3/4" formControlName="operatorId" id="op-id" pInputText
+             type="text"/>
     </div>
     <div class="flex justify-between items-center">
-      <label for="op-name" class="w-1/14">Operator Name: </label>
+      <label class="w-1/14" for="op-name">Operator Name: </label>
       <div class="w-3/4">
-        <input id="op-name" class="w-full" type="text" pInputText formControlName="name"/>
+        <input class="w-full" formControlName="name" id="op-name" pInputText type="text"/>
         <p *ngIf="getNameError() !== '' && isSubmitted" class="text-red-500">{{ getNameError() }}</p>
       </div>
     </div>
     <div class="flex justify-between items-center">
-      <label for="op-name" class="w-1/14">Email: </label>
+      <label class="w-1/14" for="op-name">Email: </label>
       <div class="w-3/4">
-        <input id="op-email" class="w-full" type="text" pInputText formControlName="email" [readOnly]="isEditMode"/>
+        <input [readOnly]="isEditMode" class="w-full" formControlName="email" id="op-email" pInputText type="text"/>
         <p *ngIf="getEmailError() !== '' && isSubmitted" class="text-red-500">{{ getEmailError() }}</p>
       </div>
     </div>
-    <div class="flex justify-between items-center" *ngIf="!isEditMode">
-      <label for="op-name" class="w-1/14">Password: </label>
+    <div *ngIf="!isEditMode" class="flex justify-between items-center">
+      <label class="w-1/14" for="op-name">Password: </label>
       <div class="w-3/4">
-        <p-password id="op-pw" class="w-full" formControlName="password" [feedback]="false" [toggleMask]="true"/>
+        <p-password [feedback]="false" [toggleMask]="true" class="w-full" formControlName="password" id="op-pw"/>
         <p *ngIf="getPasswordError() !== '' && isSubmitted" class="text-red-500">{{ getPasswordError() }}</p>
       </div>
     </div>
   </form>
   <ng-template pTemplate="footer">
-    <p-button (click)="onClickSave()" label="Save" pAutoFocus></p-button>
-    <p-button (click)="isModelVisible = false" label="Cancel" severity="secondary" [text]="true"></p-button>
+    <p-button (click)="onClickSave()" [loading]="isDataSaving" label="Save" pAutoFocus></p-button>
+    <p-button (click)="isModelVisible = false" [disabled]="isDataSaving" [text]="true" label="Cancel"
+              severity="secondary"></p-button>
   </ng-template>
 </p-dialog>
 
-<p-dialog header="Operator Details" [(visible)]="isDetailsModalVisible" *ngIf="isDetailsModalVisible" [modal]="true" [style]="{ width: '25vw' }" [draggable]="false" [resizable]="false">
+<p-dialog *ngIf="isDetailsModalVisible" [(visible)]="isDetailsModalVisible" [draggable]="false" [modal]="true"
+          [resizable]="false" [style]="{ width: '25vw' }" header="Operator Details">
   <div class="flex">
-    <p-avatar image="./assets/call/call-op.png" styleClass="mr-2" size="xlarge" shape="circle"></p-avatar>
+    <p-avatar image="./assets/call/call-op.png" shape="circle" size="xlarge" styleClass="mr-2"></p-avatar>
     <div class="flex flex-col">
-      <p class="font-bold m-[5px]">{{selectedOperator.name}}</p>
-      <p class="font-bold m-[5px]">{{selectedOperator.operator_id}}</p>
+      <p class="font-bold m-[5px]">{{ selectedOperator.name }}</p>
+      <p class="font-bold m-[5px]">{{ selectedOperator.operator_id }}</p>
     </div>
   </div>
-  <p-divider />
+  <p-divider/>
   <div *ngIf="isOperatorDataLoadingError">
     {{ userMessages.FETCH_ERROR_USER_MSG }}
   </div>
@@ -154,23 +158,23 @@
   <div *ngIf="!isOperatorDataLoading && !isOperatorDataLoadingError && !isNoData">
     <div class="flex">
       <div class="w-1/3 text-center">
-        <p class="font-bold text-2xl">{{operator.total_calls}}</p>
+        <p class="font-bold text-2xl">{{ operator.total_calls }}</p>
         <p>Total Calls</p>
       </div>
-      <p-divider layout="vertical" />
+      <p-divider layout="vertical"/>
       <div class="w-1/3 text-center">
-        <p class="font-bold text-2xl">{{operator.calls_in_last_day}}</p>
+        <p class="font-bold text-2xl">{{ operator.calls_in_last_day }}</p>
         <p>Calls In Last 24 Hours</p>
       </div>
-      <p-divider layout="vertical" />
+      <p-divider layout="vertical"/>
       <div class="w-1/3 text-center">
-        <p class="font-bold text-2xl">{{operator.avg_handle_time}}</p>
-        <p>Avg Call Duration (seconds)</p>
+        <p class="font-bold text-2xl">{{ (operator.avg_handle_time / 60).toFixed(2) }}</p>
+        <p>Avg Call Duration Min</p>
       </div>
     </div>
     <div class="w-[300px] m-auto mt-10">
       <p class="w-fit m-auto mb-10 font-medium">Call Sentiment Analysis Overview</p>
-      <p-chart type="doughnut" [data]="data" [options]="options"></p-chart>
+      <p-chart [data]="data" [options]="options" type="doughnut"></p-chart>
     </div>
   </div>
   <ng-template pTemplate="footer">

@@ -10,9 +10,8 @@ export class BestOperatorsCardComponent implements OnInit {
   @Input() title!: string;
   @Input() operatorRankings!: BestOperatorItem[];
   @Input() isLoading!: boolean;
+  protected readonly Math = Math;
 
   ngOnInit() {
   }
-
-  protected readonly Math = Math;
 }

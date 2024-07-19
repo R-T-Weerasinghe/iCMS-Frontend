@@ -10,8 +10,8 @@ describe('ProcessingRecordsIndicatorComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ProcessingRecordsIndicatorComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(ProcessingRecordsIndicatorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

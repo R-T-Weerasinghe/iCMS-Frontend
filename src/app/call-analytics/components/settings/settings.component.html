@@ -1,35 +1,35 @@
-<app-page-header pageTitle="Call Analytics Settings" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems"/>
+<app-page-header [breadcrumbItems]="breadcrumbItems" class="w-full h-fit" pageTitle="Call Analytics Settings"/>
 <div class="flex flex-col">
   <div>
     <p-toast></p-toast>
     <p-panel>
       <div class="flex flex-col">
-        <form [formGroup]="notificationsSettingsForm" (ngSubmit)="onSubmit()">
+        <form (ngSubmit)="onSubmit()" [formGroup]="notificationsSettingsForm">
           <div class="flex gap-20 px-10">
             <div class="w-1/2">
               <p-divider align="left" type="solid">
                 <b>Sentiment Shift Configuration</b>
               </p-divider>
               <div class="flex align-items-center gap-1 text-sm justify-between mb-3">
-                <p-checkbox name="notify" (onChange)="onChangeBelowScore($event)"
-                            formControlName="bellowNotify" [binary]="true"
-                            [readonly]="getIsDisabled()"
-                            label="Notify me when the sentiment score is below the value: "></p-checkbox>
-                <p-inputNumber [showButtons]="true" class="short-input"
+                <p-checkbox (onChange)="onChangeBelowScore($event)" [binary]="true"
+                            [readonly]="getIsDisabled()" formControlName="bellowNotify"
+                            label="Notify me when the sentiment score is below the value: "
+                            name="notify"></p-checkbox>
+                <p-inputNumber [max]="10" [min]="-10"
                                [readonly]="getIsDisabled()"
-                               formControlName="bellowScore" mode="decimal" inputId="minmax-buttons"
-                               [min]="-10" [max]="10">
+                               [showButtons]="true" class="short-input" formControlName="bellowScore"
+                               inputId="minmax-buttons" mode="decimal">
                 </p-inputNumber>
               </div>
               <div class="flex align-items-center gap-1 text-sm justify-between mb-10">
-                <p-checkbox name="notify" (onChange)="onChangeAboveScore($event)" [binary]="true"
+                <p-checkbox (onChange)="onChangeAboveScore($event)" [binary]="true" [readonly]="getIsDisabled()"
                             formControlName="aboveNotify"
-                            [readonly]="getIsDisabled()"
-                            label="Notify when the sentiment score is above: "></p-checkbox>
-                <p-inputNumber class="short-input" formControlName="aboveScore"
+                            label="Notify when the sentiment score is above: "
+                            name="notify"></p-checkbox>
+                <p-inputNumber [max]="10" [min]="-10"
                                [readonly]="getIsDisabled()"
-                               mode="decimal" [showButtons]="true" inputId="minmax-buttons" [min]="-10"
-                               [max]="10"></p-inputNumber>
+                               [showButtons]="true" class="short-input" formControlName="aboveScore" inputId="minmax-buttons"
+                               mode="decimal"></p-inputNumber>
               </div>
 
               <p-divider align="left" type="solid">
@@ -43,7 +43,9 @@
 
               <div class="w-full p-fluid">
                 <p>Special Keywords To Send Notifications</p>
-                <p-chips formControlName="keywords" [disabled]="!notificationsSettingsForm.get('enableKeywordsNotification')?.value"/>
+                <p-chips [disabled]="!notificationsSettingsForm.get('enableKeywordsNotification')?.value || getIsDisabled()"
+                         [ngClass]="{'readonly-look': !notificationsSettingsForm.get('enableKeywordsNotification')?.value || getIsDisabled()}"
+                         formControlName="keywords"></p-chips>
               </div>
 
             </div>
@@ -54,7 +56,8 @@
 
               <div class="w-full p-fluid mb-10">
                 <p>Topics to categorize calls</p>
-                <p-chips [disabled]="getIsDisabled()" formControlName="topics"/>
+                <p-chips [disabled]="getIsDisabled()" [ngClass]="{'readonly-look': getIsDisabled()}"
+                         formControlName="topics"/>
               </div>
 
               <p-divider align="left" type="solid">
@@ -71,13 +74,15 @@
               </div>
               <div class="w-full p-fluid mb-5">
                 <p>Email Notifications Receivers</p>
-                <p-chips formControlName="emails" [disabled]="!notificationsSettingsForm.get('enableEmailNotification')?.value"/>
+                <p-chips [disabled]="!notificationsSettingsForm.get('enableEmailNotification')?.value || getIsDisabled()"
+                         [ngClass]="{'readonly-look': !notificationsSettingsForm.get('enableKeywordsNotification')?.value || getIsDisabled()}"
+                         formControlName="emails"/>
               </div>
             </div>
           </div>
           @if (isAbleToEdit) {
             <div class="flex justify-end px-10 py-5">
-              <button pButton pRipple label="Update Settings" class="p-button-primary"></button>
+              <p-button label="Update Settings" [loading]="loading" (onClick)="onSubmit()" pAutoFocus></p-button>
             </div>
           }
         </form>

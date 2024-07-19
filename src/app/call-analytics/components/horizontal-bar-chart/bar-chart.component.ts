@@ -22,8 +22,8 @@ export class BarChartComponent implements OnInit {
       maintainAspectRatio: false,
       aspectRatio: 0.8,
       plugins: {
-        tooltip: {mode: 'index', intersect: false},
-        legend: {display: false},
+        tooltip: { mode: 'index', intersect: false },
+        legend: { display: false },
       },
       scales: {
         y: {

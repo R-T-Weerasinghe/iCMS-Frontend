@@ -44,6 +44,7 @@ export class PageHeaderComponent implements OnInit {
   home: MenuItem | undefined;
   isAbleToAddCall: boolean = false;
   isAbleToAddOperator: boolean = false;
+  maxCallDate: Date = new Date();
 
   constructor(
     private router: Router,
@@ -103,7 +104,7 @@ export class PageHeaderComponent implements OnInit {
     const today = new Date();
     const pastDate = new Date(today);
     pastDate.setDate(today.getDate() - 7);
-  
+
     return [pastDate, today];
   };
 
@@ -114,7 +115,7 @@ export class PageHeaderComponent implements OnInit {
     const pastDate = new Date(today);
     pastDate.setDate(today.getDate() - this.intervalInDaysStart);
     today.setDate(today.getDate() - this.intervalInDaysEnd)
-  
+
     return [pastDate, today];
   };
 

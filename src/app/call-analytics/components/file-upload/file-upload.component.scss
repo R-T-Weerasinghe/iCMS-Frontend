@@ -3,12 +3,28 @@
 }
 
 
-:host ::ng-deep .p-datepicker-trigger {
-  background: #f3f4f6;
-  color: #6b7280;
-  border: 1px solid #d1d5db;
+:host ::ng-deep {
+  .p-datepicker-trigger {
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #d1d5db;
+  }
+
+  .p-datepicker-title button {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  .p-datepicker table td {
+    padding: 0;
+  }
+
+  .p-datepicker .p-datepicker-buttonbar {
+    padding: 0;
+  }
+
+  .p-datepicker .p-timepicker {
+    padding: 0;
+  }
 }
-
-
-
 

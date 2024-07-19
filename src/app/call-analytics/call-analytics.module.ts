@@ -50,8 +50,11 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { CallFilteringResultComponent } from './components/call-filtering-result/call-filtering-result.component';
 import { OperatorCardItemComponent } from './components/operator-card-item/operator-card-item.component';
-import { ProcessingRecordsIndicatorComponent } from './components/processing-records-indicator/processing-records-indicator.component';
+import {
+  ProcessingRecordsIndicatorComponent
+} from './components/processing-records-indicator/processing-records-indicator.component';
 import { PasswordModule } from "primeng/password";
+import { WordcloudComponent } from './components/wordcloud/wordcloud.component';
 
 
 @NgModule({
@@ -75,45 +78,46 @@ import { PasswordModule } from "primeng/password";
     BestOperatorsCardComponent,
     OperatorCardItemComponent,
     ProcessingRecordsIndicatorComponent,
+    WordcloudComponent,
   ],
-    imports: [
-        CommonModule,
-        CallAnalyticsRoutingModule,
-        CardModule,
-        SharedModule,
-        ToastModule,
-        PanelModule,
-        ChartModule,
-        ButtonModule,
-        TooltipModule,
-        NgxEchartsModule.forRoot({echarts: () => import('echarts')}),
-        DataViewModule,
-        TagModule,
-        DialogModule,
-        TabViewModule,
-        ImageModule,
-        CheckboxModule,
-        InputNumberModule,
-        ChipsModule,
-        FormsModule,
-        InputSwitchModule,
-        InputTextModule,
-        ReactiveFormsModule,
-        FileUploadModule,
-        CalendarModule,
-        DropdownModule,
-        SliderModule,
-        DividerModule,
-        InputGroupModule,
-        InputGroupAddonModule,
-        RippleModule,
-        SkeletonModule,
-        AvatarModule,
-        ProgressSpinnerModule,
-        ConfirmDialogModule,
-        MultiSelectModule,
-        PasswordModule
-    ],
+  imports: [
+    CommonModule,
+    CallAnalyticsRoutingModule,
+    CardModule,
+    SharedModule,
+    ToastModule,
+    PanelModule,
+    ChartModule,
+    ButtonModule,
+    TooltipModule,
+    NgxEchartsModule.forRoot({ echarts: () => import('echarts') }),
+    DataViewModule,
+    TagModule,
+    DialogModule,
+    TabViewModule,
+    ImageModule,
+    CheckboxModule,
+    InputNumberModule,
+    ChipsModule,
+    FormsModule,
+    InputSwitchModule,
+    InputTextModule,
+    ReactiveFormsModule,
+    FileUploadModule,
+    CalendarModule,
+    DropdownModule,
+    SliderModule,
+    DividerModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    RippleModule,
+    SkeletonModule,
+    AvatarModule,
+    ProgressSpinnerModule,
+    ConfirmDialogModule,
+    MultiSelectModule,
+    PasswordModule
+  ],
   providers: []
 })
 export class CallAnalyticsModule {

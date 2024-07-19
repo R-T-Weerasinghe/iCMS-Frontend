@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FileUploadComponent } from './file-upload.component';
+import { WordcloudComponent } from './wordcloud.component';
 
-describe('FileUploadComponent', () => {
-  let component: FileUploadComponent;
-  let fixture: ComponentFixture<FileUploadComponent>;
+describe('WordcloudComponent', () => {
+  let component: WordcloudComponent;
+  let fixture: ComponentFixture<WordcloudComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FileUploadComponent]
+      declarations: [WordcloudComponent]
     })
       .compileComponents();
 
-    fixture = TestBed.createComponent(FileUploadComponent);
+    fixture = TestBed.createComponent(WordcloudComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -19,12 +19,12 @@ export class CallFilteringResultComponent implements OnInit {
   @Input() callRecordings: CallRecording[] = [];
   @Input() filteredTopics: string[] = [];
   @Input() filteredKeywords: string[] = [];
-  @Input() filteredSentimentCategory : string[] = [];
-  @Input() filteredStartDate : string = "";
-  @Input() filteredEndDate : string = "";
-  @Input() filteredDuration : number = 0;
-  @Input() visible :  boolean = true;
-  @Input() resultMessage : string = "";
+  @Input() filteredSentimentCategory: string[] = [];
+  @Input() filteredStartDate: string = "";
+  @Input() filteredEndDate: string = "";
+  @Input() filteredDuration: number = 0;
+  @Input() visible: boolean = true;
+  @Input() resultMessage: string = "";
   statusColors!: { [key: string]: string };
   visibleSummary: boolean = false;
   visiblePlay: boolean = false;
@@ -101,7 +101,7 @@ export class CallFilteringResultComponent implements OnInit {
   }
 
   // Function to play the audio
-  playAudio(audioUrl: string){
+  playAudio(audioUrl: string) {
     if (!this.audio) {
       this.audio = new Audio(audioUrl);
       this.audio.play();

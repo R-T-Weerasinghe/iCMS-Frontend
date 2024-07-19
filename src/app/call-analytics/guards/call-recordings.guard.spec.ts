@@ -4,8 +4,8 @@ import { CanActivateFn } from '@angular/router';
 import { callRecordingsGuard } from './call-recordings.guard';
 
 describe('callRecordingsGuard', () => {
-  const executeGuard: CanActivateFn = (...guardParameters) => 
-      TestBed.runInInjectionContext(() => callRecordingsGuard(...guardParameters));
+  const executeGuard: CanActivateFn = (...guardParameters) =>
+    TestBed.runInInjectionContext(() => callRecordingsGuard(...guardParameters));
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

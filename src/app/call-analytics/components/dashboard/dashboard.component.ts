@@ -29,12 +29,12 @@ export class DashboardComponent implements OnInit {
   @ViewChild('keywordCloud') keywordCloud!: WordcloudComponent;
 
   breadcrumbItems: MenuItem[] = [
-    {label: "Call Analytics"},
-    {label: "Dashboard"}
+    { label: "Call Analytics" },
+    { label: "Dashboard" }
   ];
 
-  start = "2024-06-29-16-29-00"
-  end = "2024-06-30-18-36-30"
+  start = this.formatDate(new Date(new Date().setMonth(new Date().getMonth() - 1)), "start");
+  end = this.formatDate(new Date(), "end");
   isLoadingStatistics = true;
   isLoadingPercentages = true;
   isLoadingSentimentsOverTime = true;
@@ -50,11 +50,14 @@ export class DashboardComponent implements OnInit {
   topicDistribution!: { [KeyFilter: string]: number }
   keywords: WordCloudItem[] = []
   protected readonly Math = Math;
+  protected readonly parseInt = parseInt;
+  protected readonly parseFloat = parseFloat;
 
   constructor(private callAnalyticsService: CallAnalyticsService, private cdr: ChangeDetectorRef) {
     this.callAnalyticsService.getAllKeywords(this.start, this.end).then(response => {
       this.keywords = Object.entries(response.data).map(([word, weight]) => (
-        {word: word, weight: Number(weight)}));
+        { word: word, weight: Number(weight) }));
+      if (this.keywordCloud) this.keywordCloud.refreshChart(this.keywords);
       this.isLoadingKeywords = false;
     }).catch(err => {
       console.log(err);
@@ -69,7 +72,7 @@ export class DashboardComponent implements OnInit {
   }
 
   formatDate(date: Date, type: "start" | "end" = "start"): string {
-    const pad = (num:any) => num.toString().padStart(2, '0');
+    const pad = (num: any) => num.toString().padStart(2, '0');
 
     const year = date.getFullYear();
     const month = pad(date.getMonth() + 1); // getMonth() is zero-indexed
@@ -137,7 +140,7 @@ export class DashboardComponent implements OnInit {
     });
 
     this.callAnalyticsService.getAllKeywords(start, end).then(response => {
-      this.keywords = Object.entries(response.data).map(([word, weight]) => ({word: word, weight: Number(weight)}));
+      this.keywords = Object.entries(response.data).map(([word, weight]) => ({ word: word, weight: Number(weight) }));
       if (this.keywordCloud) this.keywordCloud.refreshChart(this.keywords);
       this.isLoadingKeywords = false;
     }).catch(err => {
@@ -145,7 +148,4 @@ export class DashboardComponent implements OnInit {
     }).finally(() => {
     });
   }
-
-  protected readonly parseInt = parseInt;
-  protected readonly parseFloat = parseFloat;
 }

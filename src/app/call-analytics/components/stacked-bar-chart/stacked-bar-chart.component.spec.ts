@@ -10,8 +10,8 @@ describe('StackedBarChartComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [StackedBarChartComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(StackedBarChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

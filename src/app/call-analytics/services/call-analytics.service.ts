@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiResponse, CallStatistics } from "../types";
+import { ApiResponse } from "../types";
 import { HttpClient } from "@angular/common/http";
 import { firstValueFrom } from "rxjs";
 import { environment } from "../../../environment/environment";
@@ -14,28 +14,28 @@ export class CallAnalyticsService {
   constructor(private http: HttpClient) {
   }
 
-  public getCallStatistics(start: string,  end: string): Promise<ApiResponse> {
+  public getCallStatistics(start: string, end: string): Promise<ApiResponse> {
     return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/call-statistics?start=${start}&end=${end}`));
   }
 
-  public getSentimentPercentages(start: string,  end: string): Promise<ApiResponse> {
+  public getSentimentPercentages(start: string, end: string): Promise<ApiResponse> {
     return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/sentiment-percentages?start=${start}&end=${end}`));
   }
 
-  public getOperatorCallsOverTime(start: string,  end: string): Promise<ApiResponse> {
+  public getOperatorCallsOverTime(start: string, end: string): Promise<ApiResponse> {
     return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/operator-calls-over-time?start=${start}&end=${end}`));
   }
 
-  public getTopicsDistribution(start: string,  end: string): Promise<ApiResponse> {
+  public getTopicsDistribution(start: string, end: string): Promise<ApiResponse> {
     return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/topics-distribution?start=${start}&end=${end}`));
   }
 
 
-  public getOperatorRatings(start: string,  end: string): Promise<ApiResponse> {
+  public getOperatorRatings(start: string, end: string): Promise<ApiResponse> {
     return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/operator-ratings?start=${start}&end=${end}`))
   }
 
-  public getSentimentOverTime(start: string,  end: string): Promise<ApiResponse> {
+  public getSentimentOverTime(start: string, end: string): Promise<ApiResponse> {
     return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/sentiment-over-time?start=${start}&end=${end}`));
   }
 
@@ -43,7 +43,7 @@ export class CallAnalyticsService {
     return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/call-summary/${call_id}`));
   }
 
-  public getAllKeywords(start: string,  end: string): Promise<ApiResponse> {
-    return  firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/all-keywords?start=${start}&end=${end}`));
+  public getAllKeywords(start: string, end: string): Promise<ApiResponse> {
+    return firstValueFrom(this.http.get<ApiResponse>(`${this.API_ROOT}/all-keywords?start=${start}&end=${end}`));
   }
 }

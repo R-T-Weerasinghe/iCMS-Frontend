@@ -1,4 +1,5 @@
-<app-page-header pageTitle="Call Recordings" class="w-full h-fit" [breadcrumbItems]="breadcrumbItems" (buttonAction)="addCallRecording()" buttonText="+ Add Call Recording" [showButton]="true"/>
+<app-page-header (buttonAction)="addCallRecording()" [breadcrumbItems]="breadcrumbItems" [showButton]="true"
+                 buttonText="+ Add Call Recording" class="w-full h-fit" pageTitle="Call Recordings"/>
 <app-call-summary-chart/>
 <app-processing-records-indicator/>
 

@@ -2,6 +2,7 @@ export interface SentiCatg {
   name: string;
   code: string;
 }
+
 export interface CallRecording {
   call_id: string;
   id: string;
@@ -12,8 +13,8 @@ export interface CallRecording {
   callUrl: string;
   transcription: string;
   operator_id: number;
-  topics:any;
-  keywords:any
+  topics: any;
+  keywords: any
 }
 
 export interface OperatorAnalyticsOverTimeRecord {
@@ -24,12 +25,12 @@ export interface OperatorAnalyticsOverTimeRecord {
   neutral: number;
 }
 
- export interface QueuedFile {
-   file: File;
-   description: string;
-   date: Date;
-   operatorId: number;
- }
+export interface QueuedFile {
+  file: File;
+  description: string;
+  date: Date;
+  operatorId: number;
+}
 
 export interface OperatorListItem {
   name: string;
