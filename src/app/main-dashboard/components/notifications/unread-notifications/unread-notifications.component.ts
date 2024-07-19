@@ -43,7 +43,7 @@ export class UnreadNotificationsComponent implements OnInit {
 
     this.socketSubscription = this.notificationService.messages$.subscribe(
       message => {
-        console.log(message);
+        // console.log(message);
         this.fetchNotifications();
       }
     );
@@ -58,7 +58,6 @@ export class UnreadNotificationsComponent implements OnInit {
         endDate = new Date(range[1]);
       }
       this.filteredNotifications = this.notifications.filter(notification => {
-        console.log(notification.summary);
         const notificationDate = new Date(notification.summary || '');
         // Include the end date in the range
         return notificationDate >= startDate && notificationDate <= endDate;
@@ -172,7 +171,6 @@ export class UnreadNotificationsComponent implements OnInit {
       }
 
       this.filteredNotifications = this.notifications.filter(notification => {
-        console.log(notification.summary);
         const notificationDate = new Date(notification.summary || '');
         // Include the end date in the range
         return notificationDate >= startDate && notificationDate <= endDate;

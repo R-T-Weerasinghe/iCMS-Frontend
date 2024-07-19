@@ -17,7 +17,6 @@ export class AuthendicationService {
   }
 
   userEmail(token: string): Observable<any> {
-    console.log(token);
     return this.http.post('http://127.0.0.1:8002/charts/user_email', {'token':token});
   }
 
@@ -36,7 +35,6 @@ export class AuthendicationService {
   }
 
   profileUpdate(profileUpdate: any,token: string): Observable<any> {
-    console.log(profileUpdate);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}` // Include the JWT token in the Authorization header

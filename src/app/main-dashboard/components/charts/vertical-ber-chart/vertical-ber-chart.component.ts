@@ -26,7 +26,6 @@ export class VerticalBerChartComponent implements OnInit,OnChanges{
 onInputChange() {
   setTimeout(() => {
     // Perform layout-changing actions here
-    console.log('Input changed');
   }, 0); // Delay execution to ensure input focus is maintained
 }
 
@@ -177,7 +176,6 @@ onInputChange() {
     op.toggle(event);
   }
   onDelete(){
-    console.log('delete');
     this.deletedConfirmed.emit();
   }
 
@@ -185,7 +183,6 @@ onInputChange() {
   edit:boolean=false;
   onEdit(){
     if(this.xAxis=='topics' || this.xAxis=='keywords'){
-      console.log('edit');
       this.edit = true;
       this.sliderInteraction.emit(true);
     }
@@ -207,7 +204,6 @@ onInputChange() {
   }
 
  confirmDeleted() {
-        console.log('confirm button');
         this.hideConfirmed.emit();
   }
 
@@ -622,7 +618,6 @@ aggregateWordCloudData(allCount: any, topics: string[]): any[] {
       percentage: parseFloat(((categoryMapNeutral[topic] / this.total) * 100).toFixed(2))
     }));
 
-    console.log([positiveData, negativeData, neutralData]);
     return [positiveData, negativeData, neutralData];
   } 
   else {
@@ -637,7 +632,6 @@ aggregateWordCloudData(allCount: any, topics: string[]): any[] {
       count: categoryMapClosed[topic],
       percentage: parseFloat(((categoryMapClosed[topic] / this.total) * 100).toFixed(2))
     }));
-    console.log([ongoingData, closedData]);
     return [ongoingData, closedData];
   }
 

@@ -1,0 +1,54 @@
+:host ::ng-deep{
+  .p-tabview-nav li{
+    a{
+      padding-left:30px;
+    }
+
+  }
+  .p-tabview-panels{
+    min-height: 600px
+  }
+  .submit-button{
+    margin-top: 20px;
+    position: absolute;
+    left: auto;
+  }
+  .permission-counts{
+    div{
+      width:50%;
+      label{
+        width:50%
+      }
+      p-inputNumber{
+        width:10%;
+        height:50%;
+      }
+    }
+  }
+  .permissions-container {
+      padding-top:15px;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .permission-item {
+      flex: 1 0 20%;  /* Will take up 50% of the container's width */
+    }
+
+  p-accordiontab div div a{
+    background-color: white;
+    span{
+      font-weight: initial;
+    }
+  }
+  .permission {
+    display: flex;
+    align-items: center; /* This will vertically center the content */
+
+  }
+
+
+}
+
+
+

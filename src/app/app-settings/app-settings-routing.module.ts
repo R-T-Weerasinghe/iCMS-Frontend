@@ -4,6 +4,7 @@ import { PermissionsComponent } from "./components/permissions/permissions.compo
 import { RoleManagementComponent } from "./components/role-management/role-management.component";
 import { UsersComponent } from "./components/users/users.component";
 import {AuthGuardService} from "../shared/shared-services/auth-guard.service";
+import {ConfigurationsComponent} from "./components/configurations/configurations.component";
 
 const routes: Routes = [
   {
@@ -16,6 +17,11 @@ const routes: Routes = [
     component: RoleManagementComponent,
     canActivate: [AuthGuardService]
   },
+  {
+    path:"configurations",
+    component: ConfigurationsComponent,
+    canActivate: [AuthGuardService]
+  }
 ];
 
 @NgModule({

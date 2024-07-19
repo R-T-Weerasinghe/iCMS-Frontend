@@ -142,13 +142,11 @@ private authService:AuthenticationService
   }
   
   onDelete(){
-    console.log('delete');
     this.deletedConfirmed.emit();
   }
 
   edit:boolean=false;
   onEdit() {
-    console.log('edit');
     this.edit = true;
     this.sliderInteraction.emit(true);
 
@@ -175,7 +173,7 @@ editOff(){
 }
 
  confirmDeleted() {
-        console.log('confirm button');
+
         this.hideConfirmed.emit();
   }
 
@@ -303,7 +301,6 @@ editOff(){
 
             // Create a set to get distinct topics
             this.topics = [...new Set(allTopics)];
-            console.log(this.topics);
             sources.forEach(source => {
               let sourceData: any[] = [];
 
@@ -497,7 +494,6 @@ aggregateWordCloudData(allCount: any, topics: string[]): any {
 
   chart(){
 
-    console.log(this.datasets);
     const documentStyle = getComputedStyle(document.documentElement);
     // const textColor = documentStyle.getPropertyValue('--text-color');
     this.data = {

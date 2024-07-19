@@ -24,6 +24,12 @@ import {ButtonModule} from "primeng/button";
 import {ChipModule} from "primeng/chip";
 import {ProgressSpinnerModule} from "primeng/progressspinner";
 import {BadgeModule} from "primeng/badge";
+import { ConfigurationsComponent } from './components/configurations/configurations.component';
+import {PanelModule} from "primeng/panel";
+import {CheckboxModule} from "primeng/checkbox";
+import {InputNumberModule} from "primeng/inputnumber";
+import {AccordionModule} from "primeng/accordion";
+import {InputSwitchModule} from "primeng/inputswitch";
 
 
 @NgModule({
@@ -33,6 +39,7 @@ import {BadgeModule} from "primeng/badge";
     PermissionsComponent,
     RoleManagementComponent,
     AddRolePopupComponent,
+    ConfigurationsComponent,
 
   ],
     imports: [
@@ -57,7 +64,12 @@ import {BadgeModule} from "primeng/badge";
         ButtonModule,
         ChipModule,
         ProgressSpinnerModule,
-        BadgeModule
+        BadgeModule,
+        PanelModule,
+        CheckboxModule,
+        InputNumberModule,
+        AccordionModule,
+        InputSwitchModule
 
     ]
 })

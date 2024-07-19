@@ -184,7 +184,7 @@ export class DoughnutChartComponent implements OnInit,OnChanges{
  
 
   onDelete(){
-    console.log('delete');
+
     this.deletedConfirmed.emit();
   }
 
@@ -198,7 +198,6 @@ export class DoughnutChartComponent implements OnInit,OnChanges{
   }
 
  confirmDeleted() {
-        console.log('confirm button');
         this.hideConfirmed.emit();
   }
   onDateRangeChange() {

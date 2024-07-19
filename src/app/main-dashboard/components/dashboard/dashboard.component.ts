@@ -154,9 +154,9 @@ export class DashboardComponent implements OnInit,OnDestroy{
               cache.delete(key);
             });
           }).then(() => {
-            console.log('All cache entries deleted successfully.');
+            // console.log('All cache entries deleted successfully.');
           }).catch(error => {
-            console.error('Error deleting cache entries:', error);
+            // console.error('Error deleting cache entries:', error);
           });
         });
         this.skeletonActivation=true;

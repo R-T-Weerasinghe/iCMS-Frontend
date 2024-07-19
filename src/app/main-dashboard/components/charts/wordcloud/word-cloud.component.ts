@@ -121,7 +121,6 @@ export class WordcloudComponent implements OnInit, OnChanges{
   }
   
   onDelete(){
-    console.log('delete');
     this.deletedConfirmed.emit();
   }
 
@@ -137,7 +136,6 @@ export class WordcloudComponent implements OnInit, OnChanges{
   }
 
  confirmDeleted() {
-        console.log('confirm button');
         this.hideConfirmed.emit();
   }
 
@@ -355,7 +353,6 @@ export class WordcloudComponent implements OnInit, OnChanges{
 
   showWords() {
     if (!this.words || this.words.length === 0) {
-      console.error('No words to display in the word cloud.');
       return;
     }
 
@@ -367,7 +364,7 @@ export class WordcloudComponent implements OnInit, OnChanges{
       verticalEnabled: true,
       padding_left: null,
       word_click: function (event: any) {
-        console.log(event.target.textContent);
+        // console.log(event.target.textContent);
       },
       word_mouseOver: function () { },
       word_mouseEnter: function () { },

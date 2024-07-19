@@ -45,7 +45,6 @@ export class ReadNotificationsComponent implements OnInit {
 
     this.socketSubscription = this.notificationService.messages$.subscribe(
       message => {
-        console.log(message);
         this.readNotification();
       }
   );
@@ -59,7 +58,6 @@ export class ReadNotificationsComponent implements OnInit {
         endDate = new Date(range[1]);
       }
       this.filteredNotifications = this.readnotifications.filter(notification => {
-        console.log(notification.summary);
         const notificationDate = new Date(notification.summary || '');
         // Include the end date in the range
         return notificationDate >= startDate && notificationDate <= endDate;
@@ -79,7 +77,7 @@ export class ReadNotificationsComponent implements OnInit {
         this.authService.getIdToken().subscribe((token) =>{
         this.notificationService.updateUnreadNotifications(token,notification.id).subscribe(
           (response) => {
-            
+            this.readNotification();
                     },
         );
       });
@@ -93,14 +91,13 @@ export class ReadNotificationsComponent implements OnInit {
 
   clearMessages(){
     const existingNotificationDicts = this.readnotifications.map(notification => ({ id: notification.id }));
-    console.log(existingNotificationDicts);
     this.readnotifications = [];
     this.unreadnotifications= [];
     this.filteredNotifications=[];
     this.authService.getIdToken().subscribe((token) =>{
     this.notificationService.updateReadNotifications(token,existingNotificationDicts).subscribe(
       (response) => {
-
+        this.readNotification();
       },
   );
 });
@@ -116,7 +113,6 @@ export class ReadNotificationsComponent implements OnInit {
       }
 
       this.filteredNotifications = this.readnotifications.filter(notification => {
-        console.log(notification.summary);
         const notificationDate = new Date(notification.summary || '');
         // Include the end date in the range
         return notificationDate >= startDate && notificationDate <= endDate;
@@ -135,7 +131,6 @@ export class ReadNotificationsComponent implements OnInit {
     if (this.rangeDates && this.rangeDates.length === 2) {
       const [startDate, endDate] = this.rangeDates;
       this.filteredNotifications = this.readnotifications.filter(notification => {
-        console.log(notification.summary);
         const notificationDate = new Date(notification.summary || '');
         return notificationDate >= startDate && notificationDate <= endDate;
       });
@@ -189,7 +184,6 @@ export class ReadNotificationsComponent implements OnInit {
         this.notificationService.getReadNotifications(token),
         this.notificationService.getNotifications(token)
       ]).subscribe(([readNotifications, unreadNotifications]) => {
-        console.log(readNotifications, unreadNotifications);
   
         const unreadNotificationsTemp: CustomMessage[] = [];
         const readNotificationsTemp: CustomMessage[] = [];

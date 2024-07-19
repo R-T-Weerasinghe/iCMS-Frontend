@@ -185,7 +185,6 @@ removeItem($event: MouseEvent | TouchEvent, item:any): void {
 addChart($event: MouseEvent | TouchEvent, item:any): void {
   $event.preventDefault();
   $event.stopPropagation();
-  console.log(item.id);
   this.gridList.splice(this.gridList.indexOf(item), 1);
   this.dashboard.push(item);
   this.saveStatus(item,'show');
@@ -382,7 +381,6 @@ grid(draggablebool:boolean){
     itemChangeCallback: this.itemChange.bind(this),
   };
 
-  console.log('option',this.options.draggable.enabled);
 
 this.chartOptions = {
   responsive: true,
@@ -561,8 +559,6 @@ itemResize(item: GridsterItem, itemComponent: GridsterItemComponentInterface): v
 
 itemChange(item: GridsterItem, itemComponent: GridsterItemComponentInterface): void {
   // This method will be called when the item is moved or resized
-
-  console.log(item);
   if (item && this.gridStart==1){
     const change = {
       id: item["id"],   // Assuming item.key is the unique identifier

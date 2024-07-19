@@ -49,7 +49,7 @@ export class NotificationsComponent implements OnInit{
 
     this.socketSubscription = this.notificationService.messages$.subscribe(
       message => {
-        console.log(message);
+        // console.log(message);
       }
   );
   }

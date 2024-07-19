@@ -366,7 +366,6 @@ chartDataGet(): void {
               (this.allDataTpoic[topic]?.negative >= this.negativeMin && this.allDataTpoic[topic]?.negative <= this.negativeMax) ||
               (this.allDataTpoic[topic]?.neutral >= this.neutralMin && this.allDataTpoic[topic]?.neutral <= this.neutralMax)
             );
-            console.log(this.topics)
             this.topics=filteredTopicsPositive
 
           }
@@ -629,7 +628,6 @@ aggregateWordCloudData(allCount: any, topics: string[],source:string): any[] {
       percentage: parseFloat(((categoryMapSocial[topic] / this.total) * 100).toFixed(2))
     }));
 
-    console.log([positiveData, negativeData, neutralData])
     return [positiveData, negativeData, neutralData];
   } else {
     const ongoingData = topics.map(topic => ({
@@ -676,7 +674,6 @@ isDateInRange(dateStr: string): boolean {
 
 
   chart() {
-    console.log(this.datasets);
     const documentStyle = getComputedStyle(document.documentElement);
   
     // Define your desired range for labels and datasets
