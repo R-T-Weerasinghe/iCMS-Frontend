@@ -52,6 +52,8 @@ import {MenubarModule} from "primeng/menubar";
 import {SkeletonModule} from "primeng/skeleton";
 import {RippleModule} from "primeng/ripple";
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { SliderModule } from 'primeng/slider';
 
 @NgModule({
   declarations: [
@@ -112,7 +114,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
     SkeletonModule,
     RippleModule,
     InputNumberModule,
-
+    SelectButtonModule,
+    SliderModule
   ],
   exports: [
     LineAreaChartComponent, // Ensure this component is exported

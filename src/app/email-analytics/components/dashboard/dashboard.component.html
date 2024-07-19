@@ -4,41 +4,48 @@
   (rangeDatesChanged)="onRangeDatesChanged($event)"
   [minDate]="minDate"
   [maxDate]="maxDate"
+  [emailDashboardDate]="true"
+  [intervalInDaysStart]="intervalInDaysStart"
+  [intervalInDaysEnd]="intervalInDaysEnd"
 />
 
-<!-- the calendars
-
-<p-calendar [(ngModel)]="fromDate" [minDate]="minDate" [maxDate]="maxDate" [readonlyInput]="true" 
-(ngModelChange)="onFromDateChange($event)" [showIcon]="true"  [ngStyle]="{ 'width.px': '100', 'height.px': '100' }"></p-calendar>
-<p-calendar [(ngModel)]="toDate" [minDate]="minDate" [maxDate]="maxDate" [readonlyInput]="true" 
-    (ngModelChange)="onToDateChange($event)" [showIcon]="true"></p-calendar> -->
-
-
-
-<div class="flex flex-col">
-  <div class="flex flex-wrap gap-6">
+<div class="flex flex-col w-full">
+  <div class="flex flex-wrap gap-6 w-full">
     <div class="flex flex-row flex-wrap place-content-evenly w-full">
-      <app-gauge-chart [dataValue]="dataValue_forGaugeStart" *ngIf="!isLoadingGC"/>
-      <app-doughnut-chart title="Overall Sentiments Proportion" [chartData]="chartData" *ngIf="!isLoadingDC"/>
+      <app-gauge-chart
+        [dataValue]="dataValue_forGaugeStart"
+        *ngIf="!isLoadingGC"
+      />
+      <p-skeleton styleClass="w-1/3 my-3" height="250px" *ngIf="isLoadingGC" />
+      <app-doughnut-chart
+        title="Overall Sentiments Proportion"
+        [chartData]="chartData"
+        *ngIf="!isLoadingDC"
+      />
+      <p-skeleton styleClass="w-1/3 my-3" height="250px" *ngIf="isLoadingDC" />
       <!-- <app-doughnut-chart title="Current Overall Sentiments" /> -->
-     
-      <app-wordcloud [words]="wordCloudData" title="Trending Products" *ngIf="!isLoadingWCC"/>
+
+      <app-wordcloud
+        [words]="wordCloudData"
+        title="Trending Products"
+        *ngIf="!isLoadingWCC"
+      />
+      <p-skeleton styleClass="w-1/3 my-3" height="250px" *ngIf="isLoadingWCC" />
     </div>
     <div class="flex flex-row flex-wrap place-content-evenly w-full">
-      <app-line-area-chart title="Sentiments Over Time"  [labels]="labelsForSentimentsByTime" [positive_values]="positive_values_forSentimentsByTime" 
-      [neutral_values]="neutral_values_forSentimentsByTime" [negative_values]="negative_values_forSentimentsbyTime" *ngIf="!isLoadingSBTime"/>
-      <div class="flex flex-col place-content-evenly" >  
-        <div *ngFor="let item of statsData">
-
-          <app-stat-card *ngIf="!isLoadingStatCards"
-            [title]="item.title.toString()"
-            [subTitle]="item.sub_title"
-            [imgPath]="item.imgPath"
-            [header]="item.header"
-            [sentiment]="item.sentiment"
-          ></app-stat-card>
-        </div>
-      </div>
+      <app-line-area-chart
+        title="Sentiments Over Time"
+        [labels]="labelsForSentimentsByTime"
+        [positive_values]="positive_values_forSentimentsByTime"
+        [neutral_values]="neutral_values_forSentimentsByTime"
+        [negative_values]="negative_values_forSentimentsbyTime"
+        *ngIf="!isLoadingSBTime"
+      />
+      <p-skeleton
+        styleClass="w-1/2 my-3"
+        height="250px"
+        *ngIf="isLoadingSBTime"
+      />
     </div>
 
     <!-- <app-stat-card title="540" subTitle="Total Calls" imgPath="./call/blue-phone.png"/>
@@ -46,40 +53,42 @@
       <app-stat-card title="5402" subTitle="Total Minute" imgPath="./call/blue-call.png"/> -->
     <!-- </div> -->
   </div>
-  
-  <div class="flex flex-wrap gap-6 place-content-evenly w-full">
-    <app-stacked-bar-chart 
-    title="Overall sentiments of Products"
-    [labels]="labels_forStackedBarChart" 
-    [negativeDataSet]="negativeDataSet_forStackedBarChart" 
-    [neutralDataSet]="neutralDataSet_forStackedBarChart" 
-    [positiveDataSet]="positiveDataSet_forStackedBarChart"
-    *ngIf="!isLoadingSDT" />
 
+  <div class="flex flex-wrap gap-6 place-content-evenly w-full">
+    <app-stacked-bar-chart
+      title="Email count by sentiments and products"
+      [labels]="labels_forStackedBarChart"
+      [negativeDataSet]="negativeDataSet_forStackedBarChart"
+      [neutralDataSet]="neutralDataSet_forStackedBarChart"
+      [positiveDataSet]="positiveDataSet_forStackedBarChart"
+      *ngIf="!isLoadingSDT"
+    />
+    <p-skeleton styleClass="w-1/2 my-3" height="250px" *ngIf="isLoadingSDT" />
+    <app-multi-horizontal-bar-chart
+      title="Average sentiments distribution of Products"
+      [labels]="labels_forMultiHorizontal"
+      [avgPositiveValues]="positiveDataSet_forMulti_HorizontalBarChart"
+      [avgNeutralValues]="neutralDataSet_forMulti_HorizontalBarChart"
+      [avgNegativeValues]="negativeDataSet_forMulti_HorizontalBarChart"
+      *ngIf="!isLoadingSDT"
+    />
+    <p-skeleton styleClass="w-1/2 my-3" height="250px" *ngIf="isLoadingSDT" />
+    <app-horizontal-bar-chart
+      title="Average sentiment score By Products"
+      [sbtChartLabels]="sbtChartLabels"
+      [sbtChartColors]="sbtChartColors"
+      [sbtChartValues]="sbtChartValues"
+      *ngIf="!isLoadingSBT"
+    />
+    <p-skeleton styleClass="w-1/2 my-3" height="250px" *ngIf="isLoadingSBT" />
   </div>
 
-  <div class="flex flex-wrap gap-6 place-content-evenly w-full">
-    <app-multi-horizontal-bar-chart title="Avg sentiments distribution of Products"
-    [labels]="labels_forMultiHorizontal"
-    [avgPositiveValues]="positiveDataSet_forMulti_HorizontalBarChart"
-    [avgNeutralValues]="neutralDataSet_forMulti_HorizontalBarChart"
-    [avgNegativeValues]="negativeDataSet_forMulti_HorizontalBarChart"
-    *ngIf="!isLoadingSDT"/>
-  </div>
-  
-
-  
-  
- 
-  <div class="flex flex-wrap gap-6 place-content-evenly w-full">
-    <app-horizontal-bar-chart title = "Sentiments By Products" [sbtChartLabels]="sbtChartLabels" [sbtChartColors]="sbtChartColors" [sbtChartValues]="sbtChartValues" *ngIf="!isLoadingSBT"/>
-    <!-- <div class="stat-cards"> -->
-    <!-- <app-stat-card title="540" subTitle="Total Calls" imgPath="./call/blue-phone.png"/>
+  <!-- <div class="stat-cards"> -->
+  <!-- <app-stat-card title="540" subTitle="Total Calls" imgPath="./call/blue-phone.png"/>
       <app-stat-card title="10 min" subTitle="Avg. Call Time" imgPath="./call/green-call.png"/>
       <app-stat-card title="5402" subTitle="Total Minute" imgPath="./call/blue-call.png"/> -->
-    <!-- </div> -->
-    <!-- <app-line-area-chart title="Sentiment Over Time"/> -->
-  </div>
+  <!-- </div> -->
+  <!-- <app-line-area-chart title="Sentiment Over Time"/> -->
   <div class="flex gap-6 flex-wrap">
     <!-- <app-gauge-chart/> -->
     <div class="stat-cards">

@@ -46,48 +46,51 @@
       <div class="notifications-container">
         <div *ngFor="let notification of filteredNotifications">
 
-        <div *ngIf="notification.read==true" >
-          <!-- Unread messages -->
-
           <div class="unread">
-          <p-card (click)="viewNotification(notification)"  styleClass="full-width-card">
-
-            <ng-template pTemplate="header">
-              <span class="icons">
-              <i class="pi pi-phone" style="color: black" *ngIf="notification.sources=='call'"></i>
-              <i class="pi pi-envelope" style="color: black" *ngIf="notification.sources=='email'"></i>
-              <i class="pi pi-comments" style="color: black" *ngIf="notification.sources=='social'"></i>
-            </span>
-              <span class="notification-detail1">{{ notification.detail }}</span>
-            </ng-template>
-
-            <p class="card-content1">{{ notification.data }}</p>
-            <p class="card-content2">{{ notification.summary }}</p>
-          </p-card>
+            <div *ngIf="notification.read == true">
+              <p-card (click)="viewNotification(notification)" styleClass="full-width-card">
+                <ng-template pTemplate="header">
+                  <div class="card-header">
+                    <div class="icons">
+                      <i class="pi pi-phone" style="color: black" *ngIf="notification.sources == 'call'"></i>
+                      <i class="pi pi-envelope" style="color: black" *ngIf="notification.sources == 'email'"></i>
+                      <i class="pi pi-comments" style="color: black" *ngIf="notification.sources == 'social'"></i>
+                    </div>
+                    <div class="content">
+                      <span class="notification-detail1">{{ notification.detail }}</span>
+                      <p class="card-content1">{{ notification.data }}</p>
+                      <p class="card-content2">{{ notification.summary }}</p>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-card>
+            </div>
           </div>
-        </div>
 
         <!-- Readed Messages -->
 
-        <div class="read">
-        <div *ngIf="notification.read==false">
-          <p-card (click)="viewNotification(notification)" styleClass="full-width-card" >
 
-            <ng-template pTemplate="header">
-              <span class="icons">
-              <i class="pi pi-phone" style="color: black" *ngIf="notification.sources=='call'"></i>
-              <i class="pi pi-envelope" style="color: black" *ngIf="notification.sources=='email'"></i>
-              <i class="pi pi-comments" style="color: black" *ngIf="notification.sources=='social'"></i>
-            </span>
-              <span class="notification-detail2">{{ notification.detail }}</span>
-            </ng-template>
+          <div class="read">
+            <div *ngIf="notification.read == false">
+              <p-card (click)="viewNotification(notification)" styleClass="full-width-card">
+                <ng-template pTemplate="header">
+                  <div class="card-header">
+                    <div class="icons">
+                      <i class="pi pi-phone" style="color: black" *ngIf="notification.sources == 'call'"></i>
+                      <i class="pi pi-envelope" style="color: black" *ngIf="notification.sources == 'email'"></i>
+                      <i class="pi pi-comments" style="color: black" *ngIf="notification.sources == 'social'"></i>
+                    </div>
+                    <div class="content">
+                      <span class="notification-detail2">{{ notification.detail }}</span>
+                      <p class="card-content3">{{ notification.data }}</p>
+                      <p class="card-content4">{{ notification.summary }}</p>
+                    </div>
+                  </div>
+                </ng-template>
+              </p-card>
+            </div>
+          </div>
 
-            <p class="card-content3">{{ notification.data }}</p>
-            <p class="card-content4">{{ notification.summary }}</p>
-          </p-card>
-
-        </div>
-        </div>
 
 
         </div>

@@ -85,6 +85,7 @@ export class DashboardComponent implements OnInit {
     this.callAnalyticsService.getCallStatistics(start, end).then(response => {
       this.callStatistics = response.data;
       this.isLoadingStatistics = false;
+      console.log(this.callStatistics);
     }).catch(err => {
       console.log(err);
     }).finally(() => {
@@ -144,4 +145,7 @@ export class DashboardComponent implements OnInit {
     }).finally(() => {
     });
   }
+
+  protected readonly parseInt = parseInt;
+  protected readonly parseFloat = parseFloat;
 }

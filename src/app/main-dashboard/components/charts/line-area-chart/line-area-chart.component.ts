@@ -13,7 +13,7 @@ import {MenuItem, MenuItemCommandEvent} from "primeng/api";
   styleUrls: ['./line-area-chart.component.scss']
 })
 export class LineAreaChartComponent implements OnInit,OnChanges {
-
+  @Output() sliderInteraction: EventEmitter<boolean> = new EventEmitter();
   @Output() deletedConfirmed: EventEmitter<void> = new EventEmitter<void>();
   @Output() hideConfirmed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -51,7 +51,9 @@ export class LineAreaChartComponent implements OnInit,OnChanges {
 
   items: MenuItem[] = [];
 
-
+  callWeigth:number=1;
+  emailWeigth:number=1;
+  socialWeigth:number=1;
 
 
   private socketSubscription: Subscription | undefined;
@@ -62,6 +64,7 @@ export class LineAreaChartComponent implements OnInit,OnChanges {
   ) {}
 
   ngOnInit() {
+  
     if(this.yAxis==='sentiment-count'){
       this.chartCategory='Count';
     }
@@ -171,25 +174,52 @@ export class LineAreaChartComponent implements OnInit,OnChanges {
 
   }
 
-  
+
+
+  onSliderChange(event: any) {
+    this.sliderInteraction.emit(true);
+  }
+
   onDelete(){
-    console.log('delete');
     this.deletedConfirmed.emit();
   }
 
   
 edit:boolean=false;
-onEdit(){
-    this.edit=true;
+
+onEdit() {
+    if((this.chartCategory=='Score' || this.chartCategory=='Separate') && this.categories.length > 1){
+      this.sliderInteraction.emit(true);
+      this.edit = true;
+  }
   
 }
 
+editOffApply(){
+  this.edit=false;
+  this.sliderInteraction.emit(false);
+  if(this.selectedCategories){
+    if(this.chartCategory=='Score'){
+        this.lineExtractSocre(this.selectedCategories);
+    }
+    if(this.chartCategory=='Separate'){
+      this.lineExtractSeparate(this.selectedCategories);
+  }
+  }
+}
+
+editOffCancel(){
+  this.sliderInteraction.emit(false);
+  this.edit=false;
+}
+
+
 editOff(){
+  this.sliderInteraction.emit(false);
   this.edit=false;
 }
 
  confirmDeleted() {
-        console.log('confirm button');
         this.hideConfirmed.emit();
   }
 
@@ -724,143 +754,144 @@ editOff(){
       this.lineChartShow();
     }
     if (this.chartCategory === 'Score') {
-      const processData = (dataArray: any[]) => {
-        dataArray.forEach(data => {
-          const date = new Date(data.Date);
-          const monthYear = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-    
-          if (!combinedDataMap[monthYear]) {
-            combinedDataMap[monthYear] = {
-              Date: date,  // Store the actual Date object for sorting
-              monthYear: monthYear,
-              totalScore: 0,
-              count: 0,
-            };
-          }
-          combinedDataMap[monthYear].totalScore += data.score;
-          combinedDataMap[monthYear].count += 1;
-        });
-      };
-    
-      sources.forEach(source => {
-        if (source === 'call') {
-          processData(callData);
-        }
-        if (source === 'email') {
-          processData(emailData);
-        }
-        if (source === 'social') {
-          processData(socialData);
-        }
-      });
-    
-      // Sort combined data by Date
-      const sortedCombinedData = Object.values(combinedDataMap).sort((a: any, b: any) => a.Date - b.Date);
-    
-      this.dates = sortedCombinedData.map((entry: any) => entry.monthYear);
-      const documentStyle = getComputedStyle(document.documentElement);
-    
-      // Calculate average score
-      sortedCombinedData.forEach((entry: any) => {
-        entry.avgScore = entry.totalScore / entry.count;
-      });
-    
-      this.dataset = [
-        {
-          label: 'Average Score',
-          data: sortedCombinedData.map((entry: any) => entry.avgScore),
-          fill: true,
-          borderColor: documentStyle.getPropertyValue('--green-500'),
-          tension: 0.4,
-          backgroundColor: 'rgba(60,180,16,0.2)',
-        },
-      ];
-    
-      this.lineChartShow();
+
+  const processData = (dataArray: any[], weight: number) => {
+    dataArray.forEach(data => {
+      const date = new Date(data.Date);
+      const monthYear = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+      if (!combinedDataMap[monthYear]) {
+        combinedDataMap[monthYear] = {
+          Date: date,  // Store the actual Date object for sorting
+          monthYear: monthYear,
+          totalWeightedScore: 0,
+          totalWeight: 0,
+        };
+      }
+      combinedDataMap[monthYear].totalWeightedScore += data.score * weight;
+      combinedDataMap[monthYear].totalWeight += weight;
+    });
+  };
+
+  sources.forEach(source => {
+    if (source === 'call') {
+      processData(callData, this.callWeigth);
     }
+    if (source === 'email') {
+      processData(emailData, this.emailWeigth);
+    }
+    if (source === 'social') {
+      processData(socialData, this.socialWeigth);
+    }
+  });
+
+  // Sort combined data by Date
+  const sortedCombinedData = Object.values(combinedDataMap).sort((a: any, b: any) => a.Date - b.Date);
+
+  this.dates = sortedCombinedData.map((entry: any) => entry.monthYear);
+  const documentStyle = getComputedStyle(document.documentElement);
+
+  // Calculate average weighted score
+  sortedCombinedData.forEach((entry: any) => {
+    entry.avgScore = entry.totalWeightedScore / entry.totalWeight;
+  });
+
+  this.dataset = [
+    {
+      label: 'Average Weighted Score',
+      data: sortedCombinedData.map((entry: any) => entry.avgScore),
+      fill: true,
+      borderColor: documentStyle.getPropertyValue('--green-500'),
+      tension: 0.4,
+      backgroundColor: 'rgba(60,180,16,0.2)',
+    },
+  ];
+
+  this.lineChartShow();
+}
     else if (this.chartCategory === 'Separate') {
+
       const documentStyle = getComputedStyle(document.documentElement);
-      this.dataset = [];
-    
-      const allUniqueDates = new Set<string>();
-    
-      const processData = (dataArray: any[]) => {
-        const combined: { [key: string]: any } = {};
-        dataArray.forEach(data => {
-          const date = new Date(data.Date);
-          const monthYear = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
-    
-          if (!combined[monthYear]) {
-            combined[monthYear] = {
-              Date: date.toISOString(),  // Use ISO string for consistent formatting
-              monthYear: monthYear,
-              score: 0,
-              count: 0,
-            };
-          }
-          combined[monthYear].score += data.score;
-          combined[monthYear].count += 1;
-    
-          allUniqueDates.add(monthYear); // Add to unique dates set
-        });
-        return combined;
-      };
-    
-      sources.forEach(source => {
-        let finalData: any = {};
-        if (source === 'call') {
-          finalData = processData(callData);
-          this.dataset.push({
-            label: 'Call',
-            data: finalData,
-            fill: true,
-            borderColor: documentStyle.getPropertyValue('--green-500'),
-            tension: 0.4,
-            backgroundColor: 'rgba(60,180,16,0.2)'
-          });
-        }
-        if (source === 'email') {
-          finalData = processData(emailData);
-          this.dataset.push({
-            label: 'Email',
-            data: finalData,
-            fill: true,
-            borderColor: documentStyle.getPropertyValue('--red-500'),
-            tension: 0.4,
-            backgroundColor: 'rgba(152,37,40,0.2)'
-          });
-        }
-        if (source === 'social') {
-          finalData = processData(socialData);
-          this.dataset.push({
-            label: 'Social Media',
-            data: finalData,
-            fill: true,
-            borderColor: documentStyle.getPropertyValue('--blue-500'),
-            tension: 0.4,
-            backgroundColor: 'rgba(60,180,16,0.2)'
-          });
-        }
+  this.dataset = [];
+
+  const allUniqueDates = new Set<string>();
+
+  const processData = (dataArray: any[], weight: number) => {
+    const combined: { [key: string]: any } = {};
+    dataArray.forEach(data => {
+      const date = new Date(data.Date);
+      const monthYear = `${monthNames[date.getMonth()]} ${date.getFullYear()}`;
+
+      if (!combined[monthYear]) {
+        combined[monthYear] = {
+          Date: date.toISOString(),  // Use ISO string for consistent formatting
+          monthYear: monthYear,
+          score: 0,
+          count: 0,
+        };
+      }
+      // Apply weight to the score calculation
+      combined[monthYear].score += data.score * weight;
+      combined[monthYear].count += 1;
+
+      allUniqueDates.add(monthYear); // Add to unique dates set
+    });
+    return combined;
+  };
+
+  sources.forEach(source => {
+    let finalData: any = {};
+    if (source === 'call') {
+      finalData = processData(callData, this.callWeigth);
+      this.dataset.push({
+        label: 'Call',
+        data: finalData,
+        fill: true,
+        borderColor: documentStyle.getPropertyValue('--green-500'),
+        tension: 0.4,
+        backgroundColor: 'rgba(60,180,16,0.2)'
       });
-    
-      const sortedDates = Array.from(allUniqueDates).sort((a, b) => new Date(a as string).getTime() - new Date(b as string).getTime());
-    
-      this.dataset = this.dataset.map(dataset => {
-        const filledData = sortedDates.map(date => {
-          if (dataset.data[date]) {
-            return dataset.data[date].score / dataset.data[date].count;
-          } else {
-            return 0;
-          }
-        });
-        return { ...dataset, data: filledData };
-      });
-    
-      console.log(this.dataset);
-      this.dates = sortedDates;
-      console.log(this.dates);
-      this.lineChartShow();
     }
+    if (source === 'email') {
+      finalData = processData(emailData, this.emailWeigth);
+      this.dataset.push({
+        label: 'Email',
+        data: finalData,
+        fill: true,
+        borderColor: documentStyle.getPropertyValue('--red-500'),
+        tension: 0.4,
+        backgroundColor: 'rgba(152,37,40,0.2)'
+      });
+    }
+    if (source === 'social') {
+      finalData = processData(socialData, this.socialWeigth);
+      this.dataset.push({
+        label: 'Social Media',
+        data: finalData,
+        fill: true,
+        borderColor: documentStyle.getPropertyValue('--blue-500'),
+        tension: 0.4,
+        backgroundColor: 'rgba(60,180,16,0.2)'
+      });
+    }
+  });
+
+  const sortedDates = Array.from(allUniqueDates).sort((a, b) => new Date(a as string).getTime() - new Date(b as string).getTime());
+
+  this.dataset = this.dataset.map(dataset => {
+    const filledData = sortedDates.map(date => {
+      if (dataset.data[date]) {
+        return dataset.data[date].score / dataset.data[date].count;
+      } else {
+        return 0;
+      }
+    });
+    return { ...dataset, data: filledData };
+  });
+
+  this.dates = sortedDates;
+  this.lineChartShow();
+}
     
     
     
@@ -954,148 +985,158 @@ editOff(){
 
         this.lineChartShow();
     } else if (this.chartCategory === 'Score') {
-        const processData = (dataArray: any[]) => {
-            dataArray.forEach(data => {
-                const date = new Date(data.Date);
-                const dayMonthYear = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`; // Format: YYYY-MM-DD
-
-                if (!combinedDataMap[dayMonthYear]) {
-                    combinedDataMap[dayMonthYear] = {
-                        Date: dayMonthYear,
-                        totalScore: 0,
-                        count: 0,
-                    };
-                }
-                combinedDataMap[dayMonthYear].totalScore += data.score;
-                combinedDataMap[dayMonthYear].count += 1;
-            });
-        };
-
-        sources.forEach(source => {
-            if (source === 'call') {
-                processData(callData);
-            }
-            if (source === 'email') {
-                processData(emailData);
-            }
-            if (source === 'social') {
-                processData(socialData);
-            }
+      const processData = (dataArray: any[], weight: number) => {
+        dataArray.forEach(data => {
+          const date = new Date(data.Date);
+          const dayMonth = `${date.getMonth() + 1}-${date.getDate()}`; // Format: MM-DD
+    
+          if (!combinedDataMap[dayMonth]) {
+            combinedDataMap[dayMonth] = {
+              Date: dayMonth,
+              totalWeightedScore: 0,
+              totalWeight: 0,
+            };
+          }
+          combinedDataMap[dayMonth].totalWeightedScore += data.score * weight;
+          combinedDataMap[dayMonth].totalWeight += weight;
         });
-
-        this.dates = Object.values(combinedDataMap).map((entry: any) => entry.Date);
-        const documentStyle = getComputedStyle(document.documentElement);
-
-        // Calculate average score
-        Object.values(combinedDataMap).forEach((entry: any) => {
-            entry.avgScore = entry.totalScore / entry.count;
-        });
-
-        this.dataset = [
-            {
-                label: 'Average Score',
-                data: Object.values(combinedDataMap).map((entry: any) => entry.avgScore),
-                fill: true,
-                borderColor: documentStyle.getPropertyValue('--green-500'),
-                tension: 0.4,
-                backgroundColor: 'rgba(60,180,16,0.2)',
-            },
-        ];
-
-        this.lineChartShow();
+      };
+    
+      sources.forEach(source => {
+        if (source === 'call') {
+          processData(callData, this.callWeigth);
+        }
+        if (source === 'email') {
+          processData(emailData, this.emailWeigth);
+        }
+        if (source === 'social') {
+          processData(socialData, this.socialWeigth);
+        }
+      });
+    
+      const documentStyle = getComputedStyle(document.documentElement);
+    
+      // Calculate average weighted score
+      Object.values(combinedDataMap).forEach((entry: any) => {
+        entry.avgScore = entry.totalWeightedScore / entry.totalWeight;
+      });
+    
+      this.dates = Object.values(combinedDataMap).map((entry: any) => entry.Date);
+      this.dataset = [
+        {
+          label: 'Average Weighted Score',
+          data: Object.values(combinedDataMap).map((entry: any) => entry.avgScore),
+          fill: true,
+          borderColor: documentStyle.getPropertyValue('--green-500'),
+          tension: 0.4,
+          backgroundColor: 'rgba(60,180,16,0.2)',
+        },
+      ];
+    
+      this.lineChartShow();
     } else if (this.chartCategory === 'Separate') {
-        const documentStyle = getComputedStyle(document.documentElement);
-        this.dataset = [];
-
-        const processData = (dataArray: any[]) => {
-            const combined: { [key: string]: any } = {};
-            dataArray.forEach(data => {
-                const date = new Date(data.Date);
-                const dayMonthYear = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`; // Format: YYYY-MM-DD
-
-                if (!combinedDataMap[dayMonthYear]) {
-                    combinedDataMap[dayMonthYear] = {
-                        Date: dayMonthYear,
-                        score: 0,
-                        count: 0,
-                    };
-                }
-                combinedDataMap[dayMonthYear].score += data.score;
-                combinedDataMap[dayMonthYear].count += 1;
-
-                if (!combined[dayMonthYear]) {
-                    combined[dayMonthYear] = {
-                        Date: dayMonthYear,
-                        score: 0,
-                        count: 0,
-                    };
-                }
-                combined[dayMonthYear].score += data.score;
-                combined[dayMonthYear].count += 1;
-            });
-            return combined;
-        };
-
-        sources.forEach(source => {
-            let finalData: any = {};
-            if (source === 'call') {
-                finalData = processData(callData);
-                Object.keys(finalData).forEach(date => allUniqueDates.add(date));
-                this.dataset.push({
-                    label: 'Call',
-                    data: finalData,
-                    fill: true,
-                    borderColor: documentStyle.getPropertyValue('--green-500'),
-                    tension: 0.4,
-                    backgroundColor: 'rgba(60,180,16,0.2)'
-                });
-            }
-            if (source === 'email') {
-                finalData = processData(emailData);
-                Object.keys(finalData).forEach(date => allUniqueDates.add(date));
-                this.dataset.push({
-                    label: 'Email',
-                    data: finalData,
-                    fill: true,
-                    borderColor: documentStyle.getPropertyValue('--red-500'),
-                    tension: 0.4,
-                    backgroundColor: 'rgba(60,180,16,0.2)'
-                });
-            }
-            if (source === 'social') {
-                finalData = processData(socialData);
-                Object.keys(finalData).forEach(date => allUniqueDates.add(date));
-                this.dataset.push({
-                    label: 'Social Media',
-                    data: finalData,
-                    fill: true,
-                    borderColor: documentStyle.getPropertyValue('--blue-500'),
-                    tension: 0.4,
-                    backgroundColor: 'rgba(60,180,16,0.2)'
-                });
-            }
+      const documentStyle = getComputedStyle(document.documentElement);
+      this.dataset = [];
+    
+      const processData = (dataArray: any[], weight: number) => {
+        const combined: { [key: string]: any } = {};
+        dataArray.forEach(data => {
+          const date = new Date(data.Date);
+          const dayMonth = `${date.getMonth() + 1}-${date.getDate()}`; // Format: MM-DD
+    
+          if (!combinedDataMap[dayMonth]) {
+            combinedDataMap[dayMonth] = {
+              Date: dayMonth,
+              totalWeightedScore: 0,
+              totalWeight: 0,
+            };
+          }
+          combinedDataMap[dayMonth].totalWeightedScore += data.score * weight;
+          combinedDataMap[dayMonth].totalWeight += weight;
+    
+          if (!combined[dayMonth]) {
+            combined[dayMonth] = {
+              Date: dayMonth,
+              totalWeightedScore: 0,
+              totalWeight: 0,
+            };
+          }
+          combined[dayMonth].totalWeightedScore += data.score * weight;
+          combined[dayMonth].totalWeight += weight;
         });
-
-        // Convert the set of unique dates to a sorted array
-        const sortedDates = Array.from(allUniqueDates).sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
-
-        // Calculate averages and fill missing dates with zeros for each dataset
-        this.dataset = this.dataset.map(dataset => {
-            const filledData = sortedDates.map(date => {
-                if (dataset.data[date]) {
-                    return dataset.data[date].score / dataset.data[date].count;
-                } else {
-                    return 0;
-                }
-            });
-            return { ...dataset, data: filledData };
+        return combined;
+      };
+    
+      const allUniqueDates = new Set<string>();
+    
+      sources.forEach(source => {
+        let finalData: any = {};
+        let weight: number;
+        if (source === 'call') {
+          weight = this.callWeigth;
+          finalData = processData(callData, weight);
+          Object.keys(finalData).forEach(date => allUniqueDates.add(date));
+          this.dataset.push({
+            label: 'Call',
+            data: finalData,
+            fill: true,
+            borderColor: documentStyle.getPropertyValue('--green-500'),
+            tension: 0.4,
+            backgroundColor: 'rgba(60,180,16,0.2)'
+          });
+        }
+        if (source === 'email') {
+          weight = this.emailWeigth;
+          finalData = processData(emailData, weight);
+          Object.keys(finalData).forEach(date => allUniqueDates.add(date));
+          this.dataset.push({
+            label: 'Email',
+            data: finalData,
+            fill: true,
+            borderColor: documentStyle.getPropertyValue('--red-500'),
+            tension: 0.4,
+            backgroundColor: 'rgba(60,180,16,0.2)'
+          });
+        }
+        if (source === 'social') {
+          weight = this.socialWeigth;
+          finalData = processData(socialData, weight);
+          Object.keys(finalData).forEach(date => allUniqueDates.add(date));
+          this.dataset.push({
+            label: 'Social Media',
+            data: finalData,
+            fill: true,
+            borderColor: documentStyle.getPropertyValue('--blue-500'),
+            tension: 0.4,
+            backgroundColor: 'rgba(60,180,16,0.2)'
+          });
+        }
+      });
+    
+      // Convert the set of unique dates to a sorted array
+      const sortedDates = Array.from(allUniqueDates).sort((a, b) => {
+        const [monthA, dayA] = a.split('-').map(Number);
+        const [monthB, dayB] = b.split('-').map(Number);
+        return new Date(2020, monthA - 1, dayA).getTime() - new Date(2020, monthB - 1, dayB).getTime();
+      });
+    
+      // Calculate averages and fill missing dates with zeros for each dataset
+      this.dataset = this.dataset.map(dataset => {
+        const filledData = sortedDates.map(date => {
+          if (dataset.data[date]) {
+            return dataset.data[date].totalWeightedScore / dataset.data[date].totalWeight;
+          } else {
+            return 0;
+          }
         });
-
-        // Set dates for the chart
-        this.dates = sortedDates;
-
-        // Function to show the chart
-        this.lineChartShow();
+        return { ...dataset, data: filledData };
+      });
+    
+      // Set dates for the chart
+      this.dates = sortedDates;
+    
+      // Function to show the chart
+      this.lineChartShow();
     }
 }
 

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { WordCloudItem } from "../../types";
 
 declare var $: any;
@@ -33,5 +33,11 @@ export class WordcloudComponent implements OnInit {
       beforeCloudRender:function(){},
       afterCloudRender:function(){}
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['wordList'] ) {
+      this.refreshChart(this.wordList);
+    }
   }
 }

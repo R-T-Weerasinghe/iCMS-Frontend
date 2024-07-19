@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { ApiResponse, CallStatistics } from "../types";
 import { HttpClient } from "@angular/common/http";
 import { firstValueFrom } from "rxjs";
+import { environment } from "../../../environment/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class CallAnalyticsService {
 
-  API_ROOT = "http://127.0.0.1:8000";
+  API_ROOT = environment.callAnalyzerAPI;
 
   constructor(private http: HttpClient) {
   }

@@ -1,5 +1,5 @@
 <p-panel class="flex flex-col text-center justify-center">
-<div class="chart-header-container">
+<div class="chart-header-container" >
 
     <p class="chart-title">{{ title }}</p>
 <!--      <p *ngIf="selectedDateRange && selectedDateRange.length === 2 && selectedDateRange[0] && selectedDateRange[1]">{{ selectedDateRange[0]}} - {{ selectedDateRange[1]}}</p>-->
@@ -11,27 +11,80 @@
 <!--      <i class="pi pi-times" style="color: rgb(56, 56, 56)" (click)="confirmDeleted()" *ngIf="closable"></i>-->
 <!--    </div>-->
 
-
+</div>
+<div *ngIf="edit!=true">
+  <p-chart type="line" [data]="data" [options]="options"></p-chart>
 </div>
 
-  <p-chart type="line" [data]="data" [options]="options"></p-chart>
+<div *ngIf="edit==true && categories.length > 1" class="editSettings">
+       <div>
+        <table>
+          <!-- <tr>
+            <div *ngIf="categories.length > 1">
+              <div *ngFor="let category of categories" class="field-checkbox flex align-items-center">
+                <td>
+               <p-checkbox
+                  [(ngModel)]="selectedCategories"
+                 [label]="category"
+                  name="group"
+                 [value]="category"
+                  (ngModelChange)="onSourceChange(category)"/>
+                </td>
+               </div>
+            </div>
+          </tr> -->
+          <tr *ngIf="this.chartCategory!='Count' && categories.includes('email')">
+            <td>Email Weight</td>
+            <td>
+              <input type="text" pInputText [(ngModel)]="emailWeigth" class="w-full mb-3"/>
+              <p-slider [(ngModel)]="emailWeigth" class="w-full" (onChange)="onSliderChange($event)" [min]='0' [max]='2' [step]="0.1" /><br>
+              <!-- <p-selectButton [options]="[
+              { label: '0.5', value: 0.5 },
+              { label: '0', value: 0 },
+              { label: '1', value: 1 },
+              { label: '2', value: 2 },
+            ]" [(ngModel)]="emailWeigth" optionLabel="label" optionValue="value" ></p-selectButton> -->
+            </td>
+          </tr>
+          <tr *ngIf="this.chartCategory!='Count'  && categories.includes('call')">
+            <td>Call Weight</td>
+            <td>
+              <input type="text" pInputText [(ngModel)]="callWeigth" class="w-full mb-3"/>
+              <p-slider [(ngModel)]="callWeigth" class="w-full w-14rem" (onChange)="onSliderChange($event)" [min]='0' [max]='2' [step]="0.1"/><br>
+              <!-- <p-selectButton [options]="[
+              { label: '0.5', value: 0.5 },
+              { label: '0', value: 0 },
+              { label: '1', value: 1 },
+              { label: '2', value: 2 },
+            ]" [(ngModel)]="callWeigth" optionLabel="label" optionValue="value" ></p-selectButton> -->
+            </td>
+          </tr>
+          <tr *ngIf="this.chartCategory!='Count' &&  categories.includes('social')">
+            <td>Social Weight</td>
+            <td>
+              <input type="text" pInputText [(ngModel)]="socialWeigth" class="w-full mb-3"/>
+              <p-slider [(ngModel)]="socialWeigth" class="w-full" (onChange)="onSliderChange($event)" [min]='0' [max]='2' [step]="0.1"/><br>
+              <!-- <p-selectButton [options]="[
+              { label: '0.5', value: 0.5 },
+              { label: '0', value: 0 },
+              { label: '1', value: 1 },
+              { label: '2', value: 2 },
+            ]" [(ngModel)]="socialWeigth" optionLabel="label" optionValue="value" ></p-selectButton> -->
+            </td>
+          </tr>  
+          <tr>
 
-  <div *ngIf="categories.length > 1 && edit==true">
-    <div *ngFor="let category of categories" class="field-checkbox flex align-items-center">
-     <p-checkbox
-        [(ngModel)]="selectedCategories"
-       [label]="category"
-        name="group"
-       [value]="category"
-        (ngModelChange)="onSourceChange(category)"/>
-     </div>
-     <div class="field-checkbox flex align-items-center">
-     <button pButton type="button" label="Done" (click)="editOff()" ></button>
-   </div>
+            <td style="align-items: center;">
+              <button pButton type="button" label="Apply" (click)="editOffApply()" ></button>
+            </td>
+            <td style="align-items: center;"><button pButton type="button" label="cancel" (click)="editOffCancel()" ></button>
+            </td>
+            <td></td>
+          </tr>
+        </table>
+        
+      </div>
+    
+  
   </div>
-
-<!--  <p *ngIf="selectedDateRange && selectedDateRange.length === 2 && selectedDateRange[0] && selectedDateRange[1]">-->
-<!--    {{ selectedDateRange[0] }} - {{ selectedDateRange[1] }}-->
-<!--  </p>-->
-<!--  <p *ngIf="Date">{{ Date }}</p>-->
 </p-panel>

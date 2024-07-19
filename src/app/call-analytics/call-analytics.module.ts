@@ -11,7 +11,6 @@ import { LineAreaChartComponent } from './components/line-area-chart/line-area-c
 import { GaugeChartComponent } from './components/gauge-chart/gauge-chart.component';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { BarChartComponent } from './components/horizontal-bar-chart/bar-chart.component';
-import { RecentCallsCardComponent } from './components/recent-calls-card/recent-calls-card.component';
 import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
 import { TagModule } from 'primeng/tag';
@@ -22,7 +21,6 @@ import { DialogModule } from 'primeng/dialog';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { ToastModule } from 'primeng/toast';
-import { CallAnalyticsService } from './services/call-analytics.service';
 import { CardModule } from 'primeng/card';
 import { SettingsComponent } from './components/settings/settings.component';
 import { TabViewModule } from 'primeng/tabview';
@@ -64,12 +62,10 @@ import { PasswordModule } from "primeng/password";
     LineAreaChartComponent,
     GaugeChartComponent,
     BarChartComponent,
-    RecentCallsCardComponent,
     CallRecordingsComponent,
     CallSummaryChartComponent,
     FileUploadComponent,
     CallRecordingsComponent,
-    RecentCallsCardComponent,
     SettingsComponent,
     CallFilteringComponent,
     FilteringFeaturesComponent,

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from "primeng/api";
 import { DateRangeService } from '../../../main-dashboard/services/shared-date-range/date-range.service';
@@ -25,6 +25,9 @@ export class PageHeaderComponent implements OnInit {
 
   @Input() mainDashboardNotification: boolean = false;
 
+  @Input() emailDashboardDate:boolean=false;
+  @Input() intervalInDaysStart:number=29;
+  @Input() intervalInDaysEnd:number=0;
 
   @Input() minDate: Date = new Date();
   @Input() maxDate: Date = new Date();
@@ -37,6 +40,7 @@ export class PageHeaderComponent implements OnInit {
 
   rangeDates: Date[] | undefined;
   callDateRange: Date[] | undefined;
+  emailDates: Date[] | undefined;
   home: MenuItem | undefined;
   isAbleToAddCall: boolean = false;
   isAbleToAddOperator: boolean = false;
@@ -55,6 +59,7 @@ export class PageHeaderComponent implements OnInit {
       new Date(new Date().setMonth(new Date().getMonth() - 1))
     ]
     this.rangeDates = this.getCurrentDateRange();
+    this.emailDates = this.getEmailCurrentDateRange();
     this.dateRangeService.changeDateRange(this.rangeDates);
     this.home = {icon: 'pi pi-home', routerLink: '/'};
     this.showOldDate();
@@ -88,11 +93,28 @@ export class PageHeaderComponent implements OnInit {
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['intervalInDaysStart'] || changes['intervalInDaysEnd']) {
+      this.emailDates = this.getEmailCurrentDateRange();
+    }
+  }
+
   getCurrentDateRange = (): Date[] => {
     const today = new Date();
     const pastDate = new Date(today);
     pastDate.setDate(today.getDate() - 7);
+  
+    return [pastDate, today];
+  };
 
+
+
+  getEmailCurrentDateRange = (): Date[] => {
+    const today = new Date();
+    const pastDate = new Date(today);
+    pastDate.setDate(today.getDate() - this.intervalInDaysStart);
+    today.setDate(today.getDate() - this.intervalInDaysEnd)
+  
     return [pastDate, today];
   };
 

@@ -1,10 +1,33 @@
-<p-panel class="flex w-[260px] mb-4" *ngIf="!isLoading">
-    <img src="./assets/{{imgPath}}" class="self-center w-[40px] h-[40px]"/>
-
-    <div class="mt-1 mb-1">
-      <p class="font-bold text-2xl mt-1 mb-1">{{ title }}</p>
-      <p class="text-sm text-gray-500 font-medium">{{ subTitle }}</p>
+<p-panel class="flex flex-col w-[260px] mb-4" *ngIf="!isLoading">
+  <div class="flex justify-between w-full px-7" style="border-bottom: #e1e1e1 solid 1px;">
+    <img src="./assets/call/blue-phone.png" class="self-center w-[40px] h-[40px]"/>
+    <div class="mt-1">
+      <p class="font-bold text-2xl mt-1 mb-1">{{ totalCalls }}</p>
+      <p class="text-sm text-gray-500 font-medium">Total Calls</p>
     </div>
+  </div>
+  <div class="flex justify-between w-full px-7" style="border-bottom: #e1e1e1 solid 1px;">
+    <img src="./assets/call/green-call.png" class="self-center w-[40px] h-[40px]"/>
+    <div class="mt-1">
+      <p class="font-bold text-2xl mt-1 mb-1">{{ avgCallTime }}</p>
+      <p class="text-sm text-gray-500 font-medium">Avg. Call Time</p>
+    </div>
+  </div>
+  <div class="flex justify-between w-full px-7" style="border-bottom: #e1e1e1 solid 1px;">
+    <img src="./assets/call/blue-call.png" class="self-center w-[40px] h-[40px]"/>
+    <div class="mt-1">
+      <p class="font-bold text-2xl mt-1 mb-1">{{ totalCallDuration }}</p>
+      <p class="text-sm text-gray-500 font-medium">Total Duration</p>
+    </div>
+  </div>
+  <div class="flex justify-between w-full px-7">
+    <img src="./assets/call/review.png" class="self-center w-[40px] h-[40px]"/>
+    <div class="mt-1 mb-1">
+      <p class="font-bold text-2xl mt-1 mb-1">{{ avgSentimentScore }}</p>
+      <p class="text-sm text-gray-500 font-medium my-0">Avg. Sentiment</p>
+      <p class="text-sm text-gray-500 font-medium my-0">Score</p>
+    </div>
+  </div>
 </p-panel>
 <p-panel class="flex w-[260px] mb-4" *ngIf="isLoading">
   <p-skeleton height="90px" width="240px"/>

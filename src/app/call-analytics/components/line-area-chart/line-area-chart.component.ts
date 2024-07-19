@@ -37,9 +37,8 @@ export class LineAreaChartComponent implements OnInit {
           grid: {color: surfaceBorder},
         },
         y: {
-          ticks: {color: textColorSecondary},
+          ticks: {color: textColorSecondary, stepSize: 1},
           grid: {color: surfaceBorder},
-          stepSize: 1
         }
       }
     };
@@ -60,6 +59,7 @@ export class LineAreaChartComponent implements OnInit {
     const xLabels = analyticsData.map((data: any) => data.date);
     const positiveData = analyticsData.map((data: any) => data.positive);
     const negativeData = analyticsData.map((data: any) => data.negative);
+    console.log(negativeData)
     const neutralData = analyticsData.map((data: any) => data.neutral);
 
     this.data = {

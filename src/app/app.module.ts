@@ -57,7 +57,7 @@ import { tokenInterceptor } from "./shared/helpers/token.interceptor";
   ],
   providers: [
     MessageService,
-    provideHttpClient(withInterceptors([tokenInterceptor]))
+    // provideHttpClient(withInterceptors([tokenInterceptor]))
   ],
   bootstrap: [AppComponent],
 })

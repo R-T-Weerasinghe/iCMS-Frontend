@@ -1,0 +1,131 @@
+<div class="my-container flex flex-col h-auto">
+  <div class="my-child-1 flex-none">
+    <app-page-header
+      pageTitle="Email Analytics Dashboard"
+      class="w-full h-fit"
+      [breadcrumbItems]="breadcrumbItems"
+      [showDatePicker]="true"
+      (rangeDatesChanged)="onRangeDatesChanged($event)"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [emailDashboardDate]="true"
+      [intervalInDaysStart]="intervalInDaysStart"
+      [intervalInDaysEnd]="intervalInDaysEnd"
+    />
+  </div>
+</div>
+
+<div class="w-full">
+  <!-- 'No of stats' stat cards-->
+  <div
+    *ngIf="!isLoadingStatcards"
+    class="w-full flex flex-row flex-wrap place-content-evenly gap-6"
+  >
+    <app-stat-card-mgr-analytics
+      *ngFor="let item of statsData"
+      [title]="item.title.toString()"
+      [subTitle]="item.sub_title"
+      [header]="item.header"
+      [fontColor]="item.fontColor"
+      [subheader]="item.subheader"
+    ></app-stat-card-mgr-analytics>
+  </div>
+  <!-- TODO: Issue with skeletons -->
+  <div *ngIf="isLoadingStatcards">
+    <p-skeleton
+      *ngFor="let d of [1, 2, 3, 4]"
+      styleClass="w-1/4 my-3"
+      height="90px"
+    ></p-skeleton>
+  </div>
+</div>
+
+<!-- TODO: this one is not loading -->
+<!-- <div class="flex flex-row flex-wrap gap-6">
+  <div class="flex flex-wrap gap-6">
+    <app-best-worst-card
+      [header]="overallOverdueIssuesHeader"
+      [card_content]="overallOverdueIssuesContent"
+      [bgcolor]="noOfOverdueIssuesColor"
+      *ngIf="!isLoadingoverallOverdueIssuesCount"
+    />
+  </div> -->
+
+<div class="flex flex-row w-full gap-6 mt-6">
+  <div class="w-1/2">
+    <app-multi-vertical-bar-chart
+      title="Efficiency Distribution"
+      [labels]="effi_dstri_vert_bar_labels"
+      [efficiency_dataset_for_issues]="effi_distri_vert_var_issues_data"
+      [efficiency_dataset_for_inquiries]="effi_distri_vert_var_inquiries_data"
+      *ngIf="!isLoadingEffiDistri"
+    />
+    <p-skeleton
+      height="250px"
+      styleClass="w-full my-3"
+      *ngIf="isLoadingEffiDistri"
+    />
+  </div>
+  <div class="w-1/2">
+    <app-multi-vertical-bar-chart
+      title="Effectiveness Distribution"
+      [labels]="effect_dstri_vert_bar_labels"
+      [efficiency_dataset_for_issues]="effect_distri_vert_var_issues_data"
+      [efficiency_dataset_for_inquiries]="effect_distri_vert_var_inquiries_data"
+      *ngIf="!isLoadingEffectDistri"
+    />
+    <p-skeleton
+      height="250px"
+      styleClass="w-full my-3"
+      *ngIf="isLoadingEffectDistri"
+    />
+  </div>
+</div>
+<!-- </div> -->
+
+<div class="flex flex-row w-full gap-6 mt-6">
+  <div class="w-1/2">
+    <app-horizontal-bar-chart
+      title="Issue Types Distribution"
+      [sbtChartLabels]="issue_types_distri_labels"
+      [sbtChartColors]="issue_types_distri_colors"
+      [sbtChartValues]="issue_types_distri_data"
+      *ngIf="!isLoadingIssueTypes"
+    />
+    <p-skeleton
+      height="250px"
+      styleClass="w-full my-3"
+      *ngIf="isLoadingIssueTypes"
+    />
+  </div>
+  <div class="w-1/2">
+    <app-horizontal-bar-chart
+      title="Inquiry Types Distribution"
+      [sbtChartLabels]="inquiry_types_distri_labels"
+      [sbtChartColors]="inquiry_types_distri_colors"
+      [sbtChartValues]="inquiry_types_distri_data"
+      *ngIf="!isLoadingInquiryTypes"
+    />
+    <p-skeleton
+      height="250px"
+      styleClass="w-full my-3"
+      *ngIf="isLoadingInquiryTypes"
+    />
+  </div>
+</div>
+
+<div class="flex flex-row w-full justify-center gap-6 mt-6">
+  <div class="w-1/2">
+    <app-dynamic-stacked-bar-chart
+      title="Issue and Inquiry Distribution of Products"
+      [labels]="prodcuts_distri_of_issues_and_inquiries_labels"
+      [datasets]="prodcuts_distri_of_issues_and_inquiries_datasets"
+      *ngIf="!isLoadingProductdistriOfIssuesnInquirires"
+    />
+    <p-skeleton
+      height="250px"
+      styleClass="w-full my-3"
+      *ngIf="isLoadingProductdistriOfIssuesnInquirires"
+    />
+  </div>
+</div>

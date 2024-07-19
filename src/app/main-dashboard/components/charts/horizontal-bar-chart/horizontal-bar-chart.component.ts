@@ -11,7 +11,7 @@ import {MenuItem, MenuItemCommandEvent} from "primeng/api";
   styleUrl: './horizontal-bar-chart.component.scss'
 })
 export class HorizontalBarChartComponent implements OnInit,OnChanges{
-
+  @Output() sliderInteraction: EventEmitter<boolean> = new EventEmitter();
   @Output() deletedConfirmed: EventEmitter<void> = new EventEmitter<void>();
   @Output() hideConfirmed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -20,6 +20,10 @@ export class HorizontalBarChartComponent implements OnInit,OnChanges{
   @Input() persentages1: any[]=[];
   @Input() persentages2: any[]=[];
   @Input() persentages3: any[]=[];
+
+  countMin:number=1;
+  countMax:number=10;
+
 
   options: any;
   @Output() changesEvent = new EventEmitter<boolean>();
@@ -133,6 +137,9 @@ private authService:AuthenticationService
 
   }
 
+  onSliderChange(event: any) {
+    this.sliderInteraction.emit(true);
+  }
   
   onDelete(){
     console.log('delete');
@@ -140,14 +147,32 @@ private authService:AuthenticationService
   }
 
   edit:boolean=false;
-  onEdit(){
-      this.edit=true;
-    
-  }
+  onEdit() {
+    console.log('edit');
+    this.edit = true;
+    this.sliderInteraction.emit(true);
 
-  editOff(){
-    this.edit=false;
+
+}
+
+editOffApply(){
+  this.edit=false;
+  this.sliderInteraction.emit(false);
+  if(this.selectedCategories){
+    this.barChartExtract(this.selectedCategories);
   }
+}
+
+editOffCancel(){
+  this.edit=false;
+  this.sliderInteraction.emit(false);
+}
+
+
+editOff(){
+  this.edit=false;
+  this.sliderInteraction.emit(false);
+}
 
  confirmDeleted() {
         console.log('confirm button');
@@ -300,6 +325,13 @@ private authService:AuthenticationService
                 this.updateAllData(this.transformData(sourceData));
               }
             });
+
+            if (this.xAxis === 'topics' || this.xAxis === 'keywords') {
+              const filteredTopicsPositive = this.topics.filter(topic =>
+                (this.allData[topic]?.counts >= this.countMin && this.allData[topic]?.counts <= this.countMax)
+              );
+              this.topics=filteredTopicsPositive
+            }
 
             this.createDatasets(documentStyle);
 

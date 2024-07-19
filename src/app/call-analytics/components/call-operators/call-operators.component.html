@@ -105,7 +105,7 @@
     <div class="flex justify-between items-center">
       <label for="op-name" class="w-1/14">Email: </label>
       <div class="w-3/4">
-        <input id="op-email" class="w-full" type="text" pInputText formControlName="email"/>
+        <input id="op-email" class="w-full" type="text" pInputText formControlName="email" [readOnly]="isEditMode"/>
         <p *ngIf="getEmailError() !== '' && isSubmitted" class="text-red-500">{{ getEmailError() }}</p>
       </div>
     </div>
