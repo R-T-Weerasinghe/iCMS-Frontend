@@ -25,8 +25,8 @@ export class WordCloudSmComponent implements OnChanges {
         words: wordList,
         maxFont: 50,
         minFont: 10,
-        verticalEnabled: true,
-        padding_left: null,
+        verticalEnabled: false,
+        padding_left: 10,
         word_click: function (event: any) {
           console.log(event.target.textContent);
         },
